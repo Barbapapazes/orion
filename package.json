@@ -7,11 +7,19 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate:sqlite"
   },
   "dependencies": {
+    "@nuxthub/core": "^0.5.14",
+    "drizzle-orm": "^0.30.9",
     "nuxt": "^3.11.2",
+    "nuxt-auth-utils": "^0.0.24",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.17",
+    "wrangler": "^3.52.0"
   }
 }
