@@ -11,12 +11,16 @@
     "db:generate": "drizzle-kit generate:sqlite"
   },
   "dependencies": {
+    "@nuxt/ui": "^2.15.2",
+    "@nuxt/ui-pro": "^1.1.0",
     "@nuxthub/core": "^0.5.14",
     "drizzle-orm": "^0.30.9",
     "nuxt": "^3.11.2",
     "nuxt-auth-utils": "^0.0.24",
+    "slugify": "^1.6.6",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "drizzle-kit": "^0.20.17",

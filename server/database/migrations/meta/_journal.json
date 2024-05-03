@@ -8,6 +8,13 @@
       "when": 1714318176592,
       "tag": "0000_purple_shaman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714763426899,
+      "tag": "0001_skinny_energizer",
+      "breakpoints": true
     }
   ]
 }

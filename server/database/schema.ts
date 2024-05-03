@@ -6,3 +6,9 @@ export const users = sqliteTable("users", {
   username: text("user").notNull(),
   avatarUrl: text("avatar_url").notNull(),
 });
+
+export const categories = sqliteTable("categories", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+})
