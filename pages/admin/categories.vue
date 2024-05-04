@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { type Category } from '~/types'
+
 definePageMeta({
   layout: 'admin'
 })
@@ -13,11 +15,27 @@ const defaultColumns = [{
 }, {
   key: 'slug',
   label: 'Slug',
+}, {
+  key: 'actions'
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
+const actionsItems = (row: Category) => [
+  [{
+    label: 'Edit',
+    icon: 'i-heroicons-pencil-square-20-solid',
+    click: () => {
+      editCategory.value = row
+      isEditCategoryModalOpen.value = true
+    }
+  },
+]]
+
 const isNewCategoryModalOpen = ref<boolean>(false)
+
+const editCategory = ref<Category | null>(null)
+const isEditCategoryModalOpen = ref<boolean>(false)
 
 const { data: categories, refresh, pending } = await useFetch('/api/categories', {
   deep: false,
@@ -25,6 +43,7 @@ const { data: categories, refresh, pending } = await useFetch('/api/categories',
 
 function onFormClose () {
   isNewCategoryModalOpen.value = false
+  isEditCategoryModalOpen.value = false
   refresh()
 }
 
@@ -59,8 +78,17 @@ defineShortcuts({
         description="Add a new category to your database"
         :ui="{ width: 'sm:max-w-md' }"
       >
-        <CategoriesForm @close="onFormClose()" />
+        <CategoriesCreateForm @close="onFormClose()" />
       </UDashboardModal>
+
+      <UDashboardModal
+        v-model="isEditCategoryModalOpen"
+        title="Edit category"
+        :ui="{ width: 'sm:max-w-md' }"
+      >
+        <CategoriesEditForm v-if="editCategory" :category="editCategory" @close="onFormClose()" />
+      </UDashboardModal>
+
 
       <UDashboardToolbar>
         <template #right>
@@ -77,7 +105,13 @@ defineShortcuts({
         </template>
       </UDashboardToolbar>
 
-      <UTable :columns="columns" :rows="categories" :loading="pending" />
+      <UTable :columns="columns" :rows="categories" :loading="pending">
+        <template #actions-data="{ row }">
+          <UDropdown :items="actionsItems(row)">
+            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+          </UDropdown>
+        </template>
+      </UTable>
     </UDashboardPanel>
   </UDashboardPage>
 </template>

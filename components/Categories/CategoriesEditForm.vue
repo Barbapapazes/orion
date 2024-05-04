@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+import { type Category } from '~/types'
 
-const toast = useToast()
+const props = defineProps<{
+  category: Category
+}>()
 
 const emits = defineEmits<{
   close: [void]
 }>()
+
+const toast = useToast()
 
 const schema = object({
   name: string().required('Required'),
@@ -15,28 +20,31 @@ const schema = object({
 type Schema = InferType<typeof schema>
 
 const state = reactive({
-  name: undefined,
+  name: props.category.name,
 })
 
 async function onSubmit (event: FormSubmitEvent<Schema>) {
   try {
-   await $fetch('/api/categories', {
-      method: 'POST',
+   await $fetch(`/api/categories/${props.category.id}`, {
+      method: 'PUT',
       body: event.data,
     })
      toast.add({
       icon: "i-heroicons-check-circle",
-      title:  'Success',
+      title:  `Category "${event.data.name}" has been updated`,
       color: 'green',
     })
     emits('close')
   } catch (e) {
-    console.error(e)
-    toast.add({
-      icon: "i-heroicons-exclamation-circle",
-      title: 'Error',
-      color: 'red',
-    })
+    if (e instanceof Error) {
+      console.error(e)
+      toast.add({
+        icon: "i-heroicons-exclamation-circle",
+        title: 'Something went wrong',
+        description: e.message,
+        color: 'red',
+      })
+    }
   }
 }
 </script>
@@ -48,7 +56,7 @@ async function onSubmit (event: FormSubmitEvent<Schema>) {
     </UFormGroup>
 
     <UButton type="submit">
-      Submit
+      Update
     </UButton>
   </UForm>
 </template>
