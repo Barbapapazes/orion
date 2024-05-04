@@ -1,0 +1,1 @@
+ALTER TABLE users ADD `role_type` text DEFAULT 'creator';

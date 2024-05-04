@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  // TODO: only for user admin
+  await requireAdminUser(event)
 
   const body = await readBody(event)
 

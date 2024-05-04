@@ -2,6 +2,7 @@
 import { type Category } from '~/types'
 
 definePageMeta({
+  middleware: ['admin'],
   layout: 'admin'
 })
 

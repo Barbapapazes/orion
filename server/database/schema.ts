@@ -5,6 +5,7 @@ export const users = sqliteTable("users", {
   githubId: integer("github_id").notNull().unique(),
   username: text("user").notNull(),
   avatarUrl: text("avatar_url").notNull(),
+  roleType: text("role_type", { enum: ['admin', 'creator'] }).default('creator')
 });
 
 export const categories = sqliteTable("categories", {

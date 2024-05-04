@@ -3,7 +3,7 @@ export default oauth.githubEventHandler({
     emailRequired: true,
   },
   async onSuccess(event, { user, tokens }) {
-    await useDrizzle()
+    const savedUser = await useDrizzle()
       .insert(tables.users)
       .values({
         githubId: user.id,
@@ -13,13 +13,14 @@ export default oauth.githubEventHandler({
       .onConflictDoUpdate({
         target: tables.users.githubId,
         set: { username: user.login, avatarUrl: user.avatar_url },
-      });
+      }).returning().get();
 
     await setUserSession(event, {
       user: {
-        githubId: user.id,
-        username: user.login,
-        avatarUrl: user.avatar_url,
+        githubId: savedUser.githubId,
+        username: savedUser.username,
+        avatarUrl: savedUser.avatarUrl,
+        roleType: savedUser.roleType,
       },
     });
 

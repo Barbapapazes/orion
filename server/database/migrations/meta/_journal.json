@@ -15,6 +15,13 @@
       "when": 1714763426899,
       "tag": "0001_skinny_energizer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1714836106285,
+      "tag": "0002_living_gabe_jones",
+      "breakpoints": true
     }
   ]
 }

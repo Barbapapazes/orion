@@ -1,6 +1,8 @@
 import { number, object, string } from 'zod'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminUser(event)
+
   const params = await getValidatedRouterParams(event, object({
       id: number({ coerce: true }).int().positive(),
     }).parse
