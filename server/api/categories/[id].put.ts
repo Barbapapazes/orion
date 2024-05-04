@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   await requireAdminUser(event)
 
   const params = await getValidatedRouterParams(event, object({
-      id: number({ coerce: true }).int().positive(),
+      id: number({ coerce: true }),
     }).parse
   )
   const body = await readValidatedBody(event, object({

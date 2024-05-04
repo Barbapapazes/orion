@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { object, string, type InferType } from 'yup'
+import { object, string, type output } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
@@ -9,10 +9,10 @@ const emits = defineEmits<{
 }>()
 
 const schema = object({
-  name: string().required('Required'),
+  name: string({ message: 'Required' }),
 })
 
-type Schema = InferType<typeof schema>
+type Schema = output<typeof schema>
 
 const state = reactive({
   name: undefined,

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Category } from '~/types'
+import { type Category } from '~/server/utils/drizzle'
 
 definePageMeta({
   middleware: ['admin'],
@@ -38,8 +38,9 @@ const isNewCategoryModalOpen = ref<boolean>(false)
 const editCategory = ref<Category | null>(null)
 const isEditCategoryModalOpen = ref<boolean>(false)
 
-const { data: categories, refresh, pending } = await useFetch('/api/categories', {
+const { data: categories, refresh, pending } = await useFetch<Category[]>('/api/categories', {
   deep: false,
+  default: () => []
 })
 
 function onFormClose () {

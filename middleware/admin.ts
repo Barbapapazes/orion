@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware(() => {
   const isAdmin = user.value?.roleType === 'admin'
 
   if (!isAdmin) {
-    return redirectTo('/')
+    return navigateTo('/')
   }
 })

@@ -20,7 +20,7 @@ export default oauth.githubEventHandler({
         githubId: savedUser.githubId,
         username: savedUser.username,
         avatarUrl: savedUser.avatarUrl,
-        roleType: savedUser.roleType,
+        roleType: savedUser.roleType || "creator",
       },
     });
 

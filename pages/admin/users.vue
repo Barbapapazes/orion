@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { User, Category } from '~/server/utils/drizzle';
+
 definePageMeta({
   middleware: ['admin'],
   layout: 'admin'
@@ -21,8 +23,9 @@ const defaultColumns = [{
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
-const { data: users } = await useFetch('/api/users', {
+const { data: users } = await useFetch<User[]>('/api/users', {
   deep: false,
+  default: () => []
 })
 </script>
 
