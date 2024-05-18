@@ -4,11 +4,7 @@ interface Modules {
 
 export default defineEventHandler(async (event) => {
   await requireAdminUser(event)
-  /**
-   * Fetch api.nuxt.com/modules
-   * Clean data (only keep name and type, offical and community)
-   * Save data in the database
-   */
+
   const data = await $fetch<Modules>('https://api.nuxt.com/modules', {
     headers: {
       'Content-Type': 'application/json'
@@ -29,7 +25,7 @@ export default defineEventHandler(async (event) => {
   for (let i = 0; i < times; i++) {
     const values = modules.slice(i * maximumInsert, (i + 1) * maximumInsert)
     await useDrizzle().insert(tables.modules).values(values)
-    .onConflictDoNothing({ target: modules.repo }).execute()
+    .onConflictDoNothing({ target: tables.modules.repo }).execute()
   }
 
   return sendNoContent(event, 204)
