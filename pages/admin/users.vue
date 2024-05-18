@@ -6,6 +6,10 @@ definePageMeta({
   layout: 'admin'
 })
 
+useSeoMeta({
+  title: 'Users'
+})
+
 const defaultColumns = [{
   key: 'id',
   label: '#'
