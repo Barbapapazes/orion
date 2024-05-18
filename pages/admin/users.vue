@@ -23,8 +23,9 @@ const defaultColumns = [{
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
-const { data: users } = await useFetch<User[]>('/api/users', {
+const { data: users, pending } = await useFetch<User[]>('/api/users', {
   deep: false,
+  lazy: true,
   default: () => []
 })
 </script>
@@ -53,7 +54,7 @@ const { data: users } = await useFetch<User[]>('/api/users', {
         </template>
       </UDashboardToolbar>
 
-      <UTable :columns="columns" :rows="users">
+      <UTable :columns="columns" :rows="users" :loading="pending">
         <template #roleType-data="{ row }">
           <UBadge variant="subtle" :color="row.roleType === 'admin' ? 'amber' : 'primary'">{{ row.roleType }}</UBadge>
         </template>

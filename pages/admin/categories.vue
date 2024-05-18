@@ -40,6 +40,7 @@ const isEditCategoryModalOpen = ref<boolean>(false)
 
 const { data: categories, refresh, pending } = await useFetch<Category[]>('/api/categories', {
   deep: false,
+  lazy: true,
   default: () => []
 })
 
