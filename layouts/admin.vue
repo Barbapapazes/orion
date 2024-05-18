@@ -15,6 +15,14 @@ const links = [{
   tooltip: {
     text: 'Categories',
   }
+},{
+  id: 'modules',
+  label: 'Modules',
+  icon: 'i-heroicons-archive-box',
+  to: '/admin/modules',
+  tooltip: {
+    text: 'Modules',
+  }
 }, {
   id: 'users',
   label: 'Users',

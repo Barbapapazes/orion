@@ -13,3 +13,11 @@ export const categories = sqliteTable("categories", {
   slug: text("slug").notNull().unique(),
   name: text("name").notNull(),
 })
+
+export const modules = sqliteTable("modules", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  repo: text("repo").notNull().unique(),
+  type: text("type", { enum: ['official', 'community'] }).notNull(),
+  icon: text("icon"),
+})

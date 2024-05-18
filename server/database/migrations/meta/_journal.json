@@ -22,6 +22,20 @@
       "when": 1714836106285,
       "tag": "0002_living_gabe_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1716045214232,
+      "tag": "0003_lying_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1716045507515,
+      "tag": "0004_nice_squadron_supreme",
+      "breakpoints": true
     }
   ]
 }
