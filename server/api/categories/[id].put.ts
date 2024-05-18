@@ -19,5 +19,5 @@ export default defineEventHandler(async (event) => {
     .where(eq(tables.categories.id, params.id))
     .execute()
 
-  return sendNoContent(event, 200)
+  return sendNoContent(event, 204)
 })
