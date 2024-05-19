@@ -120,12 +120,22 @@ async function syncModules() {
           />
         </template>
         <template #type-data="{ row }">
-          <UBadge
-            variant="subtle"
-            :color="row.type === 'official' ? 'green' : 'blue'"
-          >
-            {{ row.type }}
-          </UBadge>
+          <template v-if="row.type === 'official'">
+            <UBadge
+              color="green"
+              variant="subtle"
+            >
+              Official
+            </UBadge>
+          </template>
+          <template v-else-if="row.type === 'community'">
+            <UBadge
+              color="blue"
+              variant="subtle"
+            >
+              Community
+            </UBadge>
+          </template>
         </template>
       </UTable>
     </UDashboardPanel>

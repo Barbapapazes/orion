@@ -88,12 +88,22 @@ const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
           </div>
         </template>
         <template #roleType-data="{ row }">
-          <UBadge
-            variant="subtle"
-            :color="row.roleType === 'admin' ? 'amber' : 'primary'"
-          >
-            {{ row.roleType }}
-          </UBadge>
+          <template v-if="row.roleType === 'admin'">
+            <UBadge
+              color="red"
+              variant="subtle"
+            >
+              Admin
+            </UBadge>
+          </template>
+          <template v-else-if="row.roleType === 'creator'">
+            <UBadge
+              color="green"
+              variant="subtle"
+            >
+              User
+            </UBadge>
+          </template>
         </template>
       </UTable>
     </UDashboardPanel>

@@ -8,8 +8,8 @@ const sort = ref(sorts[0])
 const order = ref<1 | -1>(1)
 
 const pricing = [
-  { label: 'Free', value: 'free', color: 'green' },
-  { label: 'Paid', value: 'paid', color: 'yellow' },
+  { label: 'Free', value: 'free' },
+  { label: 'Paid', value: 'paid' },
 ]
 
 const { data: categories } = await useFetch('/api/categories', {
@@ -86,14 +86,24 @@ const templates = []
               placeholder="Pricing"
             >
               <template #option="{ option }">
-                <UBadge
-                  :color="option.color"
-                  variant="subtle"
-                >
-                  {{ option.label }}
-                </UBadge>
+                <template v-if="option.value === 'free'">
+                  <UBadge
+                    color="green"
+                    variant="subtle"
+                  >
+                    {{ option.label }}
+                  </UBadge>
+                </template>
+                <template v-else>
+                  <UBadge
+                    color="yellow"
+                    variant="subtle"
+                  >
+                    {{ option.label }}
+                  </UBadge>
+                </template>
               </template>
-            </uselectmenu>
+            </USelectMenu>
           </div>
         </div>
       </template>
