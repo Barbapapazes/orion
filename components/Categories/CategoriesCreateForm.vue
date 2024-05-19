@@ -50,8 +50,10 @@ async function onSubmit (event: FormSubmitEvent<Schema>) {
       <UInput v-model="state.name" />
     </UFormGroup>
 
-    <UButton type="submit">
-      Submit
-    </UButton>
+    <div class="flex flex-row justify-end">
+      <UButton type="submit">
+        Submit
+      </UButton>
+    </div>
   </UForm>
 </template>
