@@ -75,24 +75,19 @@ async function syncModules() {
       >
         <template #right>
           <UButton
-            label="Sync modules"
+            label="Sync"
             :loading="syncModuleLoading"
-            trailing-icon="i-heroicons-server-stack"
             color="gray"
             @click="syncModules"
+          />
+          <RefreshButton
+            :loading="pending"
+            @click="refresh"
           />
         </template>
       </UDashboardNavbar>
 
       <UDashboardToolbar>
-              <template #left>
-         <UButton
-            label="Refresh"
-            trailing-icon="i-heroicons-arrow-path"
-            color="gray"
-            @click="refresh"
-          />
-      </template>
         <template #right>
           <USelectMenu
             v-model="selectedColumns"

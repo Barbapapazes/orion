@@ -21,7 +21,8 @@ const defaultColumns = [{
   key: 'slug',
   label: 'Slug',
 }, {
-  key: 'actions'
+  key: 'actions',
+  label: 'Actions'
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
@@ -68,6 +69,7 @@ defineShortcuts({
     <UDashboardPanel grow>
       <UDashboardNavbar
         title="Categories"
+        :badge="categories.length"
       >
         <template #right>
           <UButton
@@ -76,13 +78,17 @@ defineShortcuts({
             color="gray"
             @click="isNewCategoryModalOpen = true"
           />
+          <RefreshButton
+            :loading="pending"
+            @click="refresh"
+          />
         </template>
       </UDashboardNavbar>
 
       <UDashboardModal
         v-model="isNewCategoryModalOpen"
         title="New category"
-        description="Add a new category to your database"
+        description="Insert a new category into the system"
         :ui="{ width: 'sm:max-w-md' }"
       >
         <CategoriesCreateForm @close="onFormClose()" />
@@ -91,6 +97,7 @@ defineShortcuts({
       <UDashboardModal
         v-model="isEditCategoryModalOpen"
         title="Edit category"
+        description="Be careful with this action, if could affect the system."
         :ui="{ width: 'sm:max-w-md' }"
       >
         <CategoriesEditForm v-if="editCategory" :category="editCategory" @close="onFormClose()" />

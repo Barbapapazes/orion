@@ -17,17 +17,25 @@ const defaultColumns = [{
   key: 'githubId',
   label: 'GitHub ID',
 }, {
-  key: 'username',
-  label: 'Username',
+  key: 'login',
+  label: 'Login',
   sortable: true
 }, {
+  key: 'name',
+  label: 'Name',
+  sortable: true
+},{
+  key: 'email',
+  label: 'Email',
+  sortable: true
+},{
   key: 'roleType',
   label: 'Role Type'
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
-const { data: users, pending } = await useFetch<User[]>('/api/users', {
+const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
   deep: false,
   lazy: true,
   default: () => []
@@ -40,7 +48,14 @@ const { data: users, pending } = await useFetch<User[]>('/api/users', {
       <UDashboardNavbar
         title="Users"
         :badge="users.length"
-      />
+      >
+        <template #right>
+          <RefreshButton
+            :loading="pending"
+            @click="refresh"
+          />
+        </template>
+      </UDashboardNavbar>
 
       <UDashboardToolbar>
         <template #right>
@@ -58,6 +73,12 @@ const { data: users, pending } = await useFetch<User[]>('/api/users', {
       </UDashboardToolbar>
 
       <UTable :columns="columns" :rows="users" :loading="pending">
+        <template #login-data="{ row }">
+          <div class="flex flex-row items-center gap-2">
+          <img :src="row.avatarUrl" alt="avatar" class="w-6 h-6 rounded-full">
+          <span>{{ row.login }}</span>
+          </div>
+        </template>
         <template #roleType-data="{ row }">
           <UBadge variant="subtle" :color="row.roleType === 'admin' ? 'amber' : 'primary'">{{ row.roleType }}</UBadge>
         </template>
