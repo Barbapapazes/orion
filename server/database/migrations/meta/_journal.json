@@ -50,6 +50,13 @@
       "when": 1716124092303,
       "tag": "0006_fair_nemesis",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1716127672610,
+      "tag": "0007_skinny_red_wolf",
+      "breakpoints": true
     }
   ]
 }
