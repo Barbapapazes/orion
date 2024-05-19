@@ -45,7 +45,7 @@ export default oauth.githubEventHandler({
       },
     })
 
-    return sendRedirect(event, '/')
+    return sendRedirect(event, '/portal')
   },
 })
 

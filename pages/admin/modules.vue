@@ -111,7 +111,7 @@ async function syncModules() {
         <template #icon-data="{ row }">
           <img
             v-if="row.icon"
-            :src="`https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons/${row.icon}`"
+            :src="`${MODULE_ICON_PREFIX}/${row.icon}`"
             class="h-6 w-auto"
           >
           <span

@@ -11,6 +11,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  ui: {
+    icons: ['heroicons', 'simple-icons'],
+  },
   hub: {
     database: true,
   },
