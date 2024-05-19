@@ -36,6 +36,20 @@
       "when": 1716045507515,
       "tag": "0004_nice_squadron_supreme",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1716123981183,
+      "tag": "0005_sturdy_kulan_gath",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1716124092303,
+      "tag": "0006_fair_nemesis",
+      "breakpoints": true
     }
   ]
 }
