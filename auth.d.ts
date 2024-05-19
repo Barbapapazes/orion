@@ -1,10 +1,10 @@
 // auth.d.ts
-declare module "#auth-utils" {
+declare module '#auth-utils' {
   interface User {
-    login: string;
-    email: string;
-    name: string;
-    avatarUrl: string;
+    login: string
+    email: string
+    name: string
+    avatarUrl: string
     roleType: 'admin' | 'creator'
   }
 
@@ -13,4 +13,4 @@ declare module "#auth-utils" {
   }
 }
 
-export {};
+export {}

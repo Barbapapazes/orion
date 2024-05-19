@@ -2,16 +2,21 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   extends: ['@nuxt/ui-pro'],
-  modules: ["nuxt-auth-utils", "@nuxthub/core", "@nuxt/ui", "@nuxt/eslint"],
+  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
   runtimeConfig: {
     oauth: {
       github: {
-        clientId: "",
-        clientSecret: "",
+        clientId: '',
+        clientSecret: '',
       },
     },
   },
   hub: {
     database: true,
   },
-});
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
+})

@@ -14,18 +14,18 @@ const toast = useToast()
 
 const defaultColumns = [{
   key: 'id',
-  label: '#'
+  label: '#',
 }, {
   key: 'icon',
   label: 'Icon',
 }, {
   key: 'name',
   label: 'Name',
-  sortable: true
+  sortable: true,
 }, {
   key: 'type',
   label: 'Type',
-  sortable: true
+  sortable: true,
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
@@ -33,36 +33,37 @@ const columns = computed(() => defaultColumns.filter(column => selectedColumns.v
 const { data: modules, refresh, pending } = await useFetch<Module[]>('/api/modules', {
   deep: false,
   lazy: true,
-  default: () => []
+  default: () => [],
 })
 
 const syncModuleLoading = ref<boolean>(false)
 async function syncModules() {
   syncModuleLoading.value = true
-   try {
+  try {
     await $fetch('/api/modules/sync', {
       method: 'POST',
     })
     toast.add({
-      icon: "i-heroicons-check-circle",
+      icon: 'i-heroicons-check-circle',
       title: 'Modules synced',
       color: 'green',
     })
     refresh()
-   }
+  }
   catch (e) {
     if (e instanceof Error) {
-          console.error(e)
-          toast.add({
-            icon: "i-heroicons-exclamation-circle",
-            title: 'Something went wrong',
-            description: e.message,
-            color: 'red',
-          })
-        }
-      } finally {
-        syncModuleLoading.value = false
-      }
+      console.error(e)
+      toast.add({
+        icon: 'i-heroicons-exclamation-circle',
+        title: 'Something went wrong',
+        description: e.message,
+        color: 'red',
+      })
+    }
+  }
+  finally {
+    syncModuleLoading.value = false
+  }
 }
 </script>
 
@@ -102,15 +103,31 @@ async function syncModules() {
         </template>
       </UDashboardToolbar>
 
-        <UTable :columns="columns" :rows="modules" :loading="pending">
-          <template #icon-data="{ row }">
-            <img v-if="row.icon" :src="`https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons/${row.icon}`" class="h-6 w-auto" >
-            <span v-else class="i-heroicons-photo inline-block h-6 w-6" />
-          </template>
-          <template #type-data="{ row }">
-          <UBadge variant="subtle" :color="row.type === 'official' ? 'green' : 'blue'">{{ row.type }}</UBadge>
+      <UTable
+        :columns="columns"
+        :rows="modules"
+        :loading="pending"
+      >
+        <template #icon-data="{ row }">
+          <img
+            v-if="row.icon"
+            :src="`https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons/${row.icon}`"
+            class="h-6 w-auto"
+          >
+          <span
+            v-else
+            class="i-heroicons-photo inline-block h-6 w-6"
+          />
         </template>
-        </UTable>
-      </UDashboardPanel>
-    </UDashboardPage>
+        <template #type-data="{ row }">
+          <UBadge
+            variant="subtle"
+            :color="row.type === 'official' ? 'green' : 'blue'"
+          >
+            {{ row.type }}
+          </UBadge>
+        </template>
+      </UTable>
+    </UDashboardPanel>
+  </UDashboardPage>
 </template>

@@ -5,21 +5,21 @@ const items = computed(() => [
   [{
     slot: 'account',
     label: '',
-    disabled: true
+    disabled: true,
   }],
   //  [{
   //   label: 'Help & Support',
   //   icon: 'i-heroicons-question-mark-circle',
   //   shortcuts: ['?'],
   // }],
-   [{
+  [{
     label: 'Sign out',
     icon: 'i-heroicons-arrow-left-on-rectangle',
     click: async () => {
       await clear()
       navigateTo('/')
-    }
-  }]
+    },
+  }],
 ])
 </script>
 

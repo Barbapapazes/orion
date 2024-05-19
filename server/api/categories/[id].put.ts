@@ -4,11 +4,11 @@ export default defineEventHandler(async (event) => {
   await requireAdminUser(event)
 
   const params = await getValidatedRouterParams(event, object({
-      id: number({ coerce: true }),
-    }).parse
+    id: number({ coerce: true }),
+  }).parse,
   )
   const body = await readValidatedBody(event, object({
-    name: string()
+    name: string(),
   }).parse)
 
   // TODO: Return the DB error to the client (actually, it's just a 500 error handle by Nitro)

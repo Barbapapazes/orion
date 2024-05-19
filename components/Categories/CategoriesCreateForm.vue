@@ -18,23 +18,24 @@ const state = reactive({
   name: undefined,
 })
 
-async function onSubmit (event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
-   await $fetch('/api/categories', {
+    await $fetch('/api/categories', {
       method: 'POST',
       body: event.data,
     })
-     toast.add({
-      icon: "i-heroicons-check-circle",
-      title:  `Category "${event.data.name}" has been created`,
+    toast.add({
+      icon: 'i-heroicons-check-circle',
+      title: `Category "${event.data.name}" has been created`,
       color: 'green',
     })
     emits('close')
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       console.error(e)
       toast.add({
-        icon: "i-heroicons-exclamation-circle",
+        icon: 'i-heroicons-exclamation-circle',
         title: 'Something went wrong',
         description: e.message,
         color: 'red',
@@ -45,8 +46,16 @@ async function onSubmit (event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormGroup label="Name" name="name">
+  <UForm
+    :schema="schema"
+    :state="state"
+    class="space-y-4"
+    @submit="onSubmit"
+  >
+    <UFormGroup
+      label="Name"
+      name="name"
+    >
       <UInput v-model="state.name" />
     </UFormGroup>
 

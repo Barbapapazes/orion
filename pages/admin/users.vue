@@ -1,36 +1,36 @@
 <script lang="ts" setup>
-import type { User } from '~/server/utils/drizzle';
+import type { User } from '~/server/utils/drizzle'
 
 definePageMeta({
   middleware: ['admin'],
-  layout: 'admin'
+  layout: 'admin',
 })
 
 useSeoMeta({
-  title: 'Users'
+  title: 'Users',
 })
 
 const defaultColumns = [{
   key: 'id',
-  label: '#'
+  label: '#',
 }, {
   key: 'githubId',
   label: 'GitHub ID',
 }, {
   key: 'login',
   label: 'Login',
-  sortable: true
+  sortable: true,
 }, {
   key: 'name',
   label: 'Name',
-  sortable: true
-},{
+  sortable: true,
+}, {
   key: 'email',
   label: 'Email',
-  sortable: true
-},{
+  sortable: true,
+}, {
   key: 'roleType',
-  label: 'Role Type'
+  label: 'Role Type',
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
@@ -38,7 +38,7 @@ const columns = computed(() => defaultColumns.filter(column => selectedColumns.v
 const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
   deep: false,
   lazy: true,
-  default: () => []
+  default: () => [],
 })
 </script>
 
@@ -72,15 +72,28 @@ const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
         </template>
       </UDashboardToolbar>
 
-      <UTable :columns="columns" :rows="users" :loading="pending">
+      <UTable
+        :columns="columns"
+        :rows="users"
+        :loading="pending"
+      >
         <template #login-data="{ row }">
           <div class="flex flex-row items-center gap-2">
-          <img :src="row.avatarUrl" alt="avatar" class="w-6 h-6 rounded-full">
-          <span>{{ row.login }}</span>
+            <img
+              :src="row.avatarUrl"
+              alt="avatar"
+              class="w-6 h-6 rounded-full"
+            >
+            <span>{{ row.login }}</span>
           </div>
         </template>
         <template #roleType-data="{ row }">
-          <UBadge variant="subtle" :color="row.roleType === 'admin' ? 'amber' : 'primary'">{{ row.roleType }}</UBadge>
+          <UBadge
+            variant="subtle"
+            :color="row.roleType === 'admin' ? 'amber' : 'primary'"
+          >
+            {{ row.roleType }}
+          </UBadge>
         </template>
       </UTable>
     </UDashboardPanel>

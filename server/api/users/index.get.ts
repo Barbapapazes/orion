@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     login: tables.users.login,
     email: tables.users.email,
     name: tables.users.name,
-    roleType: tables.users.roleType
+    roleType: tables.users.roleType,
   }).from(tables.users)
 
   return users

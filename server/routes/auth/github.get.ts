@@ -1,15 +1,15 @@
-import type { User } from "~/server/utils/drizzle";
+import type { User } from '~/server/utils/drizzle'
 
 export default oauth.githubEventHandler({
   config: {
     emailRequired: true,
   },
   async onSuccess(event, result) {
-    const { user: ghUser } = result;
+    const { user: ghUser } = result
 
-    const githubId = ghUser.id;
+    const githubId = ghUser.id
 
-    const user = await useDrizzle().select().from(tables.users).where(eq(tables.users.githubId, githubId)).get();
+    const user = await useDrizzle().select().from(tables.users).where(eq(tables.users.githubId, githubId)).get()
 
     /**
      * If the user is not in the database or their data has changed, update the user data.
@@ -23,16 +23,16 @@ export default oauth.githubEventHandler({
         name: ghUser.name,
         avatarUrl: ghUser.avatar_url,
       })
-      .onConflictDoUpdate({
-        target: tables.users.githubId,
-        set: {
-          login: ghUser.login,
-          email: ghUser.email,
-          name: ghUser.name,
-          avatarUrl: ghUser.avatar_url,
-        },
-      })
-      .execute();
+        .onConflictDoUpdate({
+          target: tables.users.githubId,
+          set: {
+            login: ghUser.login,
+            email: ghUser.email,
+            name: ghUser.name,
+            avatarUrl: ghUser.avatar_url,
+          },
+        })
+        .execute()
     }
 
     await setUserSession(event, {
@@ -41,25 +41,25 @@ export default oauth.githubEventHandler({
         email: ghUser.email,
         name: ghUser.name,
         avatarUrl: ghUser.avatar_url,
-        roleType: user?.roleType || "creator",
+        roleType: user?.roleType || 'creator',
       },
-    });
+    })
 
-    return sendRedirect(event, "/");
+    return sendRedirect(event, '/')
   },
-});
+})
 
 interface GitHubUser {
-  id: number;
-  login: string;
-  email: string;
-  name: string;
-  avatar_url: string;
+  id: number
+  login: string
+  email: string
+  name: string
+  avatar_url: string
 }
 
 function userDataChanged(user: User, ghUser: GitHubUser) {
   return user.login !== ghUser.login
     || user.email !== ghUser.email
     || user.name !== ghUser.name
-    || user.avatarUrl !== ghUser.avatar_url;
+    || user.avatarUrl !== ghUser.avatar_url
 }

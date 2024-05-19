@@ -3,26 +3,26 @@ import { type Category } from '~/server/utils/drizzle'
 
 definePageMeta({
   middleware: ['admin'],
-  layout: 'admin'
+  layout: 'admin',
 })
 
 useSeoMeta({
-  title: 'Categories'
+  title: 'Categories',
 })
 
 const defaultColumns = [{
   key: 'id',
-  label: '#'
+  label: '#',
 }, {
   key: 'name',
   label: 'Name',
-  sortable: true
+  sortable: true,
 }, {
   key: 'slug',
   label: 'Slug',
 }, {
   key: 'actions',
-  label: 'Actions'
+  label: 'Actions',
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
@@ -34,9 +34,9 @@ const actionsItems = (row: Category) => [
     click: () => {
       editCategory.value = row
       isEditCategoryModalOpen.value = true
-    }
+    },
   },
-]]
+  ]]
 
 const isNewCategoryModalOpen = ref<boolean>(false)
 
@@ -46,10 +46,10 @@ const isEditCategoryModalOpen = ref<boolean>(false)
 const { data: categories, refresh, pending } = await useFetch<Category[]>('/api/categories', {
   deep: false,
   lazy: true,
-  default: () => []
+  default: () => [],
 })
 
-function onFormClose () {
+function onFormClose() {
   isNewCategoryModalOpen.value = false
   isEditCategoryModalOpen.value = false
   refresh()
@@ -59,8 +59,8 @@ defineShortcuts({
   meta_c: {
     handler: () => {
       isNewCategoryModalOpen.value = true
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -100,9 +100,12 @@ defineShortcuts({
         description="Be careful with this action, if could affect the system."
         :ui="{ width: 'sm:max-w-md' }"
       >
-        <CategoriesEditForm v-if="editCategory" :category="editCategory" @close="onFormClose()" />
+        <CategoriesEditForm
+          v-if="editCategory"
+          :category="editCategory"
+          @close="onFormClose()"
+        />
       </UDashboardModal>
-
 
       <UDashboardToolbar>
         <template #right>
@@ -119,10 +122,18 @@ defineShortcuts({
         </template>
       </UDashboardToolbar>
 
-      <UTable :columns="columns" :rows="categories" :loading="pending">
+      <UTable
+        :columns="columns"
+        :rows="categories"
+        :loading="pending"
+      >
         <template #actions-data="{ row }">
           <UDropdown :items="actionsItems(row)">
-            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-ellipsis-horizontal-20-solid"
+            />
           </UDropdown>
         </template>
       </UTable>

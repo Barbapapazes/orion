@@ -5,7 +5,10 @@ const { loggedIn, user, clear } = useUserSession()
 <template>
   <div v-if="loggedIn && user">
     <h1>Welcome {{ user.username }}!</h1>
-    <img :src="user.avatarUrl" alt="avatar">
+    <img
+      :src="user.avatarUrl"
+      alt="avatar"
+    >
     <NuxtLink to="/admin/categories">
       Categories
     </NuxtLink>
