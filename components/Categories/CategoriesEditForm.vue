@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  close: [void]
+  close: []
 }>()
 
 const toast = useToast()

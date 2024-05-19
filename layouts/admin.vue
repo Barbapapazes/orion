@@ -6,7 +6,7 @@ const links = [{
   to: '/admin',
   tooltip: {
     text: 'Admin',
-  }
+  },
 }, {
   id: 'categories',
   label: 'Categories',
@@ -14,15 +14,15 @@ const links = [{
   to: '/admin/categories',
   tooltip: {
     text: 'Categories',
-  }
-},{
+  },
+}, {
   id: 'modules',
   label: 'Modules',
   icon: 'i-heroicons-archive-box',
   to: '/admin/modules',
   tooltip: {
     text: 'Modules',
-  }
+  },
 }, {
   id: 'users',
   label: 'Users',
@@ -30,7 +30,7 @@ const links = [{
   to: '/admin/users',
   tooltip: {
     text: 'Users',
-  }
+  },
 }]
 </script>
 

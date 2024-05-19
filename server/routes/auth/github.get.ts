@@ -2,7 +2,7 @@ export default oauth.githubEventHandler({
   config: {
     emailRequired: true,
   },
-  async onSuccess(event, { user, tokens }) {
+  async onSuccess(event, { user }) {
     const savedUser = await useDrizzle()
       .insert(tables.users)
       .values({

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { User, Category } from '~/server/utils/drizzle';
+import type { User } from '~/server/utils/drizzle';
 
 definePageMeta({
   middleware: ['admin'],
@@ -40,8 +40,7 @@ const { data: users, pending } = await useFetch<User[]>('/api/users', {
       <UDashboardNavbar
         title="Users"
         :badge="users.length"
-      >
-      </UDashboardNavbar>
+      />
 
       <UDashboardToolbar>
         <template #right>

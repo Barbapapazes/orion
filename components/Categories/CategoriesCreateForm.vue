@@ -5,7 +5,7 @@ import type { FormSubmitEvent } from '#ui/types'
 const toast = useToast()
 
 const emits = defineEmits<{
-  close: [void]
+  close: []
 }>()
 
 const schema = object({

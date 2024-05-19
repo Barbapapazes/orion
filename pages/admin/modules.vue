@@ -109,7 +109,7 @@ async function syncModules() {
 
         <UTable :columns="columns" :rows="modules" :loading="pending">
           <template #icon-data="{ row }">
-            <img v-if="row.icon" :src="`https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons/${row.icon}`" class="h-6 w-auto" />
+            <img v-if="row.icon" :src="`https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons/${row.icon}`" class="h-6 w-auto" >
             <span v-else class="i-heroicons-photo inline-block h-6 w-6" />
           </template>
           <template #type-data="{ row }">
