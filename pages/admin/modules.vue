@@ -36,16 +36,16 @@ const { data: modules, refresh, pending } = await useFetch<Module[]>('/api/modul
   default: () => []
 })
 
-const fetchModuleLoading = ref<boolean>(false)
-async function fetchModules() {
-  fetchModuleLoading.value = true
+const syncModuleLoading = ref<boolean>(false)
+async function syncModules() {
+  syncModuleLoading.value = true
    try {
-    await $fetch('/api/modules/fetch', {
+    await $fetch('/api/modules/sync', {
       method: 'POST',
     })
     toast.add({
       icon: "i-heroicons-check-circle",
-      title: 'Modules fetched',
+      title: 'Modules synced',
       color: 'green',
     })
     refresh()
@@ -61,7 +61,7 @@ async function fetchModules() {
           })
         }
       } finally {
-        fetchModuleLoading.value = false
+        syncModuleLoading.value = false
       }
 }
 </script>
@@ -75,11 +75,11 @@ async function fetchModules() {
       >
         <template #right>
           <UButton
-            label="Fetch modules"
-            :loading="fetchModuleLoading"
+            label="Sync modules"
+            :loading="syncModuleLoading"
             trailing-icon="i-heroicons-server-stack"
             color="gray"
-            @click="fetchModules"
+            @click="syncModules"
           />
         </template>
       </UDashboardNavbar>
