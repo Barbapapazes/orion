@@ -139,7 +139,7 @@ const templates = []
             class="w-full h-full flex flex-col items-center justify-center gap-6 py-36"
           >
             <p>
-              No templates found.
+              No templates found
             </p>
             <div class="flex flex-row gap-6">
               <UButton

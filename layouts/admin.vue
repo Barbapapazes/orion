@@ -12,25 +12,21 @@ const links = [{
   label: 'Categories',
   icon: 'i-heroicons-tag',
   to: '/admin/categories',
-  tooltip: {
-    text: 'Categories',
-  },
 }, {
   id: 'modules',
   label: 'Modules',
   icon: 'i-heroicons-archive-box',
   to: '/admin/modules',
-  tooltip: {
-    text: 'Modules',
-  },
+}, {
+  id: 'templates',
+  label: 'Templates',
+  icon: 'i-heroicons-rectangle-group',
+  to: '/admin/templates',
 }, {
   id: 'users',
   label: 'Users',
   icon: 'i-heroicons-user-group',
   to: '/admin/users',
-  tooltip: {
-    text: 'Users',
-  },
 }]
 </script>
 

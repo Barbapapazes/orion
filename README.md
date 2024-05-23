@@ -29,35 +29,40 @@ pnpm dev
 
 # Création d'une Application Full-Stack avec Nuxt et Cloudflare
 
-## Restructuration de la gestion des utilisateurs
 
-- [x] On sauvegarde une fois (get if not exists save) et on check les diff pour les mises à jour
-- [x] On sauvegarde les mails (email)
-- [x] Rename username en login
-- [x] On sauvegarde le nom d'utilisateur (name) (en plus du login)
-- [x] Gestion des admins et ban des utilisateurs dans l'interface d'administration
-- [x] Voir pour ajouter un created at et un updated at
-- [x] Revoir les données envoyées lors du login (pas besoin du githubId)
 
 ## Création du formulaire pour les templates
+
+- [x] Création du schéma pour les templates (sans la gestion des images ni des modules) (uniquement les one to many)
+- [x] Création du formulaire dans l'ui (validation des données dans le front-end)
+- [x] Création de l'endpoint pour ajouter un template (validation des données dans le back-end)
+- [x] Save du template dans la DB
+- [x] Affichage des templates dans l'interface d'administration (rappeler que le index.get.ts a posé quelques soucis, pour l'issue de drizzle sur les joins, il faut just spécifier les select (mais à préciser du coup)
+Il faut les documenter parce qu'elles sont importantes
+https://github.com/drizzle-team/drizzle-orm/issues/555
+https://github.com/cloudflare/workers-sdk/issues/3160)
 
 ## On continue le formulaire des templates
 
 Template
 
-- [ ] Création du formulaire pour ajouter un template
-- [ ] Endpoint pour ajouter un template
-- [ ] Gestion du md pour la description
-- [ ] Visualisation des thèmes dans la partie administration
-- [ ] Gestion des id de l'url via https://github.com/ai/nanoid
+- [x] Visualisation d'un template (gestion de l'url)
+- [x] Parse du MD
+- [ ] Intégration de easymde
 
-Première page (hors stream pour le contenu et les texts)
 
-- [ ] Ajout d'une page d'accueil
+
+
+
+- [ ] Création de la page permettant l'affichage d'un template (gestion du hash dans l'url et computed de l'url côté server)
+- [ ] Gestion du markdown pour la description (markdown-it côté server) (et explication de pourquoi pas de Nuxt Content)
+- [ ]
+
+
 
 PR à ajouter dans les contributions:
-
 https://github.com/nuxt-hub/core/pull/113
 https://github.com/nuxt/ui-pro/issues/372
 
-(il faut voir si le problème de couleurs vient de ui, ui pro ou nuxt hub ?
+_Pour l'editeur markdown, faire un poc_
+quill (et son format delta chelou) vs easymde

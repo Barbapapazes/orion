@@ -1,3 +1,3 @@
 <template>
-  <span> portal </span>
+  <TemplatesCreateForm />
 </template>

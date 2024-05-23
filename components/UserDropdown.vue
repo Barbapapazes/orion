@@ -14,7 +14,7 @@ const items = computed(() => [
   // }],
   [{
     label: 'Sign out',
-    icon: 'i-heroicons-arrow-left-on-rectangle',
+    icon: 'i-heroicons-arrow-right-on-rectangle',
     click: async () => {
       await clear()
       navigateTo('/')
