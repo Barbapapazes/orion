@@ -19,6 +19,9 @@ const defaultColumns = [{
   key: 'icon',
   label: 'Icon',
 }, {
+  key: 'slug',
+  label: 'Slug',
+}, {
   key: 'name',
   label: 'Name',
   sortable: true,

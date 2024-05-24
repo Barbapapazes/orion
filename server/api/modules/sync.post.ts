@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
 
   const data = await $fetch<Modules>('https://api.nuxt.com/modules')
   const modules = data.modules
-    .map(({ name, type, icon, repo }) => ({ name, type, icon, repo }))
     .filter(({ type }) => type === 'official' || type === 'community')
+    .map(({ name, type, icon, repo }) => ({ name, type, icon, repo, slug: useSlugify(name) }))
 
   // A values cannot insert more than 100 bound parameters.
   // So we need to insert in multiple times

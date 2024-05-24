@@ -1,4 +1,30 @@
 <script setup lang="ts">
+const description = 'A community-driven collection of templates for your next project, from landing pages to complete web applications.'
+useSeoMeta({
+  description,
+  ogDescription: description,
+})
+
+const items = [{
+  label: 'What is Orion?',
+  content: 'Orion is a community-driven collection of templates for your next project, from landing pages to complete web applications. It means that it is a website where you can find starter or themes built by Nuxt users for other Nuxt users.',
+}, {
+  label: 'How does it work?',
+  content: 'As a user, you can browse the templates, filter them by categories, modules, and pricing, and then you can see the details of the template. Once you find a template that you like, you can easily access to it using the access link.',
+}, {
+  label: 'How can I submit a template?',
+  content: 'To submit a template, you need to have a GitHub account. Once you have it, you can click on the "Submit a template" button to create an account. You\'ll be able to create a new template using a form and then submit it to review. Your template will be examined by the Orion team and then published if it meets the requirements.',
+}, {
+  label: 'Is Orion free?',
+  content: 'Yes, Orion is free to use, for both the users and the creators. It\'s a project by the community for the community.',
+}, {
+  label: 'How can I contact the team?',
+  content: 'You can contact the team by sending an email to orion@barbapapazes.dev or using the social media links in the footer.',
+}]
+
+const route = useRoute()
+const filter = route.params.filter as string | undefined
+
 const sorts = [
   { label: 'Random', value: 'random' },
   { label: 'Created', value: 'created' },
@@ -16,28 +42,53 @@ const { data: categories } = await useFetch('/api/categories', {
   deep: false,
   default: () => [],
 })
+
+const categorySlug = ref<string>('')
+
+if (filter && categories.value.length && categories.value.some(category => category.slug === filter)) {
+  categorySlug.value = filter
+}
+
 const { data: modules } = await useFetch('/api/modules', {
   deep: false,
   default: () => [],
   transform: (data) => {
-    // Order by type
+    // Order by name and then by type (official and then community).
     return data.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.type.localeCompare(a.type))
   },
 })
+
+const moduleSlug = ref<string>('')
+
+if (filter && modules.value.length && modules.value.some(module => module.slug === filter)) {
+  moduleSlug.value = filter
+}
 
 const templates = []
 </script>
 
 <template>
   <div>
-    <ULandingHero>
+    <ULandingHero :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]">
       <template #title>
         Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
       </template>
       <template #description>
-        A community-driven collection of templates for your next project, <br> from landing pages to complete web applications.
+        A community-driven collection of templates for your next project, <br class="hidden sm:inline"> from landing pages to complete web applications.
       </template>
     </ULandingHero>
+    <section class="mt-4 mb-20 py-12 border-y dark:border-gray-800 dark:bg-gray-800 dark:bg-opacity-60">
+      <div class="px-4 max-w-screen-lg mx-auto flex flex-row justify-around">
+        <p class="flex flex-col gap-4 max-w-56">
+          <span class="text-4xl font-semibold"> 45 </span>
+          <span class="dark:opacity-60"> Templates available and ready to use across {{ categories.length }} categories.</span>
+        </p>
+        <p class="flex flex-col gap-4 max-w-56">
+          <span class="text-4xl font-semibold"> 34 </span>
+          <span class="dark:opacity-60"> Creators share their creations. You could be one of them. </span>
+        </p>
+      </div>
+    </section>
     <UPage class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <template #left>
         <div class="mt-8 flex flex-col gap-4">
@@ -55,16 +106,18 @@ const templates = []
 
           <div class="flex flex-col gap-6">
             <USelectMenu
+              v-model="categorySlug"
               :options="categories"
               placeholder="Categories"
-              by="id"
+              value-attribute="slug"
               option-attribute="name"
             />
 
             <USelectMenu
+              v-model="moduleSlug"
               :options="modules"
               placeholder="Modules"
-              by="id"
+              value-attribute="slug"
               option-attribute="name"
             >
               <template #option="{ option }">
@@ -133,7 +186,10 @@ const templates = []
           </UButtonGroup>
         </div>
 
-        <div class="mt-6">
+        <div
+          id="templates"
+          class="mt-6"
+        >
           <div
             v-if="!templates.length"
             class="w-full h-full flex flex-col items-center justify-center gap-6 py-36"
@@ -161,5 +217,12 @@ const templates = []
         </div>
       </UPageBody>
     </UPage>
+    <ULandingSection>
+      <ULandingFAQ
+        :ui="{ wrapper: 'max-w-screen-md mx-auto' }"
+        :items="items"
+        multiple
+      />
+    </ULandingSection>
   </div>
 </template>
