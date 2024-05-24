@@ -25,6 +25,15 @@ const items = [[{
     navigateTo('/templates')
   },
 }]]
+
+if (user.value?.roleType === 'admin') {
+  // @ts-expect-error No types for this yet
+  items[0].push({
+    label: 'Admin',
+    icon: 'i-heroicons-shield-check',
+    to: '/admin',
+  })
+}
 </script>
 
 <template>
@@ -51,13 +60,11 @@ const items = [[{
           Submit a template
         </UButton>
         <UDropdown
-          v-else
-          mode="hover"
+          v-else-if="user"
           :items="items"
         >
           <template #default="{ open }">
             <UButton
-              to="/profile"
               variant="ghost"
               color="gray"
               :class="[open && 'bg-gray-50 dark:bg-gray-800']"
@@ -75,7 +82,7 @@ const items = [[{
       </template>
     </UHeader>
 
-    <UMain class="flex">
+    <UMain>
       <slot />
     </UMain>
 

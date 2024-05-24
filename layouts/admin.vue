@@ -46,7 +46,7 @@ const links = [{
         :ui="{ left: 'flex-1' }"
       >
         <template #left>
-          <NuxtLink to="/">
+          <NuxtLink to="/templates">
             Orion
           </NuxtLink> Dashboard
         </template>

@@ -68,7 +68,7 @@ const templates = []
 </script>
 
 <template>
-  <div class="grow">
+  <div>
     <ULandingHero :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]">
       <template #title>
         Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
@@ -77,23 +77,27 @@ const templates = []
         A community-driven collection of templates for your next project, <br class="hidden sm:inline"> from landing pages to complete web applications.
       </template>
     </ULandingHero>
-    <section class="mt-4 mb-20 py-12 border-y dark:border-gray-800 dark:bg-gray-800 dark:bg-opacity-60">
-      <div class="px-4 max-w-screen-lg mx-auto flex flex-row justify-around">
+    <section class="my-2 py-12 ring-1 dark:ring-gray-800 dark:bg-gray-800 dark:bg-opacity-20">
+      <div class="px-4 max-w-screen-lg mx-auto flex flex-col items-center md:flex-row md:justify-around gap-12">
         <p class="flex flex-col gap-4 max-w-56">
-          <span class="text-4xl font-semibold"> 45 </span>
-          <span class="dark:opacity-60"> Templates available and ready to use across {{ categories.length }} categories.</span>
+          <span class="text-4xl md:text-5xl font-semibold"> 45 </span>
+          <span class="dark:text-gray-400"> Templates available and ready to use across {{ categories.length }} categories.</span>
         </p>
         <p class="flex flex-col gap-4 max-w-56">
-          <span class="text-4xl font-semibold"> 34 </span>
-          <span class="dark:opacity-60"> Creators share their creations. You could be one of them. </span>
+          <span class="text-4xl md:text-5xl font-semibold"> 34 </span>
+          <span class="dark:text-gray-400"> Creators share their creations to
+            help you start your project.
+          </span>
         </p>
       </div>
     </section>
-    <UPage class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <template #left>
-        <div class="mt-8 flex flex-col gap-4">
-          <div class="h-8 flex flex-row items-center justify-between">
-            <span class="font-semibold"> Filters </span>
+    <UContainer class="py-24 sm:py-32 md:py-40 flex flex-col md:flex-row gap-6 md:gap-8">
+      <div class="w-full md:max-w-56">
+        <div class="sticky top-20 flex flex-col gap-6">
+          <div class="h-9 flex flex-row items-center justify-between">
+            <p class="text-lg font-semibold">
+              Filters
+            </p>
 
             <UButton
               variant="ghost"
@@ -104,13 +108,15 @@ const templates = []
             </UButton>
           </div>
 
-          <div class="flex flex-col gap-6">
+          <!-- Filters -->
+          <div class="flex flex-col gap-6 md:gap-4">
             <USelectMenu
               v-model="categorySlug"
               :options="categories"
               placeholder="Categories"
               value-attribute="slug"
               option-attribute="name"
+              size="md"
             />
 
             <USelectMenu
@@ -119,6 +125,7 @@ const templates = []
               placeholder="Modules"
               value-attribute="slug"
               option-attribute="name"
+              size="md"
             >
               <template #option="{ option }">
                 <img
@@ -137,6 +144,7 @@ const templates = []
             <USelectMenu
               :options="pricing"
               placeholder="Pricing"
+              size="md"
             >
               <template #option="{ option }">
                 <template v-if="option.value === 'free'">
@@ -159,18 +167,20 @@ const templates = []
             </USelectMenu>
           </div>
         </div>
-      </template>
+      </div>
 
-      <UPageBody>
+      <div class="w-full flex flex-col gap-6">
+        <!-- Actions Toolbar -->
         <div class="flex flex-row justify-between">
           <UInput
             icon="i-heroicons-magnifying-glass-20-solid"
             color="white"
             :trailing="false"
             placeholder="Search..."
+            size="md"
           />
 
-          <UButtonGroup>
+          <UButtonGroup size="md">
             <UButton
               :icon="order === 1 ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down'"
               color="gray"
@@ -188,17 +198,15 @@ const templates = []
 
         <div
           id="templates"
-          class="mt-6"
         >
           <UCard
-            v-if="!templates.length"
-            class="dark:bg-opacity-30 dark:bg-gray-800 w-full h-full py-36"
+            class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
             :ui="{ body: { base: 'flex flex-col justify-center items-center gap-6' } }"
           >
-            <p>
+            <p class="text-sm text-center dark:text-gray-400">
               No templates found.
             </p>
-            <div class="flex flex-row gap-6">
+            <div class="flex flex-row justify-center items-center gap-2">
               <SubmitTemplateButton
                 size="sm"
               />
@@ -211,11 +219,12 @@ const templates = []
             </div>
           </UCard>
         </div>
-      </UPageBody>
-    </UPage>
+      </div>
+    </UContainer>
+
     <ULandingSection>
       <ULandingFAQ
-        :ui="{ wrapper: 'max-w-screen-md mx-auto' }"
+        :ui="{ wrapper: 'max-w-screen-lg mx-auto' }"
         :items="items"
         multiple
       />

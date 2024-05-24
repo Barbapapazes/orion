@@ -20,85 +20,91 @@ const templates = []
 <template>
   <UContainer
     v-if="user"
-    class="grow flex"
+    class="mt-8 flex flex-col gap-8"
   >
-    <UPage
-      class="grow"
-      :ui="{ wrapper: 'justify-items-stretch' }"
-    >
-      <UPageHeader
-        :ui="{ wrapper: 'border-none pb-0' }"
-        :title="`Welcome ${user.name ?? user.login}`"
-      />
-      <UPageBody :ui="{ wrapper: 'grow h-full flex flex-col lg:flex-row gap-8 lg:gap-4 xl:gap-8' }">
-        <div class="order-2 lg:order-none lg:grow lg:max-w-xs flex flex-col gap-6">
-          <UCard
-            class="dark:bg-opacity-30 dark:bg-gray-800"
-            :ui="{ body: { base: 'flex flex-col items-center lg:block' } }"
-          >
-            <UAvatar
-              :src="user.avatarUrl"
-              :alt="user.name ?? user.login"
-              size="3xl"
-            />
-            <p class="mt-2 font-semibold">
+    <h1 class="text-3xl font-bold">
+      Welcome {{ user.name ?? user.login }}
+    </h1>
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="order-2 md:order-none flex flex-col md:max-w-xs gap-6">
+        <UCard
+          class="dark:bg-opacity-20 dark:bg-gray-800"
+          :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
+        >
+          <UAvatar
+            :src="user.avatarUrl"
+            :alt="user.name ?? user.login"
+            size="lg"
+          />
+          <div class="flex flex-col">
+            <p class="font-semibold">
               {{ user.name ?? user.login }}
             </p>
-            <p class="opacity-60">
+            <p class="dark:text-gray-400 text-sm">
               {{ user.email }}
             </p>
-          </UCard>
+          </div>
+        </UCard>
+        <div class="flex flex-row items-center gap-2">
           <UButton
-            :ui="{ base: 'justify-center' }"
+            :ui="{ base: 'grow justify-center' }"
             to="/templates/new"
             color="black"
             size="lg"
           >
             Submit a template
           </UButton>
+          <UTooltip text="Explanation">
+            <UButton
+              square
+              icon="i-heroicons-information-circle"
+              color="gray"
+              variant="ghost"
+              size="lg"
+              @click="whatIsTemplateModal = true"
+            />
+          </UTooltip>
         </div>
-        <UPageGrid :ui="{ wrapper: 'grow' }">
-          <UCard
-            v-if="!templates.length"
-            class="dark:bg-opacity-30 dark:bg-gray-800 sm:col-span-2 sm:row-span-2 xl:col-span-3 xl:row-span-3 flex flex-col items-center justify-center lg:h-1/2"
-            :ui="{ body: { base: 'flex flex-col justify-center items-center gap-8' } }"
-          >
-            <p class="text-center">
-              <span>
-                No templates found.
-              </span>
-              <br>
-              <span>
-                Submit a template to get started.
-              </span>
-            </p>
-            <div class="flex flex-col justify-center items-center gap-2">
+      </div>
+      <div class="grow flex">
+        <UCard
+          class="grow dark:bg-opacity-20 dark:bg-gray-800 py-40"
+          :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
+        >
+          <p class="text-sm text-center dark:text-gray-400">
+            No templates found.
+          </p>
+          <div class="flex flex-row justify-center items-center gap-2">
+            <UButton
+              to="/templates/new"
+              color="black"
+            >
+              Submit a template
+            </UButton>
+            <UTooltip text="Explanation">
               <UButton
-                to="/templates/new"
-                color="black"
-              >
-                Submit a template
-              </UButton>
-              <UButton
-                variant="link"
+                square
+                icon="i-heroicons-information-circle"
                 color="gray"
-                size="xs"
+                variant="ghost"
                 @click="whatIsTemplateModal = true"
-              >
-                What is a template?
-              </UButton>
-            </div>
-          </UCard>
-        </UPageGrid>
-      </UPageBody>
-    </UPage>
+              />
+            </UTooltip>
+          </div>
+        </UCard>
+      </div>
+    </div>
 
     <UModal v-model="whatIsTemplateModal">
       <UCard
         :ui="{ divide: 'divide-none', body: { base: 'prose dark:prose-invert' }, header: { base: 'flex flex-row items-center justify-between' }, footer: { base: 'flex flex-row items-center justify-between' } }"
       >
         <template #header>
-          <h2 class="font-semibold text-lg">
+          <h2 class="font-semibold text-lg flex items-center justify-center">
+            <UIcon
+              name="i-heroicons-information-circle"
+              class="mr-2"
+            />
             What is a template?
           </h2>
           <UButton
