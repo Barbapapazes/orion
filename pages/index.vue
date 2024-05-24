@@ -142,14 +142,9 @@ const templates = []
               No templates found.
             </p>
             <div class="flex flex-row gap-6">
-              <UButton
-                to="/auth/github"
-                external
+              <SubmitTemplateButton
                 size="sm"
-                color="black"
-              >
-                Submit a template
-              </UButton>
+              />
               <UButton
                 variant="ghost"
                 color="gray"

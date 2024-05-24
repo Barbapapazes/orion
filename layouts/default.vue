@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const { user, loggedIn } = useUserSession()
+
 const socials = [{
   title: 'X',
   icon: 'i-simple-icons-x',
@@ -25,11 +27,26 @@ const socials = [{
           color="gray"
         />
         <UButton
+          v-if="!loggedIn"
           to="/auth/github"
           external
           color="black"
         >
-          Submit a template
+          {{ text }}
+        </UButton>
+        <UButton
+          v-else
+          to="/portal"
+          variant="ghost"
+          color="gray"
+        >
+          <template #leading>
+            <UAvatar
+              :src="user.avatarUrl"
+              size="2xs"
+            />
+          </template>
+          {{ user.name ?? user.login }}
         </UButton>
       </template>
     </UHeader>
