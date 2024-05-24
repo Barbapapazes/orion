@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { user, loggedIn } = useUserSession()
+const { user, loggedIn, clear } = useUserSession()
 
 const socials = [{
   title: 'X',
@@ -12,6 +12,19 @@ const socials = [{
   to: 'https://gh.soubiran.dev',
   target: '_blank',
 }]
+
+const items = [[{
+  label: 'Profile',
+  icon: 'i-heroicons-user',
+  to: '/profile',
+}], [{
+  label: 'Sign out',
+  icon: 'i-heroicons-arrow-right-on-rectangle',
+  click: async () => {
+    await clear()
+    navigateTo('/templates')
+  },
+}]]
 </script>
 
 <template>
@@ -35,26 +48,34 @@ const socials = [{
           external
           color="black"
         >
-          {{ text }}
+          Submit a template
         </UButton>
-        <UButton
+        <UDropdown
           v-else
-          to="/portal"
-          variant="ghost"
-          color="gray"
+          mode="hover"
+          :items="items"
         >
-          <template #leading>
-            <UAvatar
-              :src="user.avatarUrl"
-              size="2xs"
-            />
+          <template #default="{ open }">
+            <UButton
+              to="/profile"
+              variant="ghost"
+              color="gray"
+              :class="[open && 'bg-gray-50 dark:bg-gray-800']"
+            >
+              <template #leading>
+                <UAvatar
+                  :src="user.avatarUrl"
+                  size="2xs"
+                />
+              </template>
+              {{ user.name ?? user.login }}
+            </UButton>
           </template>
-          {{ user.name ?? user.login }}
-        </UButton>
+        </UDropdown>
       </template>
     </UHeader>
 
-    <UMain>
+    <UMain class="flex">
       <slot />
     </UMain>
 

@@ -68,7 +68,7 @@ const templates = []
 </script>
 
 <template>
-  <div>
+  <div class="grow">
     <ULandingHero :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]">
       <template #title>
         Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
@@ -190,9 +190,10 @@ const templates = []
           id="templates"
           class="mt-6"
         >
-          <div
+          <UCard
             v-if="!templates.length"
-            class="w-full h-full flex flex-col items-center justify-center gap-6 py-36"
+            class="dark:bg-opacity-30 dark:bg-gray-800 w-full h-full py-36"
+            :ui="{ body: { base: 'flex flex-col justify-center items-center gap-6' } }"
           >
             <p>
               No templates found.
@@ -208,7 +209,7 @@ const templates = []
                 Reset filters
               </UButton>
             </div>
-          </div>
+          </UCard>
         </div>
       </UPageBody>
     </UPage>

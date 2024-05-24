@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { loggedIn } = useUserSession()
 
-const to = computed(() => loggedIn.value ? '/portal/new' : '/auth/github')
+const to = computed(() => loggedIn.value ? '/templates/new' : '/auth/github')
 const external = computed(() => !loggedIn.value)
 </script>
 
@@ -10,7 +10,6 @@ const external = computed(() => !loggedIn.value)
     :to="to"
     color="black"
     :external="external"
-    @click="logout"
   >
     Submit a template
   </UButton>
