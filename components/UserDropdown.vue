@@ -7,11 +7,11 @@ const items = computed(() => [
     label: '',
     disabled: true,
   }],
-  //  [{
-  //   label: 'Help & Support',
-  //   icon: 'i-heroicons-question-mark-circle',
-  //   shortcuts: ['?'],
-  // }],
+  [{
+    label: 'Profile',
+    icon: 'i-heroicons-user',
+    to: '/profile',
+  }],
   [{
     label: 'Sign out',
     icon: 'i-heroicons-arrow-right-on-rectangle',

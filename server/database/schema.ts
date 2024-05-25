@@ -23,6 +23,7 @@ export const categories = sqliteTable('categories', {
 
 export const modules = sqliteTable('modules', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  slug: text('slug').notNull().unique(),
   name: text('name').notNull().unique(),
   repo: text('repo').notNull().unique(),
   type: text('type', { enum: ['official', 'community'] }).notNull(),

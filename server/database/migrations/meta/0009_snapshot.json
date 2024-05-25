@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "7f16e2a7-9229-4ac1-89a3-e2397f7c1561",
-  "prevId": "e7838d80-a4b2-4af1-8ab2-0bbad98f757e",
+  "id": "d44ab9f8-69eb-43a6-b91f-c4e8f6b63797",
+  "prevId": "6a9c3d98-4748-49e8-93dd-8641c7184970",
   "tables": {
     "categories": {
       "name": "categories",
@@ -66,6 +66,13 @@
           "notNull": true,
           "autoincrement": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -110,6 +117,13 @@
         }
       },
       "indexes": {
+        "modules_slug_unique": {
+          "name": "modules_slug_unique",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        },
         "modules_name_unique": {
           "name": "modules_name_unique",
           "columns": [

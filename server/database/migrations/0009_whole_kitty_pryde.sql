@@ -8,6 +8,7 @@ CREATE TABLE `templates` (
 	`live_url` text,
 	`access_url` text NOT NULL,
 	`description` text NOT NULL,
+	`description_html` text NOT NULL,
 	`user_id` integer NOT NULL,
 	`category_id` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
