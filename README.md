@@ -1,11 +1,17 @@
-# Orion - A Full-Stack Application Built with Nuxt and Cloudflare
-
 > [!NOTE]
 > This application is built during live stream sessions on [Twitch](https://tv.soubiran.dev) (in French). Replays are available on [YouTube](https://yt.soubiran.dev) (in French) and [a blog article](https://soubiran.dev/posts/building-a-full-stack-nuxt-application-on-twitch) (in English) retraces the entire journey. Read it to deeply understand the choices made and the reasons behind them.
 
-Orion is a web application to **centralize themes and templates** created by and for the Nuxt community. Anyone can submit a theme or a template he created to share it with the community. **Feel free to submit your own creation**!
+# Orion - Quickly Start your Nuxt Project
 
-This full-stack application is built with Nuxt and Nuxt UI Pro and deployed using NuxtHub and Cloudflare.
+Orion is a **community-driven collection of templates** for your next project, from landing pages to complete web applications.
+
+It serves to centralize templates created by and for the [Nuxt](https://nuxt.com) community. Templates authors can submit, manage, and share their work with the community.
+
+**Feel free to submit your own creation!**
+
+## Stack
+
+_Orion is a full-stack application is built with Nuxt, Nuxt UI Pro, NuxtHub and deployed using Cloudflare._
 
 ## Contributions
 
@@ -25,44 +31,28 @@ Start the development server
 pnpm dev
 ```
 
+## Inspiration
+
+This project is heavily inspired by the [Astro Developer Portal](https://astro.build/blog/dev-portal/).
+
+## License
+
+Orion © 2024 by Estéban Soubiran is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/
+
 ---
 
 # Création d'une Application Full-Stack avec Nuxt et Cloudflare
 
+Gestion des modules dans les templates
 
+- [x] Mise à jour du schéma
+- [x] Gestion du many-to-many dans le schéma
+- [x] Mise à jour du formulaire
+- [ ] Mise à jour de l'administration (plus tard)
+?? voir avec drizzle pour improve la doc sur le many to many parce que là, c'est pas clair
 
-## Création du formulaire pour les templates
+Gestion des images
 
-- [x] Création du schéma pour les templates (sans la gestion des images ni des modules) (uniquement les one to many)
-- [x] Création du formulaire dans l'ui (validation des données dans le front-end)
-- [x] Création de l'endpoint pour ajouter un template (validation des données dans le back-end)
-- [x] Save du template dans la DB
-- [x] Affichage des templates dans l'interface d'administration (rappeler que le index.get.ts a posé quelques soucis, pour l'issue de drizzle sur les joins, il faut just spécifier les select (mais à préciser du coup)
-Il faut les documenter parce qu'elles sont importantes
-https://github.com/drizzle-team/drizzle-orm/issues/555
-https://github.com/cloudflare/workers-sdk/issues/3160)
-
-## On continue le formulaire des templates
-
-Template
-
-- [x] Visualisation d'un template (gestion de l'url)
-- [x] Parse du MD
-- [ ] Intégration de easymde
-
-
-
-
-
-- [ ] Création de la page permettant l'affichage d'un template (gestion du hash dans l'url et computed de l'url côté server)
-- [ ] Gestion du markdown pour la description (markdown-it côté server) (et explication de pourquoi pas de Nuxt Content)
-- [ ]
-
-
-
-PR à ajouter dans les contributions:
-https://github.com/nuxt-hub/core/pull/113
-https://github.com/nuxt/ui-pro/issues/372
-
-_Pour l'editeur markdown, faire un poc_
-quill (et son format delta chelou) vs easymde
+- [ ] Mise à jour du schema (featuredImage, text, et additionalImages, json)
+- [ ] Mise à jour du formulaire
+- [ ] Mise à jour de l'administration

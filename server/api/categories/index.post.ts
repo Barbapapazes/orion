@@ -1,11 +1,9 @@
-import { object, string } from 'zod'
+import { createCategoryValidator } from '~/utils/validators'
 
 export default defineEventHandler(async (event) => {
   await requireAdminUser(event)
 
-  const body = await readValidatedBody(event, object({
-    name: string(),
-  }).parse)
+  const body = await readValidatedBody(event, createCategoryValidator.parse)
 
   // TODO: Return the DB error to the client (actually, it's just a 500 error handle by Nitro)
   await useDrizzle().insert(tables.categories).values({

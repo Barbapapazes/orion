@@ -7,11 +7,13 @@ CREATE TABLE `templates` (
 	`paid_status` text DEFAULT 'free' NOT NULL,
 	`live_url` text,
 	`access_url` text NOT NULL,
-	`description` text NOT NULL,
-	`description_html` text NOT NULL,
-	`user_id` integer NOT NULL,
+	`short_description` text NOT NULL,
+	`description` text,
+	`creatorId` integer NOT NULL,
 	`category_id` integer NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
+	`created_at` text NOT NULL,
+	`updated_at` text NOT NULL,
+	FOREIGN KEY (`creatorId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint

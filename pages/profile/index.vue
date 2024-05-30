@@ -20,80 +20,84 @@ const templates = []
 <template>
   <UContainer
     v-if="user"
-    class="mt-8 flex flex-col gap-8"
   >
-    <h1 class="text-3xl font-bold">
-      Welcome {{ user.name ?? user.login }}
-    </h1>
-    <div class="flex flex-col md:flex-row gap-8">
-      <div class="order-2 md:order-none flex flex-col md:max-w-xs gap-6">
-        <UCard
-          class="dark:bg-opacity-20 dark:bg-gray-800"
-          :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
-        >
-          <UAvatar
-            :src="user.avatarUrl"
-            :alt="user.name ?? user.login"
-            size="lg"
-          />
-          <div class="flex flex-col">
-            <p class="font-semibold">
-              {{ user.name ?? user.login }}
-            </p>
-            <p class="dark:text-gray-400 text-sm">
-              {{ user.email }}
-            </p>
-          </div>
-        </UCard>
-        <div class="flex flex-row items-center gap-2">
-          <UButton
-            :ui="{ base: 'grow justify-center' }"
-            to="/templates/new"
-            color="black"
-            size="lg"
-          >
-            Submit a template
-          </UButton>
-          <UTooltip text="Explanation">
-            <UButton
-              square
-              icon="i-heroicons-information-circle"
-              color="gray"
-              variant="ghost"
-              size="lg"
-              @click="whatIsTemplateModal = true"
-            />
-          </UTooltip>
-        </div>
-      </div>
-      <div class="grow flex">
-        <UCard
-          class="grow dark:bg-opacity-20 dark:bg-gray-800 py-40"
-          :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
-        >
-          <p class="text-sm text-center dark:text-gray-400">
-            No templates found.
-          </p>
-          <div class="flex flex-row justify-center items-center gap-2">
-            <UButton
-              to="/templates/new"
-              color="black"
+    <UPage>
+      <UPageHeader
+        :title="`Welcome ${user.name ?? user.login}`"
+      />
+      <UPageBody>
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="order-2 md:order-0 flex flex-col gap-6">
+            <UCard
+              class="dark:bg-opacity-20 dark:bg-gray-800"
+              :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
             >
-              Submit a template
-            </UButton>
-            <UTooltip text="Explanation">
-              <UButton
-                square
-                icon="i-heroicons-information-circle"
-                color="gray"
-                variant="ghost"
-                @click="whatIsTemplateModal = true"
+              <UAvatar
+                :src="user.avatarUrl"
+                :alt="user.name ?? user.login"
+                size="lg"
               />
-            </UTooltip>
+              <div class="flex flex-col">
+                <p class="font-semibold">
+                  {{ user.name ?? user.login }}
+                </p>
+                <p class="dark:text-gray-400 text-sm">
+                  {{ user.email }}
+                </p>
+              </div>
+            </UCard>
+            <div class="flex flex-row items-center gap-2">
+              <UButton
+                :ui="{ base: 'grow justify-center' }"
+                to="/templates/new"
+                color="black"
+                size="lg"
+              >
+                Submit a template
+              </UButton>
+              <UTooltip text="Explanation">
+                <UButton
+                  square
+                  icon="i-heroicons-information-circle"
+                  color="gray"
+                  variant="ghost"
+                  size="lg"
+                  @click="whatIsTemplateModal = true"
+                />
+              </UTooltip>
+            </div>
           </div>
-        </UCard>
-      </div>
-    </div>
+
+          <div class="grow md:order-2">
+            <UCard
+              class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
+              :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
+            >
+              <p class="text-sm text-center dark:text-gray-400">
+                No templates found.
+              </p>
+              <div class="flex flex-row justify-center items-center gap-2">
+                <UButton
+                  to="/templates/new"
+                  color="black"
+                >
+                  Submit a template
+                </UButton>
+                <UTooltip text="Explanation">
+                  <UButton
+                    square
+                    icon="i-heroicons-information-circle"
+                    color="gray"
+                    variant="ghost"
+                    @click="whatIsTemplateModal = true"
+                  />
+                </UTooltip>
+              </div>
+            </UCard>
+          </div>
+        </div>
+      </UPageBody>
+    </UPage>
 
     <UModal v-model="whatIsTemplateModal">
       <UCard

@@ -33,11 +33,6 @@ const sorts = [
 const sort = ref(sorts[0])
 const order = ref<1 | -1>(1)
 
-const pricing = [
-  { label: 'Free', value: 'free' },
-  { label: 'Paid', value: 'paid' },
-]
-
 const { data: categories } = await useFetch('/api/categories', {
   deep: false,
   default: () => [],
@@ -69,7 +64,17 @@ const templates = []
 
 <template>
   <div>
-    <ULandingHero :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]">
+    <ULandingHero
+      :ui="{ wrapper: 'overflow-hidden', base: 'lg:text-left', links: 'lg:justify-start' }"
+      :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]"
+    >
+      <template #top>
+        <img
+          src="/images/hero-template-dark.svg"
+          alt=""
+          class="absolute -z-10 top-1/2 right-0 h-3/4 -translate-y-1/2 translate-x-1/4 opacity-40 lg:opacity-100"
+        >
+      </template>
       <template #title>
         Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
       </template>
@@ -142,34 +147,22 @@ const templates = []
             </USelectMenu>
 
             <USelectMenu
-              :options="pricing"
+              :options="PAID_STATUS"
               placeholder="Pricing"
               size="md"
             >
               <template #option="{ option }">
-                <template v-if="option.value === 'free'">
-                  <UBadge
-                    color="green"
-                    variant="subtle"
-                  >
-                    {{ option.label }}
-                  </UBadge>
-                </template>
-                <template v-else>
-                  <UBadge
-                    color="yellow"
-                    variant="subtle"
-                  >
-                    {{ option.label }}
-                  </UBadge>
-                </template>
+                <PaidStatusBadge :status="option" />
               </template>
             </USelectMenu>
           </div>
         </div>
       </div>
 
-      <div class="w-full flex flex-col gap-6">
+      <div
+        id="templates"
+        class="w-full flex flex-col gap-6"
+      >
         <!-- Actions Toolbar -->
         <div class="flex flex-row justify-between">
           <UInput
@@ -196,9 +189,7 @@ const templates = []
           </UButtonGroup>
         </div>
 
-        <div
-          id="templates"
-        >
+        <div>
           <UCard
             class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
             :ui="{ body: { base: 'flex flex-col justify-center items-center gap-6' } }"
@@ -231,3 +222,9 @@ const templates = []
     </ULandingSection>
   </div>
 </template>
+
+<style>
+#templates {
+  scroll-margin-top: 6rem;
+}
+</style>

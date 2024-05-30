@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { object, string, type output } from 'zod'
+import { type output } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { type Category } from '~/server/utils/drizzle'
 
@@ -13,11 +13,7 @@ const emits = defineEmits<{
 
 const toast = useToast()
 
-const schema = object({
-  name: string({ message: 'Required' }),
-})
-
-type Schema = output<typeof schema>
+type Schema = output<typeof updateCategoryValidator>
 
 const state = reactive({
   name: props.category.name,
@@ -26,7 +22,7 @@ const state = reactive({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     await $fetch(`/api/categories/${props.category.id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: event.data,
     })
     toast.add({
@@ -52,7 +48,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 <template>
   <UForm
-    :schema="schema"
+    :schema="updateCategoryValidator"
     :state="state"
     class="space-y-4"
     @submit="onSubmit"
@@ -60,6 +56,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <UFormGroup
       label="Name"
       name="name"
+      :hint="`${state.name?.length || 0}/${CATEGORY_MAX_NAME_LENGTH} characters`"
     >
       <UInput v-model="state.name" />
     </UFormGroup>

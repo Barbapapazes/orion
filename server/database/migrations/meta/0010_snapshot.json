@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "b00f95d3-04c6-4385-b0e2-ab6f09246fc6",
-  "prevId": "6a9c3d98-4748-49e8-93dd-8641c7184970",
+  "id": "e65299e7-661c-4f5c-a585-f79f1d21beb0",
+  "prevId": "b00f95d3-04c6-4385-b0e2-ab6f09246fc6",
   "tables": {
     "categories": {
       "name": "categories",
@@ -140,6 +140,56 @@
         }
       },
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "modulesToTemplates": {
+      "name": "modulesToTemplates",
+      "columns": {
+        "module_id": {
+          "name": "module_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_id": {
+          "name": "template_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "modulesToTemplates_module_id_modules_id_fk": {
+          "name": "modulesToTemplates_module_id_modules_id_fk",
+          "tableFrom": "modulesToTemplates",
+          "tableTo": "modules",
+          "columnsFrom": [
+            "module_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "modulesToTemplates_template_id_templates_id_fk": {
+          "name": "modulesToTemplates_template_id_templates_id_fk",
+          "tableFrom": "modulesToTemplates",
+          "tableTo": "templates",
+          "columnsFrom": [
+            "template_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },

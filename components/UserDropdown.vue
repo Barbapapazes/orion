@@ -25,7 +25,6 @@ const items = computed(() => [
 
 <template>
   <UDropdown
-    mode="hover"
     :items="items"
     :ui="{ width: 'w-full', item: { disabled: 'cursor-text select-text' } }"
     :popper="{ strategy: 'absolute', placement: 'top' }"

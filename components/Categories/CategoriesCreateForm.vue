@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { object, string, type output } from 'zod'
+import { type output } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
@@ -8,11 +8,7 @@ const emits = defineEmits<{
   close: []
 }>()
 
-const schema = object({
-  name: string({ message: 'Required' }),
-})
-
-type Schema = output<typeof schema>
+type Schema = output<typeof createCategoryValidator>
 
 const state = reactive({
   name: undefined,
@@ -47,7 +43,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 <template>
   <UForm
-    :schema="schema"
+    :schema="createCategoryValidator"
     :state="state"
     class="space-y-4"
     @submit="onSubmit"
@@ -55,6 +51,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <UFormGroup
       label="Name"
       name="name"
+      :hint="`${state.name?.length || 0}/${CATEGORY_MAX_NAME_LENGTH} characters`"
     >
       <UInput v-model="state.name" />
     </UFormGroup>

@@ -30,6 +30,9 @@ const defaultColumns = [{
   key: 'accessUrl',
   label: 'Access URL',
 }, {
+  key: 'shortDescription',
+  label: 'Short Description',
+}, {
   key: 'description',
   label: 'Description',
 },
@@ -113,22 +116,7 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
           </UButton>
         </template>
         <template #paidStatus-data="{ row }">
-          <template v-if="row.paidStatus === 'free'">
-            <UBadge
-              color="green"
-              variant="subtle"
-            >
-              Free
-            </UBadge>
-          </template>
-          <template v-else-if="row.paidStatus === 'paid'">
-            <UBadge
-              color="yellow"
-              variant="subtle"
-            >
-              Paid
-            </UBadge>
-          </template>
+          <PaidStatusBadge :status="row.paidStatus" />
         </template>
         <template #createdBy-data="{ row }">
           <div class="flex flex-row items-center gap-2">
@@ -142,6 +130,11 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
         </template>
         <template #category-data="{ row }">
           {{ row.category.name }}
+        </template>
+        <template #description-data="{ row }">
+          <div
+            v-html="row.description"
+          />
         </template>
       </UTable>
     </UDashboardPanel>
