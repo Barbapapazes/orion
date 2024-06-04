@@ -4,71 +4,43 @@ import '~/assets/css/quill.css'
 import { type output } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
+const props = defineProps<{
+  hash: string
+  title: string
+  paidStatus: typeof PAID_STATUS[number]
+  categoryId: number
+  moduleIds: number[]
+  liveUrl: string | null
+  accessUrl: string
+  shortDescription: string
+  description: string | null
+}>()
+
 const toast = useToast()
 
 type Schema = output<typeof createTemplateValidator>
 
 const form = ref()
 
-const state = reactive({
-  featuredImage: undefined as File | undefined,
-  title: undefined,
-  paidStatus: undefined,
-  categoryId: undefined,
-  moduleIds: [],
-  liveUrl: undefined,
-  accessUrl: undefined,
-  shortDescription: '',
-  description: '',
+const state = reactive<{
+  title: undefined | string
+  paidStatus: undefined | typeof PAID_STATUS[number]
+  categoryId: undefined | number
+  moduleIds: number[]
+  liveUrl: string | undefined
+  accessUrl: string
+  shortDescription: string
+  description: string | null
+}>({
+  title: props.title,
+  paidStatus: props.paidStatus,
+  categoryId: props.categoryId,
+  moduleIds: props.moduleIds,
+  liveUrl: props.liveUrl ?? undefined,
+  accessUrl: props.accessUrl,
+  shortDescription: props.shortDescription,
+  description: props.description,
 })
-
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = new FormData()
-
-  for (const key in state) {
-    if (state[key] === undefined) continue
-
-    if (key === 'featuredImage') {
-      if (state.featuredImage) {
-        formData.append('featuredImage', state.featuredImage)
-      }
-    }
-    else if (key === 'moduleIds') {
-      state.moduleIds.forEach((moduleId) => {
-        formData.append('moduleIds', moduleId)
-      })
-    }
-    else {
-      formData.append(key, state[key])
-    }
-  }
-
-  try {
-    await $fetch('/api/templates', {
-      method: 'POST',
-      body: formData,
-    })
-    toast.add({
-      icon: 'i-heroicons-check-circle',
-      title: `Template "${event.data.title}" has been created`,
-      color: 'green',
-    })
-    // navigateTo('/profile')
-  }
-  catch (error) {
-    if (error instanceof Error) {
-      console.error(error)
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Something went wrong',
-        description: error.message,
-        color: 'red',
-      })
-    }
-  }
-}
-
-const isPremium = computed(() => state.paidStatus === 'premium')
 
 const { data: categories } = await useFetch('/api/categories', {
   deep: false,
@@ -84,6 +56,34 @@ const { data: modules } = await useFetch('/api/modules', {
   },
 })
 
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  try {
+    await $fetch(`/api/templates/${props.hash}`, {
+      method: 'PATCH',
+      body: event.data,
+    })
+    toast.add({
+      icon: 'i-heroicons-check-circle',
+      title: `Template "${event.data.title}" has been updated`,
+      color: 'green',
+    })
+    navigateTo(`/profile`)
+  }
+  catch (error) {
+    if (error instanceof Error) {
+      console.error(error)
+      toast.add({
+        icon: 'i-heroicons-exclamation-circle',
+        title: 'Something went wrong',
+        description: error.message,
+        color: 'red',
+      })
+    }
+  }
+}
+
+const isPremium = computed(() => state.paidStatus ? state.paidStatus === 'premium' : false)
+
 const quill = useQuill()
 
 async function onReset() {
@@ -95,6 +95,9 @@ async function onReset() {
 }
 
 watch(quill, () => {
+  const delta = quill.value?.clipboard.convert({ html: state.description ?? '' })
+  quill.value?.setContents(delta ?? [], 'silent')
+
   quill.value?.on('text-change', (_, __, source) => {
     // Source is 'api' when the form is reset
     if (source === 'api') return
@@ -112,15 +115,6 @@ watch(quill, () => {
     :state="state"
     @submit="onSubmit"
   >
-    <UFormGroup
-      label="Featured Image"
-      name="featuredImage"
-    >
-      <UInput
-        type="file"
-        @change="state.featuredImage = $event[0]"
-      />
-    </UFormGroup>
     <UFormGroup
       label="Title"
       name="title"

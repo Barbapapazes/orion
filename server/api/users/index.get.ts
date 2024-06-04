@@ -1,5 +1,13 @@
+import { number, object } from 'zod'
+import { getPaginationMeta } from '~/server/utils/pagination'
+
 export default defineEventHandler(async (event) => {
   await requireAdminUser(event)
+
+  const query = await getValidatedQuery(event, object({
+    limit: number({ coerce: true }).default(10),
+    page: number({ coerce: true }).default(1),
+  }).parse)
 
   const users = await useDrizzle().select({
     id: tables.users.id,
@@ -10,6 +18,10 @@ export default defineEventHandler(async (event) => {
     name: tables.users.name,
     roleType: tables.users.roleType,
   }).from(tables.users)
+    .limit(query.limit)
+    .offset(getOffset(query))
 
-  return users
+  const meta = await useDrizzle().select({ count: count() }).from(tables.users)
+
+  return getPagination(users, getPaginationMeta({ total: meta[0].count, ...query }))
 })

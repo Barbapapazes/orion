@@ -1,7 +1,7 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "b00f95d3-04c6-4385-b0e2-ab6f09246fc6",
+  "id": "1f1cce1c-945c-46a4-b12c-13d2e26f9a66",
   "prevId": "6a9c3d98-4748-49e8-93dd-8641c7184970",
   "tables": {
     "categories": {
@@ -143,6 +143,56 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "modulesToTemplates": {
+      "name": "modulesToTemplates",
+      "columns": {
+        "module_id": {
+          "name": "module_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_id": {
+          "name": "template_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "modulesToTemplates_module_id_modules_id_fk": {
+          "name": "modulesToTemplates_module_id_modules_id_fk",
+          "tableFrom": "modulesToTemplates",
+          "tableTo": "modules",
+          "columnsFrom": [
+            "module_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "modulesToTemplates_template_id_templates_id_fk": {
+          "name": "modulesToTemplates_template_id_templates_id_fk",
+          "tableFrom": "modulesToTemplates",
+          "tableTo": "templates",
+          "columnsFrom": [
+            "template_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "templates": {
       "name": "templates",
       "columns": {
@@ -162,6 +212,13 @@
         },
         "slug": {
           "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "featured_image": {
+          "name": "featured_image",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -267,7 +324,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "templates_category_id_categories_id_fk": {
@@ -388,5 +445,8 @@
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

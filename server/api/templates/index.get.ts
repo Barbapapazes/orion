@@ -1,45 +1,61 @@
-export default defineEventHandler(async () => {
-  // const templates = await useDrizzle().select({
-  //   id: tables.templates.id,
-  //   title: tables.templates.title,
-  //   shortDescription: tables.templates.shortDescription,
-  //   description: tables.templates.description,
-  //   status: tables.templates.status,
-  //   paidStatus: tables.templates.paidStatus,
-  //   liveUrl: tables.templates.liveUrl,
-  //   accessUrl: tables.templates.accessUrl,
-  //   user: {
-  //     name: tables.users.name,
-  //     login: tables.users.login,
-  //     avatarUrl: tables.users.avatarUrl,
-  //   },
-  //   // group modules from the same template to an array (you are using sqlite
-  //   // so you can't use the `arrayAgg` function)
-  //   modules:
-  //   category: {
-  //     /**
-  //      * The `name` field is aliased to `c_name` to avoid conflicts with the `name` field from the `templates` table. Issue in D1.
-  //      *
-  //      * https://github.com/cloudflare/workers-sdk/issues/3160
-  //      */
-  //     name: sql<string>`${tables.categories.name}`.as('c_name'),
-  //   },
-  // }).from(tables.modulesToTemplates)
-  //   .leftJoin(tables.templates, eq(tables.templates.id, tables.modulesToTemplates.templateId))
-  //   .leftJoin(tables.modules, eq(tables.modules.id, tables.modulesToTemplates.moduleId))
-  //   .leftJoin(tables.users, eq(tables.templates.creatorId, tables.users.id))
-  //   .leftJoin(tables.categories, eq(tables.templates.categoryId, tables.categories.id))
+import { number, object } from 'zod'
+import { getPagination } from '~/server/utils/pagination'
+
+export default defineEventHandler(async (event) => {
+  const query = await getValidatedQuery(event, object({
+    limit: number({ coerce: true }).default(10),
+    page: number({ coerce: true }).default(1),
+  }).parse)
+
   const templates = await useDrizzle().query.templates.findMany({
+    limit: query.limit,
+    offset: getOffset(query),
+    columns: {
+      id: true,
+      slug: true,
+      hash: true,
+      title: true,
+      paidStatus: true,
+      accessUrl: true,
+      liveUrl: true,
+      shortDescription: true,
+      description: true,
+    },
     with: {
-      category: true,
-      creator: true,
+      category: {
+        columns: {
+          name: true,
+          slug: true,
+        },
+      },
+      creator: {
+        columns: {
+          login: true,
+          name: true,
+          avatarUrl: true,
+        },
+      },
       modules: {
+        columns: {
+          templateId: false,
+          moduleId: false,
+        },
         with: {
-          module: true
-        } ,
+          module: {
+            columns: {
+              name: true,
+              icon: true,
+            },
+          },
+        },
       },
     },
   })
 
-  return templates
+  const meta = await useDrizzle().select({ count: count() }).from(tables.templates)
+
+  return getPagination(templates, {
+    total: meta[0].count,
+    ...query,
+  })
 })

@@ -45,6 +45,7 @@ export const templates = sqliteTable('templates', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   hash: text('hash').notNull().unique(),
   slug: text('slug').notNull(),
+  featuredImage: text('featured_image').notNull(),
   title: text('title').notNull(),
   status: text('status', { enum: STATUS }).notNull().default('submitted'),
   paidStatus: text('paid_status', { enum: PAID_STATUS }).notNull().default('free'),
@@ -52,7 +53,7 @@ export const templates = sqliteTable('templates', {
   accessUrl: text('access_url').notNull(),
   shortDescription: text('short_description').notNull(),
   description: text('description'),
-  creatorId: integer('creatorId').notNull().references(() => users.id),
+  creatorId: integer('creatorId').notNull().references(() => users.id, { onDelete: 'cascade' }),
   categoryId: integer('category_id').notNull().references(() => categories.id),
   createdAt: text('created_at').notNull().$defaultFn(() => sql`(current_timestamp)`),
   updatedAt: text('updated_at').notNull().$defaultFn(() => sql`(current_timestamp)`).$onUpdateFn(() => sql`(current_timestamp)`),
@@ -70,13 +71,13 @@ export const templatesRelations = relations(templates, ({ one, many }) => ({
   modules: many(modulesToTemplates),
 }))
 
-export const modulesRelations = relations(modules, ({ many }) => ({
-  templates: many(templates),
-}))
+// export const modulesRelations = relations(modules, ({ many }) => ({
+//   templates: many(templates),
+// }))
 
 export const modulesToTemplates = sqliteTable('modulesToTemplates', {
   moduleId: integer('module_id').notNull().references(() => modules.id),
-  templateId: integer('template_id').notNull().references(() => templates.id),
+  templateId: integer('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
 })
 
 export const modulesToTemplatesRelations = relations(modulesToTemplates, ({ one }) => ({

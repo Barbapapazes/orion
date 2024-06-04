@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "bc948a10-1af8-4a34-8cee-5a25e2a823cb",
-  "prevId": "4ba1ba0a-ca7a-496a-aef3-3868f4353791",
   "tables": {
     "categories": {
       "name": "categories",
@@ -178,10 +176,11 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {
       "\"users\".\"user\"": "\"users\".\"login\""
     }
-  }
+  },
+  "id": "bc948a10-1af8-4a34-8cee-5a25e2a823cb",
+  "prevId": "4ba1ba0a-ca7a-496a-aef3-3868f4353791"
 }

@@ -13,6 +13,13 @@ export default oauth.githubEventHandler({
 
     user = await useDrizzle().select().from(tables.users).where(eq(tables.users.githubId, githubId)).get()
 
+    if (user?.roleType === 'banned') {
+      throw createError({
+        status: 403,
+        message: 'Your cannot access to the application.',
+      })
+    }
+
     /**
      * If the user is not in the database or their data has changed, update the user data.
      * A write is more expensive than a read, so we only write if necessary.

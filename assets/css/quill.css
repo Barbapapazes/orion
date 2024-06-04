@@ -1,0 +1,47 @@
+/* All colors are for the DARK. I must do the light. */
+.ql-snow.ql-toolbar {
+  border-color: theme('colors.gray.700');
+  border-top-left-radius: theme('borderRadius.md');
+  border-top-right-radius: theme('borderRadius.md')
+}
+.ql-snow.ql-toolbar button:hover .ql-fill {
+  fill: theme('colors.primary.600')
+}
+.ql-snow.ql-toolbar button:hover .ql-stroke {
+  stroke: theme('colors.primary.600')
+}
+.ql-snow.ql-toolbar button:focus .ql-fill {
+  fill: theme('colors.primary.600')
+}
+.ql-snow.ql-toolbar button:focus .ql-stroke {
+  stroke: theme('colors.primary.600')
+}
+.ql-snow.ql-toolbar button.ql-active .ql-fill {
+  fill: theme('colors.primary.600')
+}
+.ql-snow.ql-toolbar button.ql-active .ql-stroke {
+  stroke: theme('colors.primary.600')
+}
+.ql-snow .ql-fill {
+  fill: theme('colors.gray.400')
+}
+.ql-snow .ql-stroke {
+  stroke: theme('colors.gray.400')
+}
+.ql-snow.ql-container {
+  border-color: theme('colors.gray.700');
+  border-bottom-left-radius: theme('borderRadius.md');
+  border-bottom-right-radius: theme('borderRadius.md');
+  font-size: theme('fontSize.sm');
+  font-family: theme('fontFamily.sans');
+}
+.ql-editor {
+  min-height: theme('spacing.32');
+}
+.ql-editor.ql-blank::before {
+  color: theme('colors.gray.500');
+  font-style: normal;
+}
+.ql-editor {
+  color: theme('colors.white')
+}

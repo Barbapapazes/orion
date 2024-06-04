@@ -1,17 +1,12 @@
-import { object, string } from 'zod'
-
 export default defineEventHandler(async (event) => {
-  const params = await getValidatedRouterParams(event, object({
-    hash: string().length(12),
-  }).parse)
+  const user = await requireUserSession(event)
 
-  const { hash } = params
-
-  const template = await useDrizzle().query.templates.findFirst({
-    where: eq(tables.templates.hash, hash),
+  const templates = await useDrizzle().query.templates.findMany({
+    where: eq(tables.templates.creatorId, user.user.id),
     columns: {
       id: true,
       hash: true,
+      slug: true,
       title: true,
       paidStatus: true,
       accessUrl: true,
@@ -23,12 +18,14 @@ export default defineEventHandler(async (event) => {
       category: {
         columns: {
           id: true,
+          slug: true,
           name: true,
         },
       },
       creator: {
         columns: {
           id: true,
+          name: true,
           login: true,
           avatarUrl: true,
         },
@@ -43,6 +40,7 @@ export default defineEventHandler(async (event) => {
             columns: {
               id: true,
               name: true,
+              slug: true,
               icon: true,
             },
           },
@@ -51,5 +49,5 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  return template
+  return templates
 })

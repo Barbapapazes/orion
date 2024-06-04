@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const description = 'A community-driven collection of templates for your next project, from landing pages to complete web applications.'
+const description = 'Discover, search, find and learn from a collection of templates built by the Nuxt community for the Nuxt ecosystem.'
 useSeoMeta({
   description,
   ogDescription: description,
@@ -16,7 +16,7 @@ const items = [{
   content: 'To submit a template, you need to have a GitHub account. Once you have it, you can click on the "Submit a template" button to create an account. You\'ll be able to create a new template using a form and then submit it to review. Your template will be examined by the Orion team and then published if it meets the requirements.',
 }, {
   label: 'Is Orion free?',
-  content: 'Yes, Orion is free to use, for both the users and the creators. It\'s a project by the community for the community.',
+  content: 'Yes, Orion is free to use, for both the users and the creators. It\'s a project by the community for the community. You can support the project by sharing it with your friends, by submitting a template or by <a href="https://github.com/sponsors/Barbapapazes" target="_blank">sponsoring the project on GitHub.</a>',
 }, {
   label: 'How can I contact the team?',
   content: 'You can contact the team by sending an email to orion@barbapapazes.dev or using the social media links in the footer.',
@@ -59,7 +59,16 @@ if (filter && modules.value.length && modules.value.some(module => module.slug =
   moduleSlug.value = filter
 }
 
-const templates = []
+const page = ref(1)
+const { data } = await useFetch('/api/templates',
+  {
+    query: {
+      page,
+      limit: 12,
+    },
+    deep: false,
+    default: () => ({ data: [], meta: { total: 0, limit: 0 } }),
+  })
 </script>
 
 <template>
@@ -76,7 +85,7 @@ const templates = []
         >
       </template>
       <template #title>
-        Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
+        Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span>
       </template>
       <template #description>
         A community-driven collection of templates for your next project, <br class="hidden sm:inline"> from landing pages to complete web applications.
@@ -189,27 +198,54 @@ const templates = []
           </UButtonGroup>
         </div>
 
-        <div>
-          <UCard
-            class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
-            :ui="{ body: { base: 'flex flex-col justify-center items-center gap-6' } }"
+        <template
+          v-if="data.data.length"
+        >
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 place-items-start"
           >
-            <p class="text-sm text-center dark:text-gray-400">
-              No templates found.
-            </p>
-            <div class="flex flex-row justify-center items-center gap-2">
-              <SubmitTemplateButton
-                size="sm"
-              />
-              <UButton
-                variant="ghost"
-                color="gray"
-              >
-                Reset filters
-              </UButton>
-            </div>
-          </UCard>
-        </div>
+            <TemplatesCard
+              v-for="template in data.data"
+              :key="template.title"
+              :hash="template.hash"
+              :slug="template.slug"
+              featured-image-url="https://github.com/Barbapapazes/the-green-chronicle/assets/45267552/d6df661f-1cfc-4f4e-bc0c-d97480d0a885"
+              :title="template.title"
+              :short-description="template.shortDescription"
+              :paid-status="template.paidStatus"
+              :creator="template.creator"
+              :category="template.category"
+            />
+          </div>
+          <div class="mt-8 flex justify-center">
+            <UPagination
+              v-if="data.meta.total > data.meta.limit"
+              v-model="page"
+              :page-count="data.meta.limit"
+              :total="data.meta.total"
+            />
+          </div>
+        </template>
+        <UCard
+          v-else
+          class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
+          :ui="{ body: { base: 'flex flex-col justify-center items-center gap-6' } }"
+        >
+          <p class="text-sm text-center dark:text-gray-400">
+            No templates found.
+          </p>
+          <div class="flex flex-row justify-center items-center gap-2">
+            <SubmitTemplateButton
+              size="sm"
+            />
+            <UButton
+              variant="ghost"
+              color="gray"
+            >
+              Reset filters
+            </UButton>
+          </div>
+        </UCard>
       </div>
     </UContainer>
 
@@ -218,7 +254,14 @@ const templates = []
         :ui="{ wrapper: 'max-w-screen-lg mx-auto' }"
         :items="items"
         multiple
-      />
+      >
+        <template #item="{ item }">
+          <div
+            class="prose dark:prose-invert max-w-none"
+            v-html="item.content"
+          />
+        </template>
+      </ULandingFAQ>
     </ULandingSection>
   </div>
 </template>

@@ -11,10 +11,10 @@ useSeoMeta({
 
 const whatIsTemplateModal = ref(false)
 
-const templates = []
-// fetch les templates
-// afficher les templates
-// si pas de templates, afficher un message
+const { data: templates } = useFetch(`/api/me/templates`, {
+  deep: false,
+  default: () => [],
+})
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const templates = []
       />
       <UPageBody>
         <div class="flex flex-col md:flex-row gap-8">
-          <div class="order-2 md:order-0 flex flex-col gap-6">
+          <div class="lg:w-4/12 flex flex-col gap-6">
             <UCard
               class="dark:bg-opacity-20 dark:bg-gray-800"
               :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
@@ -68,8 +68,29 @@ const templates = []
             </div>
           </div>
 
-          <div class="grow md:order-2">
+          <div class="lg:w-8/12">
+            <!-- TODO: add a toolber to filter by status -->
+
+            <div
+              v-if="templates.length"
+              class="grid grid-cols-1 lg:grid-cols-2 gap-6 place-items-start"
+            >
+              <TemplatesCard
+                v-for="template in templates"
+                :key="template.title"
+                editable
+                :slug="template.slug"
+                :hash="template.hash"
+                featured-image-url="https://github.com/Barbapapazes/the-green-chronicle/assets/45267552/d6df661f-1cfc-4f4e-bc0c-d97480d0a885"
+                :title="template.title"
+                :short-description="template.shortDescription"
+                :paid-status="template.paidStatus"
+                :creator="template.creator"
+                :category="template.category"
+              />
+            </div>
             <UCard
+              v-else
               class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
               :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
             >

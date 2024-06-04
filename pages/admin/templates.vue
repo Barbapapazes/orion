@@ -47,10 +47,14 @@ const defaultColumns = [{
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
-const { data: templates, refresh, pending } = await useFetch('/api/templates', {
+const page = ref(1)
+const { data, refresh, pending } = await useFetch('/api/templates', {
+  query: {
+    page,
+  },
   deep: false,
   lazy: true,
-  default: () => [],
+  default: () => ({ data: [], meta: { total: 0, limit: 0 } }),
 })
 </script>
 
@@ -59,7 +63,7 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
     <UDashboardPanel grow>
       <UDashboardNavbar
         title="Templates"
-        :badge="templates.length"
+        :badge="data.meta.total"
       >
         <template #right>
           <RefreshButton
@@ -86,7 +90,7 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
 
       <UTable
         :columns="columns"
-        :rows="templates"
+        :rows="data.data"
         :loading="pending"
       >
         <template #liveUrl-data="{ row }">
@@ -119,14 +123,18 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
           <PaidStatusBadge :status="row.paidStatus" />
         </template>
         <template #createdBy-data="{ row }">
-          <div class="flex flex-row items-center gap-2">
+          <UButton
+            color="gray"
+            variant="ghost"
+            :to="`https://github.com/${row.creator.login}`"
+          >
             <img
-              :src="row.user.avatarUrl"
+              :src="row.creator.avatarUrl"
               alt="avatar"
               class="w-6 h-6 rounded-full"
             >
-            <span>{{ row.user.name ?? row.user.login }}</span>
-          </div>
+            <span>{{ row.creator.name ?? row.creator.login }}</span>
+          </UButton>
         </template>
         <template #category-data="{ row }">
           {{ row.category.name }}
@@ -137,6 +145,15 @@ const { data: templates, refresh, pending } = await useFetch('/api/templates', {
           />
         </template>
       </UTable>
+
+      <div class="mt-8 flex justify-center">
+        <UPagination
+          v-if="data.meta.total > data.meta.limit"
+          v-model="page"
+          :page-count="data.meta.limit"
+          :total="data.meta.total"
+        />
+      </div>
     </UDashboardPanel>
   </UDashboardPage>
 </template>

@@ -10,31 +10,32 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "db:generate": "drizzle-kit generate:sqlite"
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "@iconify-json/simple-icons": "^1.1.101",
+    "@iconify-json/simple-icons": "^1.1.104",
     "@nuxt/eslint": "^0.3.13",
-    "@nuxt/ui": "^2.15.2",
-    "@nuxt/ui-pro": "^1.1.0",
-    "@nuxthub/core": "^0.5.14",
-    "drizzle-orm": "^0.30.10",
+    "@nuxt/ui": "^2.16.0",
+    "@nuxt/ui-pro": "^1.2.0",
+    "@nuxthub/core": "^0.6.4",
+    "drizzle-orm": "^0.31.0",
     "easymde": "^2.18.0",
     "nanoid": "^5.0.7",
     "nuxt": "^3.11.2",
-    "nuxt-auth-utils": "^0.0.24",
+    "nuxt-auth-utils": "^0.0.25",
     "sanitize-html": "^2.13.0",
     "slugify": "^1.6.6",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "zod": "^3.23.6"
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.1",
     "@types/sanitize-html": "^2.11.0",
-    "drizzle-kit": "^0.20.17",
+    "drizzle-kit": "^0.22.1",
     "eslint": "9.2.0",
     "quill": "2.0.2",
-    "wrangler": "^3.52.0"
-  }
+    "wrangler": "^3.58.0"
+  },
+  "packageManager": "pnpm@9.1.4"
 }

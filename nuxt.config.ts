@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   extends: ['@nuxt/ui-pro'],
   modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
   runtimeConfig: {
@@ -25,6 +25,7 @@ export default defineNuxtConfig({
   },
   hub: {
     database: true,
+    blob: true,
   },
   eslint: {
     config: {
