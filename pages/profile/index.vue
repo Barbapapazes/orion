@@ -81,7 +81,7 @@ const { data: templates } = useFetch(`/api/me/templates`, {
                 editable
                 :slug="template.slug"
                 :hash="template.hash"
-                featured-image-url="https://github.com/Barbapapazes/the-green-chronicle/assets/45267552/d6df661f-1cfc-4f4e-bc0c-d97480d0a885"
+                :featured-image-url="`/images/${template.featuredImage}`"
                 :title="template.title"
                 :short-description="template.shortDescription"
                 :paid-status="template.paidStatus"

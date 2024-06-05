@@ -2,6 +2,7 @@
 import 'quill/dist/quill.snow.css'
 import '~/assets/css/quill.css'
 import { type output } from 'zod'
+import { any } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
@@ -10,8 +11,19 @@ type Schema = output<typeof createTemplateValidator>
 
 const form = ref()
 
-const state = reactive({
-  featuredImage: undefined as File | undefined,
+const state = reactive<{
+  featuredImage: File | undefined
+  title: string | undefined
+  paidStatus: typeof PAID_STATUS[number] | undefined
+  categoryId: string | undefined
+  moduleIds: string[]
+  liveUrl: string | undefined
+  accessUrl: string | undefined
+  shortDescription: string
+  description: string
+
+}>({
+  featuredImage: undefined,
   title: undefined,
   paidStatus: undefined,
   categoryId: undefined,
@@ -21,25 +33,42 @@ const state = reactive({
   shortDescription: '',
   description: '',
 })
+// Only exists to show the image name in the input
+const featuredImageName = ref('')
+
+// const featuredImageValidator = any().refine((file) => {
+//   return file instanceof File
+// }, { message: 'Required' })
+//   .refine(file => file?.size < TEMPLATE_MAX_IMAGE_SIZE
+//     , { message: 'Max 500kb' }).refine(file => TEMPLATE_IMAGE_FORMAT.includes(file?.type), { message: `Invalid format, must be one of ${TEMPLATE_IMAGE_FORMAT.join(', ')}` })
+
+// const validate = (state: Schema): FormError[] => {
+//   const errors = []
+//   const { featuredImage } = state
+
+//   // Manually validate the featured image on the client because the server can't use this method
+//   const validation = featuredImageValidator.safeParse(featuredImage)
+//   if (!validation.success) {
+//     errors.push({ path: 'featuredImage', message: validation.error.errors[0].message })
+//   }
+//   return errors
+// }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   const formData = new FormData()
 
   for (const key in state) {
-    if (state[key] === undefined) continue
+    const value = state[key]
 
-    if (key === 'featuredImage') {
-      if (state.featuredImage) {
-        formData.append('featuredImage', state.featuredImage)
-      }
-    }
-    else if (key === 'moduleIds') {
-      state.moduleIds.forEach((moduleId) => {
-        formData.append('moduleIds', moduleId)
+    if (value === undefined) continue
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        formData.append(key, item)
       })
     }
     else {
-      formData.append(key, state[key])
+      formData.append(key, value)
     }
   }
 
@@ -117,6 +146,7 @@ watch(quill, () => {
       name="featuredImage"
     >
       <UInput
+        v-model="featuredImageName"
         type="file"
         @change="state.featuredImage = $event[0]"
       />
