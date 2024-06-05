@@ -6,6 +6,8 @@ export const CATEGORY_MAX_NAME_LENGTH = 20
 
 export const TEMPLATE_MAX_DESCRIPTION_LENGTH = 2000
 export const TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH = 120
+
+export const TEMPLATE_MAX_ADDITIONAL_IMAGES = 3
 // TODO: update typing https://github.com/nuxt-hub/core/issues/141
 export const TEMPLATE_MAX_IMAGE_SIZE = 512_000 as const
 export const TEMPLATE_IMAGE_WIDTH = 1920

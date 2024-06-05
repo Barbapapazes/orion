@@ -1,18 +1,15 @@
 <script lang="ts" setup>
 import 'quill/dist/quill.snow.css'
 import '~/assets/css/quill.css'
-import { type output } from 'zod'
-import { any } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
-
-type Schema = output<typeof createTemplateValidator>
 
 const form = ref()
 
 const state = reactive<{
   featuredImage: File | undefined
+  additionalImages: File[]
   title: string | undefined
   paidStatus: typeof PAID_STATUS[number] | undefined
   categoryId: string | undefined
@@ -21,9 +18,9 @@ const state = reactive<{
   accessUrl: string | undefined
   shortDescription: string
   description: string
-
 }>({
   featuredImage: undefined,
+  additionalImages: [],
   title: undefined,
   paidStatus: undefined,
   categoryId: undefined,
@@ -33,30 +30,11 @@ const state = reactive<{
   shortDescription: '',
   description: '',
 })
-// Only exists to show the image name in the input
-const featuredImageName = ref('')
 
-// const featuredImageValidator = any().refine((file) => {
-//   return file instanceof File
-// }, { message: 'Required' })
-//   .refine(file => file?.size < TEMPLATE_MAX_IMAGE_SIZE
-//     , { message: 'Max 500kb' }).refine(file => TEMPLATE_IMAGE_FORMAT.includes(file?.type), { message: `Invalid format, must be one of ${TEMPLATE_IMAGE_FORMAT.join(', ')}` })
-
-// const validate = (state: Schema): FormError[] => {
-//   const errors = []
-//   const { featuredImage } = state
-
-//   // Manually validate the featured image on the client because the server can't use this method
-//   const validation = featuredImageValidator.safeParse(featuredImage)
-//   if (!validation.success) {
-//     errors.push({ path: 'featuredImage', message: validation.error.errors[0].message })
-//   }
-//   return errors
-// }
-
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
   const formData = new FormData()
 
+  // Create a FormData object with the state values.
   for (const key in state) {
     const value = state[key]
 
@@ -82,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       title: `Template "${event.data.title}" has been created`,
       color: 'green',
     })
-    // navigateTo('/profile')
+    navigateTo('/profile')
   }
   catch (error) {
     if (error instanceof Error) {
@@ -96,6 +74,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
   }
 }
+
+// const validate = (state: any): FormError[] => {
+//   console.log(state)
+//   const errors = []
+//   const data = createTemplateImagesValidator.safeParse({
+//     featuredImage: state.featuredImage,
+//     additionalImages: state.additionalImages,
+//   })
+//   console.log(data)
+//   return errors
+// }
 
 const isPremium = computed(() => state.paidStatus === 'premium')
 
@@ -137,135 +126,165 @@ watch(quill, () => {
   <UForm
     ref="form"
     class="flex flex-col gap-8"
-    :schema="createTemplateValidator"
+    :schema="createTemplateImagesValidator"
     :state="state"
     @submit="onSubmit"
   >
-    <UFormGroup
-      label="Featured Image"
-      name="featuredImage"
+    <div
+      class="flex flex-col gap-8"
     >
-      <UInput
-        v-model="featuredImageName"
-        type="file"
-        @change="state.featuredImage = $event[0]"
-      />
-    </UFormGroup>
-    <UFormGroup
-      label="Title"
-      name="title"
-      required
-    >
-      <UInput
-        v-model="state.title"
-        placeholder="My Nuxt Template"
-        type="text"
-      />
-    </UFormGroup>
+      <h2 class="text-lg font-semibold">
+        Images
+      </h2>
 
-    <UFormGroup
-      label="Paid Status"
-      name="paidStatus"
-      help="A freemium template is free but has premium features. A premium template is paid."
-      required
-    >
-      <URadioGroup
-        v-model="state.paidStatus"
-        :ui="{ fieldset: 'flex flex-row gap-4' }"
-        :options="paidStatusOptions"
-      />
-    </UFormGroup>
-
-    <div class="contents md:grid md:grid-cols-2 md:gap-8">
+      <!-- TODO: Use var for 500kb -->
       <UFormGroup
-        label="Category"
-        name="category"
+        label="Featured image"
+        name="featuredImage"
+        help="This image will be displayed on the template list page and on the template page."
+        hint="Maximum size: 1920x1080px, and 500kB"
         required
       >
-        <USelectMenu
-          v-model="state.categoryId"
-          :options="categories"
-          value-attribute="id"
-          option-attribute="name"
-          placeholder="Select a category"
+        <TemplatesInputFeaturedImage
+          @file-change="state.featuredImage = $event"
+        />
+      </UFormGroup>
+
+      <!-- TODO: Use var for 500kb -->
+      <UFormGroup
+        label="Additional Images"
+        name="additionalImages"
+        help="These images will be displayed on the template page in addition to the featured image."
+        hint="Maximum size: 1920x1080px, and 500kB"
+      >
+        <TemplatesInputAdditionalImages
+          @files-change="state.additionalImages = $event"
+        />
+      </UFormGroup>
+    </div>
+
+    <div
+      class="flex flex-col gap-8"
+    >
+      <h2 class="text-lg font-semibold">
+        Content
+      </h2>
+      <UFormGroup
+        label="Title"
+        name="title"
+        required
+      >
+        <UInput
+          v-model="state.title"
+          placeholder="My Nuxt Template"
+          type="text"
         />
       </UFormGroup>
 
       <UFormGroup
-        label="Modules"
-        name="modules"
+        label="Paid Status"
+        name="paidStatus"
+        help="A freemium template is free but has premium features. A premium template is paid."
+        required
       >
-        <USelectMenu
-          v-model="state.moduleIds"
-          :options="modules"
-          multiple
-          value-attribute="id"
-          option-attribute="name"
-          placeholder="Select one or multiples modules"
+        <URadioGroup
+          v-model="state.paidStatus"
+          :ui="{ fieldset: 'flex flex-row gap-4' }"
+          :options="paidStatusOptions"
+        />
+      </UFormGroup>
+
+      <div class="contents md:grid md:grid-cols-2 md:gap-8">
+        <UFormGroup
+          label="Category"
+          name="category"
+          required
         >
-          <template #option="{ option }">
-            <img
-              v-if="option.icon"
-              :src="`${MODULE_ICON_PREFIX}/${option.icon}`"
-              class="h-4 w-auto"
-            >
-            <span
-              v-else
-              class="i-heroicons-photo inline-block h-4 w-4"
-            />
-            <span>{{ option.name }}</span>
-          </template>
-        </USelectMenu>
-      </UFormGroup>
-    </div>
+          <USelectMenu
+            v-model="state.categoryId"
+            :options="categories"
+            value-attribute="id"
+            option-attribute="name"
+            placeholder="Select a category"
+          />
+        </UFormGroup>
 
-    <div class="contents md:grid md:grid-cols-2 md:gap-8">
+        <UFormGroup
+          label="Modules"
+          name="modules"
+        >
+          <USelectMenu
+            v-model="state.moduleIds"
+            :options="modules"
+            multiple
+            value-attribute="id"
+            option-attribute="name"
+            placeholder="Select one or multiples modules"
+          >
+            <template #option="{ option }">
+              <img
+                v-if="option.icon"
+                :src="`${MODULE_ICON_PREFIX}/${option.icon}`"
+                class="h-4 w-auto"
+              >
+              <span
+                v-else
+                class="i-heroicons-photo inline-block h-4 w-4"
+              />
+              <span>{{ option.name }}</span>
+            </template>
+          </USelectMenu>
+        </UFormGroup>
+      </div>
+
+      <div class="contents md:grid md:grid-cols-2 md:gap-8">
+        <UFormGroup
+          label="Live URL"
+          name="liveUrl"
+          help="A URL where user can see the template in action."
+        >
+          <UInput
+            v-model="state.liveUrl"
+            placeholder="https://example.com/preview"
+            type="url"
+          />
+        </UFormGroup>
+        <UFormGroup
+          :label="isPremium ? 'Purchase URL' : 'Public Repo URL'"
+          name="accessUrl"
+          help="A URL where user can access the template."
+          required
+        >
+          <UInput
+            v-model="state.accessUrl"
+            :placeholder="isPremium ? 'https://stripe.com/me/template': 'https://github.com/barbapapazes/orion'"
+            type="url"
+          />
+        </UFormGroup>
+      </div>
+
       <UFormGroup
-        label="Live URL"
-        name="liveUrl"
-        help="A URL where user can see the template in action."
-      >
-        <UInput
-          v-model="state.liveUrl"
-          placeholder="https://example.com/preview"
-          type="url"
-        />
-      </UFormGroup>
-      <UFormGroup
-        :label="isPremium ? 'Purchase URL' : 'Public Repo URL'"
-        name="accessUrl"
-        help="A URL where user can access the template."
+        label="Short Description"
+        name="shortDescription"
         required
+        :hint="`${state.shortDescription?.length || 0}/${TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH} characters`"
+        help="A short description for SEO and list page."
       >
-        <UInput
-          v-model="state.accessUrl"
-          :placeholder="isPremium ? 'https://stripe.com/me/template': 'https://github.com/barbapapazes/orion'"
-          type="url"
+        <UTextarea
+          v-model="state.shortDescription"
+          placeholder="Concisely describe your template..."
+          :rows="5"
         />
       </UFormGroup>
+
+      <UFormGroup
+        label="Description"
+        name="description"
+        :hint="`${state.description?.length || 0}/${TEMPLATE_MAX_DESCRIPTION_LENGTH} characters`"
+      >
+        <div id="editor" />
+      </UFormGroup>
     </div>
-
-    <UFormGroup
-      label="Short Description"
-      name="shortDescription"
-      required
-      :hint="`${state.shortDescription?.length || 0}/${TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH} characters`"
-      help="A short description for SEO and list page."
-    >
-      <UTextarea
-        v-model="state.shortDescription"
-        placeholder="Concisely describe your template..."
-        :rows="5"
-      />
-    </UFormGroup>
-
-    <UFormGroup
-      label="Description"
-      name="description"
-      :hint="`${state.description?.length || 0}/${TEMPLATE_MAX_DESCRIPTION_LENGTH} characters`"
-    >
-      <div id="editor" />
-    </UFormGroup>
 
     <div class="flex flex-row justify-end gap-4">
       <UButton

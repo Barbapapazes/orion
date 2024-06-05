@@ -14,12 +14,6 @@ useSeoMeta({
       />
       <UPageBody class="flex flex-col lg:flex-row gap-8">
         <div class="order-2 lg:order-1 lg:w-9/12 flex flex-col gap-2">
-          <h2 class="text-lg font-semibold">
-            Images
-          </h2>
-          <h2 class="text-lg font-semibold">
-            Content
-          </h2>
           <TemplatesCreateForm />
         </div>
         <div class="order-1 lg:order-2 lg:w-3/12">
