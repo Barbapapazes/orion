@@ -1,6 +1,8 @@
-import type { } from '@nuxthub/core'
-
 export const MODULE_ICON_PREFIX = 'https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons'
+
+export const CATEGORY_ICON = 'i-heroicons-tag'
+export const TEMPLATE_ICON = 'i-heroicons-rectangle-group'
+
 
 export const CATEGORY_MAX_NAME_LENGTH = 20
 

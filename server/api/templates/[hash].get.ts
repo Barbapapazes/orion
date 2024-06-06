@@ -57,5 +57,12 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  if (!template) {
+    throw createError({
+      status: 404,
+      message: `Template with hash "${hash}" not found`,
+    })
+  }
+
   return template
 })

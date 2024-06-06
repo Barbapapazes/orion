@@ -27,3 +27,7 @@ interface GenerateEditImagesTemplateURLElements extends GenerateShowTemplateURLE
 export function generateEditImagesTemplateURL(elements: GenerateEditImagesTemplateURLElements) {
   return `/templates/${elements.categorySlug}/${elements.slug}-${elements.hash}/edit/images`
 }
+
+export function getTemplateImageURL(image: string) {
+  return `/images/${image}`
+}

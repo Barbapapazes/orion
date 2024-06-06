@@ -46,7 +46,7 @@ export const templates = sqliteTable('templates', {
   hash: text('hash').notNull().unique(),
   slug: text('slug').notNull(),
   featuredImage: text('featured_image').notNull(),
-  additionalImages: text('additional_images', { mode: 'json' }),
+  additionalImages: text('additional_images', { mode: 'json' }).$type<string[]>(),
   title: text('title').notNull(),
   status: text('status', { enum: STATUS }).notNull().default('submitted'),
   paidStatus: text('paid_status', { enum: PAID_STATUS }).notNull().default('free'),

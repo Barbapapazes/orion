@@ -56,8 +56,10 @@ const creatorAvatarUrl = props.creator.avatarUrl
     <div class="relative w-full aspect-video overflow-hidden">
       <img
         :src="featuredImageUrl"
+        width="1920"
+        height="1080"
         :alt="`${title} featured image`"
-        class="w-full aspect-video group-hover:scale-[102%] transition-transform"
+        class="w-full aspect-[16/9] group-hover:scale-[102%] transition-transform"
       >
       <dl class="category absolute right-2 bottom-2 opacity-0 group-hover:opacity-100 transition">
         <div>
@@ -75,7 +77,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
     <div class="mt-4">
       <div class="px-4">
         <h3 class="text-lg font-bold">
-          <NuxtLink :to="`/templates/${categorySlug}/${slug}-${hash}`">
+          <NuxtLink :to="generateShowTemplateURL({ slug, hash, categorySlug: categorySlug })">
             {{ title }}
             <span class="absolute inset-0" />
           </NuxtLink>
