@@ -38,6 +38,13 @@
 .ql-editor {
   min-height: theme('spacing.32');
 }
+
+.ql-editor:focus-within {
+  @apply ring-2 ring-primary-400;
+  border-bottom-left-radius: theme('borderRadius.md');
+  border-bottom-right-radius: theme('borderRadius.md');
+}
+
 .ql-editor.ql-blank::before {
   color: theme('colors.gray.500');
   font-style: normal;

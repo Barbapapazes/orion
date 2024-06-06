@@ -4,12 +4,16 @@ export const MODULE_ICON_PREFIX = 'https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modu
 
 export const CATEGORY_MAX_NAME_LENGTH = 20
 
+export const TEMPLATE_MIN_TITLE_LENGTH = 3
+export const TEMPLATE_MAX_TITLE_LENGTH = 100
 export const TEMPLATE_MAX_DESCRIPTION_LENGTH = 2000
+export const TEMPLATE_MIN_SHORT_DESCRIPTION_LENGTH = 20
 export const TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH = 120
 
 export const TEMPLATE_MAX_ADDITIONAL_IMAGES = 3
 // TODO: update typing https://github.com/nuxt-hub/core/issues/141
 export const TEMPLATE_MAX_IMAGE_SIZE = 512_000 as const
+export const TEMPLATE_MAX_IMAGE_SIZE_KB = TEMPLATE_MAX_IMAGE_SIZE / 1000
 export const TEMPLATE_IMAGE_WIDTH = 1920
 export const TEMPLATE_IMAGE_HEIGHT = 1080
 // TODO: update typing https://github.com/nuxt-hub/core/issues/141

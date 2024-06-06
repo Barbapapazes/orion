@@ -30,7 +30,7 @@ function handleFileChange(fileList: FileList) {
   emits('filesChange', files.value)
   toast.add({
     icon: 'i-heroicons-photo',
-    title: `${fileList.length} ${fileList.length > 1 ? 'files' : 'file'} have been added.`,
+    title: `${fileList.length} additional ${fileList.length > 1 ? 'images' : 'image'} have been added.`,
   })
 }
 
@@ -41,7 +41,7 @@ function removeFile(file: File) {
   emits('filesChange', files.value)
   toast.add({
     icon: 'i-heroicons-trash',
-    title: `File "${file.name}" has been removed.`,
+    title: `Additional image "${file.name}" has been removed.`,
     color: 'red',
   })
 }

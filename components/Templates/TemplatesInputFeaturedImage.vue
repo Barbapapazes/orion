@@ -3,6 +3,8 @@ const emits = defineEmits<{
   fileChange: [File]
 }>()
 
+const toast = useToast()
+
 const file = ref<File | null>(null)
 const hasImage = computed(() => file.value !== null)
 
@@ -14,6 +16,11 @@ function handleFileChange(files: FileList) {
   const _file = files[0]
   file.value = _file
   emits('fileChange', _file)
+
+  toast.add({
+    icon: 'i-heroicons-photo',
+    title: 'Featured image has been added.',
+  })
 }
 </script>
 
@@ -21,7 +28,7 @@ function handleFileChange(files: FileList) {
   <img
     v-if="file"
     :src="urlFromFile(file)"
-    class="absolute inset-0 aspect-[16/9] object-cover object-center rounded-xl"
+    class="absolute inset-0 aspect-[16/9] object-cover object-center rounded-lg"
   >
   <TemplatesInputCard
     class="aspect-[16/9] transition"

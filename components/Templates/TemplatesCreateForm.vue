@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import 'quill/dist/quill.snow.css'
-import '~/assets/css/quill.css'
+import type { EmitterSource } from 'quill'
 import type { FormSubmitEvent } from '#ui/types'
+import type { UForm, RichTextEditor } from '#components'
 
-const toast = useToast()
+defineProps<{
+  loading: boolean
+}>()
 
-const form = ref()
+const emits = defineEmits<{
+  submit: [FormSubmitEvent<CreateTemplateValidatorSchema>]
+}>()
 
 const state = reactive<{
   featuredImage: File | undefined
@@ -31,61 +35,6 @@ const state = reactive<{
   description: '',
 })
 
-async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
-  const formData = new FormData()
-
-  // Create a FormData object with the state values.
-  for (const key in state) {
-    const value = state[key]
-
-    if (value === undefined) continue
-
-    if (Array.isArray(value)) {
-      value.forEach((item) => {
-        formData.append(key, item)
-      })
-    }
-    else {
-      formData.append(key, value)
-    }
-  }
-
-  try {
-    await $fetch('/api/templates', {
-      method: 'POST',
-      body: formData,
-    })
-    toast.add({
-      icon: 'i-heroicons-check-circle',
-      title: `Template "${event.data.title}" has been created`,
-      color: 'green',
-    })
-    navigateTo('/profile')
-  }
-  catch (error) {
-    if (error instanceof Error) {
-      console.error(error)
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Something went wrong',
-        description: error.message,
-        color: 'red',
-      })
-    }
-  }
-}
-
-// const validate = (state: any): FormError[] => {
-//   console.log(state)
-//   const errors = []
-//   const data = createTemplateImagesValidator.safeParse({
-//     featuredImage: state.featuredImage,
-//     additionalImages: state.additionalImages,
-//   })
-//   console.log(data)
-//   return errors
-// }
-
 const isPremium = computed(() => state.paidStatus === 'premium')
 
 const { data: categories } = await useFetch('/api/categories', {
@@ -102,31 +51,42 @@ const { data: modules } = await useFetch('/api/modules', {
   },
 })
 
-const quill = useQuill()
+const form = ref<InstanceType<typeof UForm> | null>(null)
 
-async function onReset() {
-  form.value.clear()
-  state.description = ''
-  state.categoryId = undefined
-  if (quill.value)
-    quill.value.setText('')
+function onDescriptionChange(content: string, source: EmitterSource) {
+  if (source === 'api') return
+  state.description = content
+  if (form.value)
+    // @ts-expect-error Should exists
+    form.value.validate('description', { silent: true })
 }
 
-watch(quill, () => {
-  quill.value?.on('text-change', (_, __, source) => {
-    // Source is 'api' when the form is reset
-    if (source === 'api') return
-    state.description = quill.value?.root.innerHTML ?? ''
-    form.value.validate('description', { silent: true })
-  })
-})
+const richTextEditor = ref<InstanceType<typeof RichTextEditor> | null>(null)
+
+async function onReset() {
+  state.description = ''
+  state.categoryId = undefined
+  state.moduleIds = []
+  state.featuredImage = undefined
+  state.additionalImages = []
+
+  if (form.value)
+    // @ts-expect-error Should exists
+    form.value.clear()
+  if (richTextEditor.value)
+    richTextEditor.value.reset()
+}
+
+function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
+  emits('submit', event)
+}
 </script>
 
 <template>
   <UForm
     ref="form"
     class="flex flex-col gap-8"
-    :schema="createTemplateImagesValidator"
+    :schema="createTemplateValidator"
     :state="state"
     @submit="onSubmit"
   >
@@ -137,12 +97,11 @@ watch(quill, () => {
         Images
       </h2>
 
-      <!-- TODO: Use var for 500kb -->
       <UFormGroup
         label="Featured image"
         name="featuredImage"
         help="This image will be displayed on the template list page and on the template page."
-        hint="Maximum size: 1920x1080px, and 500kB"
+        :hint="`Maximum size: 1920x1080px, and ${TEMPLATE_MAX_IMAGE_SIZE_KB}kB`"
         required
       >
         <TemplatesInputFeaturedImage
@@ -150,12 +109,11 @@ watch(quill, () => {
         />
       </UFormGroup>
 
-      <!-- TODO: Use var for 500kb -->
       <UFormGroup
         label="Additional Images"
         name="additionalImages"
         help="These images will be displayed on the template page in addition to the featured image."
-        hint="Maximum size: 1920x1080px, and 500kB"
+        :hint="`Maximum size: 1920x1080px, and ${TEMPLATE_MAX_IMAGE_SIZE_KB}kB`"
       >
         <TemplatesInputAdditionalImages
           @files-change="state.additionalImages = $event"
@@ -172,6 +130,7 @@ watch(quill, () => {
       <UFormGroup
         label="Title"
         name="title"
+        :hint="`${state.title?.length || 0}/${TEMPLATE_MAX_TITLE_LENGTH} characters`"
         required
       >
         <UInput
@@ -197,7 +156,7 @@ watch(quill, () => {
       <div class="contents md:grid md:grid-cols-2 md:gap-8">
         <UFormGroup
           label="Category"
-          name="category"
+          name="categoryId"
           required
         >
           <USelectMenu
@@ -211,7 +170,7 @@ watch(quill, () => {
 
         <UFormGroup
           label="Modules"
-          name="modules"
+          name="moduleIds"
         >
           <USelectMenu
             v-model="state.moduleIds"
@@ -282,7 +241,10 @@ watch(quill, () => {
         name="description"
         :hint="`${state.description?.length || 0}/${TEMPLATE_MAX_DESCRIPTION_LENGTH} characters`"
       >
-        <div id="editor" />
+        <RichTextEditor
+          ref="richTextEditor"
+          @change="onDescriptionChange"
+        />
       </UFormGroup>
     </div>
 
@@ -295,7 +257,10 @@ watch(quill, () => {
       >
         Reset
       </UButton>
-      <UButton type="submit">
+      <UButton
+        type="submit"
+        :loading="loading"
+      >
         Submit
       </UButton>
     </div>

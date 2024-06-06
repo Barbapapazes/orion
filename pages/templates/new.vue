@@ -1,8 +1,58 @@
 <script lang="ts" setup>
+import type { FormSubmitEvent } from '#ui/types'
+
 useSeoMeta({
   title: 'Submit a new template',
   description: 'Thank you for sharing your creation with the community!',
 })
+
+const toast = useToast()
+const loading = ref(false)
+async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
+  loading.value = true
+  const formData = new FormData()
+
+  // Create a FormData object with the state values.
+  for (const [key, value] of Object.entries(event.data)) {
+    if (value === undefined) continue
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        formData.append(key, item)
+      })
+    }
+    else {
+      formData.append(key, value)
+    }
+  }
+
+  try {
+    await $fetch('/api/templates', {
+      method: 'POST',
+      body: formData,
+    })
+    toast.add({
+      icon: 'i-heroicons-check-circle',
+      title: `Template "${event.data.title}" has been created`,
+      color: 'green',
+    })
+    navigateTo('/profile')
+  }
+  catch (error) {
+    if (error instanceof Error) {
+      console.error(error)
+      toast.add({
+        icon: 'i-heroicons-exclamation-circle',
+        title: 'Something went wrong',
+        description: error.message,
+        color: 'red',
+      })
+    }
+  }
+  finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -14,7 +64,10 @@ useSeoMeta({
       />
       <UPageBody class="flex flex-col lg:flex-row gap-8">
         <div class="order-2 lg:order-1 lg:w-9/12 flex flex-col gap-2">
-          <TemplatesCreateForm />
+          <TemplatesCreateForm
+            :loading="loading"
+            @submit="onSubmit($event)"
+          />
         </div>
         <div class="order-1 lg:order-2 lg:w-3/12">
           <UCard
