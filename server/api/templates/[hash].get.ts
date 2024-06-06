@@ -11,7 +11,10 @@ export default defineEventHandler(async (event) => {
     where: eq(tables.templates.hash, hash),
     columns: {
       id: true,
+      slug: true,
       hash: true,
+      featuredImage: true,
+      additionalImages: true,
       title: true,
       paidStatus: true,
       accessUrl: true,
@@ -23,6 +26,7 @@ export default defineEventHandler(async (event) => {
       category: {
         columns: {
           id: true,
+          slug: true,
           name: true,
         },
       },
@@ -30,6 +34,7 @@ export default defineEventHandler(async (event) => {
         columns: {
           id: true,
           login: true,
+          name: true,
           avatarUrl: true,
         },
       },
@@ -42,6 +47,7 @@ export default defineEventHandler(async (event) => {
           module: {
             columns: {
               id: true,
+              slug: true,
               name: true,
               icon: true,
             },

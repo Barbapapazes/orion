@@ -1,51 +1,49 @@
 <script lang="ts" setup>
-import type { Button } from '#ui/types'
-// const route = useRoute()
-// const hash = computed(() => {
-//   return (route.params.slug as string).slice(-12)
-// })
-// const { data: template } = await useFetch(`/api/templates/${hash.value}`, {
-//   deep: false,
-//   default: () => {},
-// })
-const template = {
-  featuredImageUrl: 'https://github.com/Barbapapazes/the-green-chronicle/assets/45267552/d6df661f-1cfc-4f4e-bc0c-d97480d0a885',
-  title: 'The Green Chronicle',
-  shortDescription: 'A Nuxt Studio theme powered by Nuxt UI Pro for your corporate blog.',
-  description: '<p>The Green Chronicle is a Nuxt Studio theme powered by Nuxt UI Pro for your corporate blog.</p><ul><li>Content module</li><li>SEO module</li></ul>',
-  category: {
-    name: 'Blog',
-    slug: 'blog',
-  },
-  modules: [
-    {
-      name: 'Content',
-      slug: 'content',
-      icon: 'nuxt.svg',
-    },
-    {
-      name: 'SEO',
-      slug: 'seo',
-      icon: 'algolia.svg',
-    },
-  ],
-  paidStatus: 'premium' as typeof PAID_STATUS[number],
-  liveUrl: 'https://the-green-chronicle.esteban-soubiran.site',
-  accessUrl: 'https://github.com/barbapapazes/the-green-chronicle',
-  creator: {
-    name: 'Barbapapazes',
-    avatarUrl: 'https://github.com/barbapapazes.png',
-  },
+const route = useRoute()
+const hash = computed(() => {
+  return (route.params.slug as string).slice(-12)
+})
+const { data: template } = await useFetch(`/api/templates/${hash.value}`, {
+  deep: false,
+  default: () => {},
+})
+
+if (!template.value) {
+  throw createError({
+    statusCode: 404,
+    message: 'Template not found',
+    fatal: true,
+  })
 }
 
-const links: Button[] = [{ label: template.paidStatus !== 'premium' ? 'Get Started' : 'Buy Now', rel: 'noopener noreferrer external', color: 'primary', to: template.accessUrl, target: '_blank', trailingIcon: 'i-heroicons-arrow-top-right-on-square-20-solid', size: 'md' }]
-if (template.liveUrl) {
-  links.push({ label: 'Live Demo', color: 'white', to: template.liveUrl, target: '_blank', rel: 'noopener noreferrer external', trailingIcon: 'i-heroicons-arrow-top-right-on-square-20-solid', size: 'md' })
-}
+const isPremium = template.value.paidStatus === 'premium'
 
-const categoryName = template.category.name
-const creatorName = template.creator.name
-const creatorAvatarUrl = template.creator.avatarUrl
+const categoryName = template.value.category.name
+const creatorName = template.value.creator.name || template.value.creator.login
+const creatorAvatarUrl = template.value.creator.avatarUrl
+
+const items = [[{
+  label: 'Edit Content',
+  icon: 'i-heroicons-pencil',
+  to: generateEditTextTemplateURL({
+    slug: template.value.slug,
+    hash: template.value.hash,
+    categorySlug: template.value.category.slug,
+  }),
+}, {
+  label: 'Edit Images',
+  icon: 'i-heroicons-photo',
+  to: generateEditImagesTemplateURL({
+    slug: template.value.slug,
+    hash: template.value.hash,
+    categorySlug: template.value.category.slug,
+  }),
+}]]
+
+useSeoMeta({
+  title: template.value.title,
+  description: template.value.shortDescription,
+})
 </script>
 
 <template>
@@ -55,7 +53,7 @@ const creatorAvatarUrl = template.creator.avatarUrl
     <img
       width="1920"
       height="1080"
-      :src="template.featuredImageUrl"
+      :src="template.featuredImage"
       :alt="`${template.title} featured image`"
       class="mt-8 rounded-xl w-full aspect-video"
     >
@@ -63,9 +61,40 @@ const creatorAvatarUrl = template.creator.avatarUrl
       <UPageHeader
         :title="template.title"
         :description="template.shortDescription"
-        :links="links"
         :ui="{ links: 'gap-4' }"
-      />
+      >
+        <template #links>
+          <UButton
+            :label="isPremium ? 'Buy Now' : 'Get Started'"
+            color="primary"
+            rel="noopener noreferrer external"
+            :to="template.accessUrl"
+            target="_blank"
+            trailing-icon="i-heroicons-arrow-top-right-on-square"
+            size="md"
+          />
+          <UButton
+            v-if="template.liveUrl"
+            label="Live Demo"
+            color="white"
+            :to="template.liveUrl"
+            target="_blank"
+            rel="noopener noreferrer external"
+            trailing-icon="i-heroicons-arrow-top-right-on-square"
+            size="md"
+          />
+          <UDropdown
+            :items="items"
+          >
+            <UButton
+              color="gray"
+              square
+              icon="i-heroicons-ellipsis-horizontal"
+              aria-label="Edit"
+            />
+          </UDropdown>
+        </template>
+      </UPageHeader>
 
       <div class="flex">
         <UPageBody class="w-9/12">
@@ -132,22 +161,22 @@ const creatorAvatarUrl = template.creator.avatarUrl
                 <ul class="flex flex-col gap-2">
                   <li
                     v-for="item in template.modules"
-                    :key="item.name"
+                    :key="item.module.name"
                   >
                     <NuxtLink
-                      :to="`https://nuxt.com/modules/${item.slug}`"
+                      :to="`https://nuxt.com/modules/${item.module.slug}`"
                       rel="noopener noreferrer external"
                       target="_blank"
                       class="flex flex-row items-center gap-2"
                     >
 
                       <img
-                        :src="`${MODULE_ICON_PREFIX}/${item.icon}`"
-                        :alt="`${item.name} icon`"
+                        :src="`${MODULE_ICON_PREFIX}/${item.module.icon}`"
+                        :alt="`${item.module.name} icon`"
                         class="w-8 h-8"
                       >
                       <span>
-                        {{ item.name }}
+                        {{ item.module.name }}
                       </span>
                     </NuxtLink>
                   </li>

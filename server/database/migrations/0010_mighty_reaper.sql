@@ -1,0 +1,1 @@
+ALTER TABLE `templates` ADD `additional_images` text;

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  file: File
+  src: string
 }>()
 
 const emits = defineEmits<{
-  click: [File]
+  click: [string]
 }>()
 
 function onClick() {
-  emits('click', props.file)
+  emits('click', props.src)
 }
 </script>
 
@@ -18,7 +18,7 @@ function onClick() {
     type="button"
   >
     <img
-      :src="urlFromFile(file)"
+      :src="src"
       alt="Image preview"
       class="absolute inset-0 aspect-[16/9] object-cover object-center"
     >

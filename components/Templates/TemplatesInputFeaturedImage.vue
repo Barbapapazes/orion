@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+defineProps<{
+  value: string | undefined
+}>()
+
 const emits = defineEmits<{
   fileChange: [File]
 }>()
@@ -26,8 +30,7 @@ function handleFileChange(files: FileList) {
 
 <template>
   <img
-    v-if="file"
-    :src="urlFromFile(file)"
+    :src="value"
     class="absolute inset-0 aspect-[16/9] object-cover object-center rounded-lg"
   >
   <TemplatesInputCard

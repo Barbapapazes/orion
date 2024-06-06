@@ -1,12 +1,22 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types'
 
-useSeoMeta({
-  title: 'Submit a new template',
-  description: 'Thank you for sharing your creation with the community!',
+const toast = useToast()
+
+const { data: categories } = await useFetch('/api/categories', {
+  deep: false,
+  default: () => [],
 })
 
-const toast = useToast()
+const { data: modules } = await useFetch('/api/modules', {
+  deep: false,
+  default: () => [],
+  transform: (data) => {
+    // Order by name and then by type (official and then community).
+    return data.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.type.localeCompare(a.type))
+  },
+})
+
 const loading = ref(false)
 async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
   loading.value = true
@@ -27,7 +37,7 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
   }
 
   try {
-    await $fetch('/api/templates', {
+    const template = await $fetch('/api/templates', {
       method: 'POST',
       body: formData,
     })
@@ -36,7 +46,22 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
       title: `Template "${event.data.title}" has been created`,
       color: 'green',
     })
-    navigateTo('/profile')
+    const category = categories.value.find(category => category.id === event.data.categoryId)
+
+    /**
+     * This case should never happen.
+     */
+    if (!category) {
+      toast.add({
+        icon: 'i-heroicons-exclamation-circle',
+        title: 'Category not found',
+        description: 'The category for the template was not found but your template have been created. Please contact the administrator.',
+        color: 'red',
+      })
+      return navigateTo('/profile')
+    }
+
+    navigateTo(generateShowTemplateURL({ slug: template.slug, hash: template.hash, categorySlug: category.slug }))
   }
   catch (error) {
     if (error instanceof Error) {
@@ -53,6 +78,11 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
     loading.value = false
   }
 }
+
+useSeoMeta({
+  title: 'Submit a new template',
+  description: 'Thank you for sharing your creation with the community!',
+})
 </script>
 
 <template>
@@ -66,48 +96,13 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
         <div class="order-2 lg:order-1 lg:w-9/12 flex flex-col gap-2">
           <TemplatesCreateForm
             :loading="loading"
+            :categories="categories"
+            :modules="modules"
             @submit="onSubmit($event)"
           />
         </div>
         <div class="order-1 lg:order-2 lg:w-3/12">
-          <UCard
-            class="top-24 sticky dark:bg-opacity-20 dark:bg-gray-800"
-            :ui="{ divide: 'divide-y-0', body: { base: 'prose prose-sm dark:prose-invert max-w-none' } }"
-          >
-            <h3>
-              Guidelines
-            </h3>
-            <p>
-              Before submitting your template, please make sure to take note:
-            </p>
-            <ul>
-              <li>
-                Your template must be original and not infringe on any copyright.
-              </li>
-              <li>
-                All npm dependencies must be up-to-date and publicly available.
-              </li>
-              <li>
-                Free and freemium templates must have code source available on a public repository.
-              </li>
-            </ul>
-            <p>
-              We carefully review each submission to ensure the quality of the templates available on our platform. You'll be notified by email once your template is approved or if changes are required.
-            </p>
-            <p>
-              Looking for inspiration for the featured image?
-            </p>
-            <p>
-              <UButton
-                class="w-full justify-center"
-                to=""
-                variant="outline"
-                target="_blank"
-              >
-                Discover Image Templates
-              </UButton>
-            </p>
-          </UCard>
+          <TemplatesGuideline class="sticky top-24" />
         </div>
       </UPageBody>
     </UPage>

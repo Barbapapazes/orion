@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+defineProps<{
+  value: string[] | undefined
+}>()
+
 const emits = defineEmits<{
   filesChange: [File[]]
 }>()
@@ -34,9 +38,8 @@ function handleFileChange(fileList: FileList) {
   })
 }
 
-function removeFile(file: File) {
-  const index = files.value.indexOf(file)
-  files.value.splice(index, 1)
+function removeFile(index: number) {
+  const [file] = files.value.splice(index, 1)
 
   emits('filesChange', files.value)
   toast.add({
@@ -52,10 +55,10 @@ const inputAccept = computed(() => TEMPLATE_IMAGE_FORMAT.join(', '))
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-3 lg:grid-cols-4 gap-4">
     <TemplatesInputAdditionalImage
-      v-for="file in files"
-      :key="file.name"
-      :file="file"
-      @click="removeFile($event)"
+      v-for="(src, index) in value"
+      :key="src"
+      :src="src"
+      @click="removeFile(index)"
     />
     <TemplatesInputCard class="aspect-[16/9]">
       <p

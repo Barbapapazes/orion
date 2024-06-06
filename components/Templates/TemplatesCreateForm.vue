@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import type { EmitterSource } from 'quill'
 import type { FormSubmitEvent } from '#ui/types'
-import type { UForm, RichTextEditor } from '#components'
+import type { UForm } from '#components'
+import type { TemplateFormTextState } from '~/components/Templates/TemplatesFormText.vue'
+import type { TemplateFormImagesState } from '~/components/Templates/TemplatesFormImages.vue'
 
 defineProps<{
   loading: boolean
+  categories: Pick<Category, 'id' | 'name'>[]
+  modules: Pick<Module, 'name' | 'id' | 'icon'>[]
 }>()
 
 const emits = defineEmits<{
@@ -35,35 +38,34 @@ const state = reactive<{
   description: '',
 })
 
-const isPremium = computed(() => state.paidStatus === 'premium')
-
-const { data: categories } = await useFetch('/api/categories', {
-  deep: false,
-  default: () => [],
-})
-
-const { data: modules } = await useFetch('/api/modules', {
-  deep: false,
-  default: () => [],
-  transform: (data) => {
-    // Order by name and then by type (official and then community).
-    return data.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.type.localeCompare(a.type))
-  },
-})
-
 const form = ref<InstanceType<typeof UForm> | null>(null)
 
-function onDescriptionChange(content: string, source: EmitterSource) {
-  if (source === 'api') return
-  state.description = content
-  if (form.value)
-    // @ts-expect-error Should exists
-    form.value.validate('description', { silent: true })
+function onTextChange(textState: TemplateFormTextState) {
+  const oldDescription = state.description
+
+  Object.assign(state, textState)
+
+  // Because the description lives in a Rich Text Editor, it cannot be automatically validated by the form.
+  if (oldDescription !== textState.description) {
+    // @ts-expect-error Should options exists
+    form.value?.validate('description', { silent: true })
+  }
 }
 
-const richTextEditor = ref<InstanceType<typeof RichTextEditor> | null>(null)
+function onImagesChange(imagesState: TemplateFormImagesState) {
+  Object.assign(state, imagesState)
+}
+
+const featuredImageValue = computed(() => {
+  return state.featuredImage ? urlFromFile(state.featuredImage) : undefined
+})
+
+const additionalImagesValue = computed(() => {
+  return state.additionalImages.map(file => urlFromFile(file))
+})
 
 async function onReset() {
+  // Erase some fields that are not native to the form.
   state.description = ''
   state.categoryId = undefined
   state.moduleIds = []
@@ -73,8 +75,6 @@ async function onReset() {
   if (form.value)
     // @ts-expect-error Should exists
     form.value.clear()
-  if (richTextEditor.value)
-    richTextEditor.value.reset()
 }
 
 function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
@@ -96,29 +96,11 @@ function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
       <h2 class="text-lg font-semibold">
         Images
       </h2>
-
-      <UFormGroup
-        label="Featured image"
-        name="featuredImage"
-        help="This image will be displayed on the template list page and on the template page."
-        :hint="`Maximum size: 1920x1080px, and ${TEMPLATE_MAX_IMAGE_SIZE_KB}kB`"
-        required
-      >
-        <TemplatesInputFeaturedImage
-          @file-change="state.featuredImage = $event"
-        />
-      </UFormGroup>
-
-      <UFormGroup
-        label="Additional Images"
-        name="additionalImages"
-        help="These images will be displayed on the template page in addition to the featured image."
-        :hint="`Maximum size: 1920x1080px, and ${TEMPLATE_MAX_IMAGE_SIZE_KB}kB`"
-      >
-        <TemplatesInputAdditionalImages
-          @files-change="state.additionalImages = $event"
-        />
-      </UFormGroup>
+      <TemplatesFormImages
+        :featured-image="featuredImageValue"
+        :additional-images="additionalImagesValue"
+        @change="onImagesChange($event)"
+      />
     </div>
 
     <div
@@ -127,125 +109,12 @@ function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
       <h2 class="text-lg font-semibold">
         Content
       </h2>
-      <UFormGroup
-        label="Title"
-        name="title"
-        :hint="`${state.title?.length || 0}/${TEMPLATE_MAX_TITLE_LENGTH} characters`"
-        required
-      >
-        <UInput
-          v-model="state.title"
-          placeholder="My Nuxt Template"
-          type="text"
-        />
-      </UFormGroup>
-
-      <UFormGroup
-        label="Paid Status"
-        name="paidStatus"
-        help="A freemium template is free but has premium features. A premium template is paid."
-        required
-      >
-        <URadioGroup
-          v-model="state.paidStatus"
-          :ui="{ fieldset: 'flex flex-row gap-4' }"
-          :options="paidStatusOptions"
-        />
-      </UFormGroup>
-
-      <div class="contents md:grid md:grid-cols-2 md:gap-8">
-        <UFormGroup
-          label="Category"
-          name="categoryId"
-          required
-        >
-          <USelectMenu
-            v-model="state.categoryId"
-            :options="categories"
-            value-attribute="id"
-            option-attribute="name"
-            placeholder="Select a category"
-          />
-        </UFormGroup>
-
-        <UFormGroup
-          label="Modules"
-          name="moduleIds"
-        >
-          <USelectMenu
-            v-model="state.moduleIds"
-            :options="modules"
-            multiple
-            value-attribute="id"
-            option-attribute="name"
-            placeholder="Select one or multiples modules"
-          >
-            <template #option="{ option }">
-              <img
-                v-if="option.icon"
-                :src="`${MODULE_ICON_PREFIX}/${option.icon}`"
-                class="h-4 w-auto"
-              >
-              <span
-                v-else
-                class="i-heroicons-photo inline-block h-4 w-4"
-              />
-              <span>{{ option.name }}</span>
-            </template>
-          </USelectMenu>
-        </UFormGroup>
-      </div>
-
-      <div class="contents md:grid md:grid-cols-2 md:gap-8">
-        <UFormGroup
-          label="Live URL"
-          name="liveUrl"
-          help="A URL where user can see the template in action."
-        >
-          <UInput
-            v-model="state.liveUrl"
-            placeholder="https://example.com/preview"
-            type="url"
-          />
-        </UFormGroup>
-        <UFormGroup
-          :label="isPremium ? 'Purchase URL' : 'Public Repo URL'"
-          name="accessUrl"
-          help="A URL where user can access the template."
-          required
-        >
-          <UInput
-            v-model="state.accessUrl"
-            :placeholder="isPremium ? 'https://stripe.com/me/template': 'https://github.com/barbapapazes/orion'"
-            type="url"
-          />
-        </UFormGroup>
-      </div>
-
-      <UFormGroup
-        label="Short Description"
-        name="shortDescription"
-        required
-        :hint="`${state.shortDescription?.length || 0}/${TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH} characters`"
-        help="A short description for SEO and list page."
-      >
-        <UTextarea
-          v-model="state.shortDescription"
-          placeholder="Concisely describe your template..."
-          :rows="5"
-        />
-      </UFormGroup>
-
-      <UFormGroup
-        label="Description"
-        name="description"
-        :hint="`${state.description?.length || 0}/${TEMPLATE_MAX_DESCRIPTION_LENGTH} characters`"
-      >
-        <RichTextEditor
-          ref="richTextEditor"
-          @change="onDescriptionChange"
-        />
-      </UFormGroup>
+      <TemplatesFormText
+        :modules="modules"
+        :categories="categories"
+        :state="state"
+        @change="onTextChange($event)"
+      />
     </div>
 
     <div class="flex flex-row justify-end gap-4">

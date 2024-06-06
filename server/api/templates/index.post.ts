@@ -78,11 +78,14 @@ export default defineEventHandler(async (event) => {
     creatorId: user.id,
   }).returning({
     id: tables.templates.id,
+    slug: tables.templates.slug,
+    hash: tables.templates.hash,
   })
 
   if (body.moduleIds?.length) {
     await useDrizzle().insert(tables.modulesToTemplates).values(body.moduleIds.map(id => ({ moduleId: id, templateId: template.id }))).execute()
   }
 
-  return sendNoContent(event, 201)
+  setResponseStatus(event, 201)
+  return template
 })
