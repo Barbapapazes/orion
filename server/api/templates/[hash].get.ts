@@ -21,6 +21,8 @@ export default defineEventHandler(async (event) => {
       liveUrl: true,
       shortDescription: true,
       description: true,
+      status: true,
+      creatorId: true,
     },
     with: {
       category: {
@@ -60,9 +62,19 @@ export default defineEventHandler(async (event) => {
   if (!template) {
     throw createError({
       status: 404,
-      message: `Template with hash "${hash}" not found`,
+      message: `Template with hash ${hash} not found`,
     })
   }
 
-  return template
+  if (await allows(event, viewTemplate, template)) {
+    return template
+  }
+
+  /**
+   * Use a 404 instead of a 403 to avoid leaking the existence of the template.
+   */
+  throw createError({
+    status: 404,
+    message: `Template with hash ${hash} not found`,
+  })
 })

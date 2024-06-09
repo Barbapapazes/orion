@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/d1'
 
 import * as schema from '../database/schema'
 
-export { sql, eq, and, or, count } from 'drizzle-orm'
+export { sql, eq, and, or, count, ne, countDistinct, asc, desc } from 'drizzle-orm'
 
 export const tables = schema
 

@@ -120,7 +120,7 @@ const { data, refresh, pending } = await useFetch('/api/templates', {
           </UButton>
         </template>
         <template #paidStatus-data="{ row }">
-          <PaidStatusBadge :status="row.paidStatus" />
+          <TemplatesPaidStatusBadge :status="row.paidStatus" />
         </template>
         <template #createdBy-data="{ row }">
           <UButton

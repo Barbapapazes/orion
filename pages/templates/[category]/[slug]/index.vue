@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { User } from '#auth-utils'
 import type { UCarousel } from '#components'
 
 const route = useRoute()
@@ -40,12 +41,10 @@ const creatorName = template.value.creator.name || template.value.creator.login
 const creatorLogin = template.value.creator.login
 const creatorAvatarUrl = template.value.creator.avatarUrl
 const images = [
-  getTemplateImageURL(template.value.featuredImage),
-  ...(template.value.additionalImages ?? []).map(image => getTemplateImageURL(image)),
+  getImageURL(template.value.featuredImage),
+  ...(template.value.additionalImages ?? []).map(image => getImageURL(image)),
 ]
 
-const { user } = useUserSession()
-const canEdit = user.value?.id === template.value.creator.id
 const items = [[{
   label: 'Edit Content',
   icon: 'i-heroicons-pencil',
@@ -63,6 +62,22 @@ const items = [[{
     categorySlug: template.value.category.slug,
   }),
 }]]
+
+const editTemplate = defineAbility((user, template: Pick<Template, 'creatorId'>) => {
+  if (!user) {
+    return false
+  }
+
+  if (user.roleType === 'admin') {
+    return true
+  }
+
+  if (user.id === template.creatorId) {
+    return true
+  }
+
+  return false
+})
 
 useSeoMeta({
   title: `${template.value.title} by ${creatorName}`,
@@ -126,18 +141,22 @@ useSeoMeta({
             trailing-icon="i-heroicons-arrow-top-right-on-square"
             size="md"
           />
-          <UDropdown
-            v-if="canEdit"
-            :items="items"
+          <Can
+            :bouncer-ability="editTemplate"
+            :data="template"
           >
-            <UButton
-              color="gray"
-              square
-              icon="i-heroicons-ellipsis-horizontal"
-              aria-label="Edit"
-              size="md"
-            />
-          </UDropdown>
+            <UDropdown
+              :items="items"
+            >
+              <UButton
+                color="gray"
+                square
+                icon="i-heroicons-ellipsis-horizontal"
+                aria-label="Edit"
+                size="md"
+              />
+            </UDropdown>
+          </Can>
         </template>
       </UPageHeader>
 
@@ -159,7 +178,7 @@ useSeoMeta({
                 class="h-1 grow border-t border-gray-200 dark:border-gray-800"
               />
               <dd>
-                <PaidStatusBadge
+                <TemplatesPaidStatusBadge
                   :status="template.paidStatus"
                   size="lg"
                 />

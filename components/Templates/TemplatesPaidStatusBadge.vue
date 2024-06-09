@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import type { TemplatePaidStatus } from '~/types'
+
 const props = defineProps<{
-  status: typeof PAID_STATUS[number]
+  status: TemplatePaidStatus
 }>()
 
 const color = computed(() => {
@@ -15,28 +17,17 @@ const color = computed(() => {
       return ''
   }
 })
+
+const label = computed(() => {
+  return templatePaidStatusOptions.find(option => option.value === props.status)?.label
+})
 </script>
 
 <template>
   <UBadge
-    v-if="status === 'free'"
     :color="color"
     variant="subtle"
   >
-    Free
-  </UBadge>
-  <UBadge
-    v-else-if="status === 'freemium'"
-    color="blue"
-    variant="subtle"
-  >
-    Freemium
-  </UBadge>
-  <UBadge
-    v-else-if="status === 'premium'"
-    color="yellow"
-    variant="subtle"
-  >
-    Premium
+    {{ label }}
   </UBadge>
 </template>

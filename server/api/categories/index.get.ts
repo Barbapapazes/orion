@@ -1,4 +1,6 @@
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  await authorize(event, listCategories)
+
   const categories = await useDrizzle().select({
     id: tables.categories.id,
     slug: tables.categories.slug,

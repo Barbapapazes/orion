@@ -4,7 +4,7 @@ import { TEMPLATE_IMAGE_FORMAT, TEMPLATE_MAX_IMAGE_SIZE } from '~/utils/constant
 import { createTemplateTextValidator } from '~/utils/validators'
 
 export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+  await authorize(event, createTemplate)
 
   /**
    * Validate the text.
@@ -63,6 +63,7 @@ export default defineEventHandler(async (event) => {
   })
   const savedAdditionalImages = await Promise.all(additionalImagePromises)
 
+  const { user } = await requireUserSession(event)
   const [template] = await useDrizzle().insert(tables.templates).values({
     hash: useHash(),
     slug: useSlugify(body.title),

@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
       id: true,
       hash: true,
       slug: true,
+      status: true,
       featuredImage: true,
       title: true,
       paidStatus: true,

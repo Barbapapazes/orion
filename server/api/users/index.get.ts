@@ -2,7 +2,7 @@ import { number, object } from 'zod'
 import { getPaginationMeta } from '~/server/utils/pagination'
 
 export default defineEventHandler(async (event) => {
-  await requireAdminUser(event)
+  await authorize(event, listUsers)
 
   const query = await getValidatedQuery(event, object({
     limit: number({ coerce: true }).default(10),

@@ -8,10 +8,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  devtools: { enabled: false },
-  extends: ['@nuxt/ui-pro'],
-  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
   runtimeConfig: {
     oauth: {
       github: {
@@ -20,6 +16,18 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    '/': {
+      redirect: '/templates',
+    },
+    '/admin': {
+      redirect: '/admin/templates',
+    },
+  },
+
+  extends: ['@nuxt/ui-pro'],
+  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
+
   ui: {
     icons: ['heroicons', 'simple-icons'],
   },
@@ -32,4 +40,5 @@ export default defineNuxtConfig({
       stylistic: true,
     },
   },
+  devtools: { enabled: true },
 })

@@ -1,7 +1,7 @@
 import { createCategoryValidator } from '~/utils/validators'
 
 export default defineEventHandler(async (event) => {
-  await requireAdminUser(event)
+  await authorize(event, createCategory)
 
   const body = await readValidatedBody(event, createCategoryValidator.parse)
 

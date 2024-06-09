@@ -2,7 +2,7 @@ import { number, object } from 'zod'
 import { updateCategoryValidator } from '~/utils/validators'
 
 export default defineEventHandler(async (event) => {
-  await requireAdminUser(event)
+  await authorize(event, updateCategory)
 
   const params = await getValidatedRouterParams(event, object({
     id: number({ coerce: true }),

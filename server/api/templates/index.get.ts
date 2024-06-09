@@ -1,19 +1,24 @@
 import { number, object } from 'zod'
-import { getPagination } from '~/server/utils/pagination'
 
 export default defineEventHandler(async (event) => {
+  await authorize(event, listTemplates)
+
   const query = await getValidatedQuery(event, object({
     limit: number({ coerce: true }).default(10),
     page: number({ coerce: true }).default(1),
   }).parse)
 
+  const where = eq(tables.templates.status, 'validated')
+
   const templates = await useDrizzle().query.templates.findMany({
     limit: query.limit,
     offset: getOffset(query),
+    where,
     columns: {
       id: true,
       slug: true,
       hash: true,
+      featuredImage: true,
       title: true,
       paidStatus: true,
       accessUrl: true,
@@ -52,7 +57,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const meta = await useDrizzle().select({ count: count() }).from(tables.templates)
+  const meta = await useDrizzle().select({ count: count() }).from(tables.templates).where(where).execute()
 
   return getPagination(templates, {
     total: meta[0].count,

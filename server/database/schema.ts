@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql, relations } from 'drizzle-orm'
-import { PAID_STATUS, ROLE_TYPE, STATUS } from '../../utils/constants'
+import { TEMPLATE_PAID_STATUS, TEMPLATE_STATUS, USER_ROLE_TYPE } from '../../utils/constants'
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -9,7 +9,7 @@ export const users = sqliteTable('users', {
   login: text('login').notNull().unique(),
   name: text('name'),
   avatarUrl: text('avatar_url').notNull(),
-  roleType: text('role_type', { enum: ROLE_TYPE }).default('creator'),
+  roleType: text('role_type', { enum: USER_ROLE_TYPE }).default('creator'),
   createdAt: text('created_at').notNull().$defaultFn(() => sql`(current_timestamp)`),
   updatedAt: text('updated_at').notNull().$defaultFn(() => sql`(current_timestamp)`).$onUpdateFn(() => sql`(current_timestamp)`),
 })
@@ -48,8 +48,8 @@ export const templates = sqliteTable('templates', {
   featuredImage: text('featured_image').notNull(),
   additionalImages: text('additional_images', { mode: 'json' }).$type<string[]>(),
   title: text('title').notNull(),
-  status: text('status', { enum: STATUS }).notNull().default('submitted'),
-  paidStatus: text('paid_status', { enum: PAID_STATUS }).notNull().default('free'),
+  status: text('status', { enum: TEMPLATE_STATUS }).notNull().default('submitted'),
+  paidStatus: text('paid_status', { enum: TEMPLATE_PAID_STATUS }).notNull().default('free'),
   liveUrl: text('live_url'),
   accessUrl: text('access_url').notNull(),
   shortDescription: text('short_description').notNull(),
@@ -72,9 +72,9 @@ export const templatesRelations = relations(templates, ({ one, many }) => ({
   modules: many(modulesToTemplates),
 }))
 
-// export const modulesRelations = relations(modules, ({ many }) => ({
-//   templates: many(templates),
-// }))
+export const modulesRelations = relations(modules, ({ many }) => ({
+  templates: many(modulesToTemplates),
+}))
 
 export const modulesToTemplates = sqliteTable('modulesToTemplates', {
   moduleId: integer('module_id').notNull().references(() => modules.id),

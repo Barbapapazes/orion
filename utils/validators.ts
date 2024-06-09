@@ -1,6 +1,6 @@
 import { string, enum as zEnum, object, number, array, any } from 'zod'
 import { type output } from 'zod'
-import { CATEGORY_MAX_NAME_LENGTH, PAID_STATUS, TEMPLATE_MAX_DESCRIPTION_LENGTH, TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH, TEMPLATE_IMAGE_FORMAT, TEMPLATE_MAX_IMAGE_SIZE, TEMPLATE_MAX_ADDITIONAL_IMAGES, TEMPLATE_MIN_SHORT_DESCRIPTION_LENGTH, TEMPLATE_MAX_IMAGE_SIZE_KB, TEMPLATE_MIN_TITLE_LENGTH, TEMPLATE_MAX_TITLE_LENGTH } from './constants'
+import { CATEGORY_MAX_NAME_LENGTH, TEMPLATE_MAX_DESCRIPTION_LENGTH, TEMPLATE_MAX_SHORT_DESCRIPTION_LENGTH, TEMPLATE_IMAGE_FORMAT, TEMPLATE_MAX_IMAGE_SIZE, TEMPLATE_MAX_ADDITIONAL_IMAGES, TEMPLATE_MIN_SHORT_DESCRIPTION_LENGTH, TEMPLATE_MAX_IMAGE_SIZE_KB, TEMPLATE_MIN_TITLE_LENGTH, TEMPLATE_MAX_TITLE_LENGTH, TEMPLATE_PAID_STATUS } from './constants'
 
 export const createCategoryValidator = object({
   name: string({ message: 'Required' }).max(CATEGORY_MAX_NAME_LENGTH, { message: `Max ${CATEGORY_MAX_NAME_LENGTH} characters` }),
@@ -32,7 +32,7 @@ export const createTemplateImagesValidator = object({
 
 export const createTemplateTextValidator = object({
   title: string({ message: 'Required' }).min(TEMPLATE_MIN_TITLE_LENGTH, { message: `Min ${TEMPLATE_MIN_TITLE_LENGTH} characters` }).max(TEMPLATE_MAX_TITLE_LENGTH, { message: `Max ${TEMPLATE_MAX_TITLE_LENGTH} characters` }),
-  paidStatus: zEnum(PAID_STATUS, { message: 'Required' }),
+  paidStatus: zEnum(TEMPLATE_PAID_STATUS, { message: 'Required' }),
   categoryId: number({ message: 'Required', coerce: true }),
   moduleIds: array(number({ coerce: true })).max(6, { message: `Max 6 modules` }).optional(),
   liveUrl: string().url().optional(),
@@ -49,7 +49,7 @@ export type CreateTemplateValidatorSchema = output<typeof createTemplateValidato
 
 export const editTemplateContentValidator = object({
   title: string({ message: 'Required' }),
-  paidStatus: zEnum(PAID_STATUS, { message: 'Required' }),
+  paidStatus: zEnum(TEMPLATE_PAID_STATUS, { message: 'Required' }),
   categoryId: number({ message: 'Required', coerce: true }),
   moduleIds: array(number()).max(6, { message: `Max 6 modules` }).optional(),
   liveUrl: string().url().optional(),

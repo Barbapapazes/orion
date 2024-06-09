@@ -3,7 +3,7 @@ interface Modules {
 }
 
 export default defineEventHandler(async (event) => {
-  await requireAdminUser(event)
+  await authorize(event, syncModules)
 
   const data = await $fetch<Modules>('https://api.nuxt.com/modules')
   const modules = data.modules

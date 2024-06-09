@@ -5,7 +5,8 @@ const props = withDefaults(defineProps<{
   editable?: boolean
   hash: string
   slug: string
-  featuredImageUrl: string
+  status?: Template['status']
+  featuredImage: string
   title: Template['title']
   shortDescription: Template['shortDescription']
   paidStatus: Template['paidStatus']
@@ -28,6 +29,7 @@ const items = [
 
 const categoryName = props.category.name
 const categorySlug = props.category.slug
+
 const creatorName = props.creator.name ?? props.creator.login
 const creatorAvatarUrl = props.creator.avatarUrl
 </script>
@@ -38,13 +40,14 @@ const creatorAvatarUrl = props.creator.avatarUrl
     :ui="{ body: { padding: 'px-0 py-0 pb-4 sm:p-0 sm:pb-4' } }"
   >
     <template v-if="editable">
-      <UBadge
-        label="Approved"
-        class="absolute top-2 left-2 z-10"
+      <TemplatesStatusBadge
+        v-if="status"
+        :status="status"
+        class="absolute z-10 top-2 left-2"
       />
       <UDropdown
         :items="items"
-        class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition z-10"
+        class="absolute z-10 top-2 right-2 opacity-0 group-hover:opacity-100 transition"
       >
         <UButton
           square
@@ -55,7 +58,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
     </template>
     <div class="relative w-full aspect-video overflow-hidden">
       <img
-        :src="featuredImageUrl"
+        :src="getImageURL(featuredImage)"
         width="1920"
         height="1080"
         :alt="`${title} featured image`"
@@ -106,7 +109,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
               Price
             </dt>
             <dd>
-              <PaidStatusBadge :status="paidStatus" />
+              <TemplatesPaidStatusBadge :status="paidStatus" />
             </dd>
           </div>
         </dl>
