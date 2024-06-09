@@ -20,7 +20,10 @@ defineProps<{
       <p class="font-semibold">
         {{ name }}
       </p>
-      <p class="dark:text-gray-400 text-sm">
+      <p
+        class="dark:text-gray-400 text-sm truncate"
+        :title="email"
+      >
         {{ email }}
       </p>
     </div>

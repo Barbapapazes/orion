@@ -30,7 +30,7 @@ useSeoMeta({
       <!-- TODO: split into many components -->
       <UPageBody>
         <div class="flex flex-col md:flex-row gap-8">
-          <div class="lg:w-4/12 flex flex-col gap-6">
+          <div class="lg:w-3/12 flex flex-col gap-6">
             <ProfileInformations
               :avatar-url="user.avatarUrl"
               :name="user.name ?? user.login"
@@ -58,7 +58,7 @@ useSeoMeta({
             </div>
           </div>
 
-          <div class="lg:w-8/12">
+          <div class="lg:w-9/12">
             <!-- TODO: add a toolbar to filter by status -->
 
             <TemplatesGrid

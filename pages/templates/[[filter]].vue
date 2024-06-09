@@ -105,7 +105,7 @@ const order = ref<1 | -1>(1)
       </div>
 
       <div
-        class="flex flex-col gap-6"
+        class="grow flex flex-col gap-6"
       >
         <HomeTemplatesToolbar
           v-model:search="search"

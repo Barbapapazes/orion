@@ -8,7 +8,7 @@ const sort = defineModel<TemplateSort>('sort', { required: true })
 </script>
 
 <template>
-  <div class="flex flex-row justify-between">
+  <div class="flex flex-row justify-between gap-4">
     <UInput
       v-model="search"
       icon="i-heroicons-magnifying-glass-20-solid"
