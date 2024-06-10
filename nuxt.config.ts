@@ -35,6 +35,9 @@ export default defineNuxtConfig({
     database: true,
     blob: true,
   },
+  authorization: {
+    preset: 'nuxt-auth-utils',
+  },
   eslint: {
     config: {
       stylistic: true,

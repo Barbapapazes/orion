@@ -26,3 +26,5 @@ export type BouncerAbility<T> = {
   execute: AbilityFunctionWithGuest<T>
   allowGuest: true
 }
+
+export interface User {}
