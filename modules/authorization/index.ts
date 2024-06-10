@@ -64,6 +64,6 @@ export {}
     })
 
     // Register server resolver
-
+    // TODO: add an option to ask for the preset (could be 'nuxt-auth-utils' or nothing where nothing means that user must add their own middleare)
   },
 })
