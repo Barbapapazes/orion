@@ -1,5 +1,3 @@
-import type { User } from '#auth-utils'
-
 /**
  * Callback function that defines if a user can perform an action.
  */

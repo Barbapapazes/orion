@@ -1,4 +1,4 @@
-import { addComponentsDir, addServerImportsDir, createResolver, defineNuxtModule, addImportsDir, addServerImports, addImports, addTypeTemplate, addPlugin } from 'nuxt/kit'
+import { addComponentsDir, addServerImportsDir, createResolver, defineNuxtModule, addImportsDir, addServerImports, addImports, addPlugin, addServerPlugin } from 'nuxt/kit'
 import { version } from '../../package.json'
 
 // const log = logger.withTag('nuxthub-authorization')
@@ -13,7 +13,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'authorization',
     version,
   },
-  async setup(options) {
+  async setup() {
     const { resolve } = createResolver(import.meta.url)
 
     const defineAbilityImport = {
@@ -37,33 +37,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Register client resolver
     addPlugin(resolve('runtime/plugins/nuxt-auth-utils.ts'))
-    addTypeTemplate({
-      filename: 'modules/authorization/resolver-client.d.ts',
-      getContents: () => `
-interface User {}
-
-declare module '#app' {
-  interface NuxtApp {
-    $authorization: {
-      resolveClientUser: () => Promise<User | null>
-    }
-  }
-}
-
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $authorization: {
-      resolveClientUser: () => Promise<User | null>
-    }
-  }
-}
-
-export {}
-      `,
-      write: true,
-    })
 
     // Register server resolver
-    // TODO: add an option to ask for the preset (could be 'nuxt-auth-utils' or nothing where nothing means that user must add their own middleare)
+    addServerPlugin(resolve('runtime/server/plugins/nuxt-auth-utils.ts'))
   },
 })
