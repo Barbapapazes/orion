@@ -1,6 +1,5 @@
 import type { ROLE_TYPE } from './utils/constants'
 
-// auth.d.ts
 declare module '#auth-utils' {
   interface User {
     id: number
