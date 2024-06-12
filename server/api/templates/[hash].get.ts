@@ -59,22 +59,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  if (!template) {
-    throw createError({
-      status: 404,
-      message: `Template with hash ${hash} not found`,
-    })
-  }
+  await authorize(event, viewTemplate, template)
 
-  if (await allows(event, viewTemplate, template)) {
-    return template
-  }
-
-  /**
-   * Use a 404 instead of a 403 to avoid leaking the existence of the template.
-   */
-  throw createError({
-    status: 404,
-    message: `Template with hash ${hash} not found`,
-  })
+  return template
 })

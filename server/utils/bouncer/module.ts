@@ -1,6 +1,8 @@
-export const listModules = defineAbility(() => true, { allowGuest: true })
+import type { User } from '#auth-utils'
 
-export const syncModules = defineAbility((user) => {
+export const listModules = defineAbility({ allowGuest: true }, () => true)
+
+export const syncModules = defineAbility((user: User) => {
   /**
    * Only admins can create modules.
    */

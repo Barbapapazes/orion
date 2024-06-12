@@ -6,10 +6,18 @@ const route = useRoute()
 const hash = computed(() => {
   return (route.params.slug as string).slice(-12)
 })
-const { data: template } = await useFetch(`/api/templates/${hash.value}`, {
+const { data: template, error } = await useFetch(`/api/templates/${hash.value}`, {
   deep: false,
   default: () => {},
 })
+
+if (error.value) {
+  throw createError({
+    statusCode: error.value.statusCode,
+    message: error.value.message,
+    fatal: true,
+  })
+}
 
 if (!template.value) {
   throw createError({
@@ -63,7 +71,7 @@ const items = [[{
   }),
 }]]
 
-const editTemplate = defineAbility((user, template: Pick<Template, 'creatorId'>) => {
+const editTemplate = defineAbility((user: User, template: Pick<Template, 'creatorId'>) => {
   if (!user) {
     return false
   }
@@ -72,7 +80,7 @@ const editTemplate = defineAbility((user, template: Pick<Template, 'creatorId'>)
     return true
   }
 
-  if (user.id === template.creatorId) {
+  if (template && user.id === template.creatorId) {
     return true
   }
 
@@ -143,7 +151,7 @@ useSeoMeta({
           />
           <Can
             :bouncer-ability="editTemplate"
-            :data="template"
+            :args="[template]"
           >
             <UDropdown
               :items="items"

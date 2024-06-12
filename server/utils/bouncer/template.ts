@@ -1,44 +1,43 @@
 import type { User } from '#auth-utils'
+import { deny as _deny } from '#imports'
 
-export const listTemplates = defineAbility(() => true, { allowGuest: true })
+export const listTemplates = defineAbility({ allowGuest: true }, () => true)
 
-export const viewTemplate = defineAbility((user, template: Pick<Template, 'status' | 'creatorId'> | undefined) => {
+export const viewTemplate = defineAbility({ allowGuest: true }, (user: User | null, template: Pick<Template, 'status' | 'creatorId'> | undefined) => {
+  const deny = () => _deny({ statusCode: 404, message: 'Template not found' })
+
   if (template === undefined) {
-    return false
+    return deny()
   }
 
   /**
    * The template is public and available for everyone to view.
    */
   if (template.status === 'validated') {
-    return true
+    return allow()
   }
 
   /**
    * Logged in user must be an admin.
    */
   if (user && user.roleType === 'admin') {
-    return true
+    return allow()
   }
 
   /**
    * Or the logged in user must be the creator of the template.
    */
   if (user && user.id === template.creatorId) {
-    return true
+    return allow()
   }
 
-  return false
-}, { allowGuest: true })
+  return deny()
+})
 
 export const createTemplate = defineAbility(() => true)
 
-export const updateTemplate = defineAbility((user: User | undefined, template: Pick<Template, 'status' | 'creatorId'> | undefined): boolean => {
+export const updateTemplate = defineAbility((user: User, template: Pick<Template, 'status' | 'creatorId'> | undefined) => {
   if (template === undefined) {
-    return false
-  }
-
-  if (user === undefined) {
     return false
   }
 

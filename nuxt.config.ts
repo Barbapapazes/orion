@@ -26,8 +26,7 @@ export default defineNuxtConfig({
   },
 
   extends: ['@nuxt/ui-pro'],
-  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
-
+  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint', 'nuxt-authorization'],
   ui: {
     icons: ['heroicons', 'simple-icons'],
   },

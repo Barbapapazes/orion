@@ -1,4 +1,4 @@
 /**
  * Everyone can get KPIs.
  */
-export const getKPIs = defineAbility(() => true, { allowGuest: true })
+export const getKPIs = defineAbility({ allowGuest: true }, () => true)
