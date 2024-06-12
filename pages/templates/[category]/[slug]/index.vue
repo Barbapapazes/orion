@@ -72,15 +72,23 @@ const items = [[{
 }]]
 
 const editTemplate = defineAbility((user: User, template: Pick<Template, 'creatorId'>) => {
-  if (!user) {
-    return false
-  }
-
   if (user.roleType === 'admin') {
     return true
   }
 
   if (template && user.id === template.creatorId) {
+    return true
+  }
+
+  return false
+})
+
+const viewNonPublicTemplate = defineAbility((user: User, template: Pick<Template, 'creatorId' | 'status'>) => {
+  if (template.status === 'validated') {
+    return false // If the template is validated, it's public.
+  }
+
+  if (user.roleType === 'admin' || user.id === template.creatorId) {
     return true
   }
 
@@ -98,6 +106,17 @@ useSeoMeta({
     v-if="template"
     class="mt-8"
   >
+    <Can
+      :bouncer-ability="viewNonPublicTemplate"
+      :args="[template]"
+    >
+      <TemplatesStatusAlert
+        :id="template.id"
+        class="mb-8 sticky top-20 z-10"
+        :status="template.status"
+      />
+    </Can>
+
     <UBreadcrumb :links="breadcrumbLinks" />
 
     <UCarousel
