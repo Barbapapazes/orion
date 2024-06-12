@@ -33,6 +33,7 @@ export default defineNuxtConfig({
   hub: {
     database: true,
     blob: true,
+    cache: true,
   },
   authorization: {
     preset: 'nuxt-auth-utils',
