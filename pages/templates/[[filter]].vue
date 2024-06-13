@@ -29,6 +29,7 @@ const hasTemplates = computed(() => templatesPaginated.value.data.length > 0)
 const showPagination = computed(() => total.value > limit)
 
 // Fetch Categories, Modules and KPIs in parallel because they won't change
+// TODO: refactor to extract the promise to use the client cache
 const { data } = await useAsyncData(async () => {
   const [categories, modules, kpis] = await Promise.all([
     $fetch('/api/categories'),
