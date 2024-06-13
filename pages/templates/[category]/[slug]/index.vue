@@ -87,7 +87,7 @@ useSeoMeta({
             target="_blank"
             rel="noopener noreferrer external"
             trailing-icon="i-heroicons-arrow-top-right-on-square"
-            size="md"
+            size="lg"
           />
           <Can
             :bouncer-ability="editTemplate"
