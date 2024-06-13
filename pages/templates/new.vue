@@ -3,19 +3,17 @@ import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
 
-const { data: categories } = await useFetch('/api/categories', {
-  deep: false,
-  default: () => [],
-})
+const categories = useFetchCategories()
 
-const { data: modules } = await useFetch('/api/modules', {
-  deep: false,
-  default: () => [],
-  transform: (data) => {
-    // Order by name and then by type (official and then community).
-    return data.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.type.localeCompare(a.type))
-  },
-})
+if (!categories.value) {
+  throw categoriesNotFoundError
+}
+
+const modules = useFetchModules()
+
+if (!modules.value) {
+  throw modulesNotFoundError
+}
 
 const loading = ref(false)
 async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
@@ -46,7 +44,7 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
       title: `Template "${event.data.title}" has been created`,
       color: 'green',
     })
-    const category = categories.value.find(category => category.id === event.data.categoryId)
+    const category = categories.value!.find(category => category.id === event.data.categoryId)
 
     /**
      * This case should never happen.
@@ -95,6 +93,7 @@ useSeoMeta({
       <UPageBody class="flex flex-col lg:flex-row gap-8">
         <div class="order-2 lg:order-1 lg:w-9/12 flex flex-col gap-2">
           <TemplatesCreateForm
+            v-if="categories && modules"
             :loading="loading"
             :categories="categories"
             :modules="modules"

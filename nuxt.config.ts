@@ -25,6 +25,12 @@ export default defineNuxtConfig({
     },
   },
 
+  experimental: {
+    viewTransition: true,
+  },
+
+  css: ['~/assets/css/main.css'],
+
   extends: ['@nuxt/ui-pro'],
   modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint', 'nuxt-authorization'],
   ui: {

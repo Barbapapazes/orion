@@ -1,29 +1,20 @@
 <script lang="ts" setup>
 import type { EmitterSource } from 'quill'
 
-export interface TemplateFormTextState {
-  title: string | undefined
-  paidStatus: typeof PAID_STATUS[number] | undefined
-  categoryId: string | undefined
-  moduleIds: string[]
-  liveUrl: string | undefined
-  accessUrl: string | undefined
-  shortDescription: string
-  description: string
-}
+type State = Partial<CreateTemplateTextValidatorSchema>
 
 const props = defineProps<{
   categories: Pick<Category, 'id' | 'name'>[]
   modules: Pick<Module, 'name' | 'id' | 'icon'>[]
-  state: TemplateFormTextState
+  state: State
 }>()
 
 const emits = defineEmits<{
-  change: [TemplateFormTextState]
+  change: [State]
 }>()
 
 // Create a new internal reactive object with the props state to avoid mutation.
-const state = reactive<TemplateFormTextState>({ ...props.state })
+const state = reactive<State>({ ...props.state })
 
 // Watch for props changes to allow the parent to update and reset the internal state.
 watch(() => props.state, (value) => {
@@ -66,7 +57,7 @@ function onDescriptionChange(content: string, source: EmitterSource) {
     <URadioGroup
       v-model="state.paidStatus"
       :ui="{ fieldset: 'flex flex-row gap-4' }"
-      :options="paidStatusOptions"
+      :options="templatePaidStatusOptions"
     />
   </UFormGroup>
 

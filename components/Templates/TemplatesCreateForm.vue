@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types'
 import type { UForm } from '#components'
-import type { TemplateFormTextState } from '~/components/Templates/TemplatesFormText.vue'
 import type { TemplateFormImagesState } from '~/components/Templates/TemplatesFormImages.vue'
+
+type State = Partial<CreateTemplateValidatorSchema>
 
 defineProps<{
   loading: boolean
@@ -14,18 +15,7 @@ const emits = defineEmits<{
   submit: [FormSubmitEvent<CreateTemplateValidatorSchema>]
 }>()
 
-const state = reactive<{
-  featuredImage: File | undefined
-  additionalImages: File[]
-  title: string | undefined
-  paidStatus: typeof PAID_STATUS[number] | undefined
-  categoryId: string | undefined
-  moduleIds: string[]
-  liveUrl: string | undefined
-  accessUrl: string | undefined
-  shortDescription: string
-  description: string
-}>({
+const state = reactive<State>({
   featuredImage: undefined,
   additionalImages: [],
   title: undefined,
@@ -40,7 +30,7 @@ const state = reactive<{
 
 const form = ref<InstanceType<typeof UForm> | null>(null)
 
-function onTextChange(textState: TemplateFormTextState) {
+function onTextChange(textState: State) {
   const oldDescription = state.description
 
   Object.assign(state, textState)
@@ -61,7 +51,7 @@ const featuredImageValue = computed(() => {
 })
 
 const additionalImagesValue = computed(() => {
-  return state.additionalImages.map(file => urlFromFile(file))
+  return state.additionalImages?.map(file => urlFromFile(file))
 })
 
 async function onReset() {

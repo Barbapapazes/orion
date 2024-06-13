@@ -37,7 +37,9 @@ const { data } = await useAsyncData(async () => {
   ])
 
   return { categories, modules, kpis }
-}, { deep: false })
+}, { deep: false, getCachedData(key, nuxtApp) {
+  return nuxtApp.payload.data[key]
+} })
 const categories = computed(() => data.value?.categories ?? [])
 const modules = computed(() => data.value?.modules ?? [])
 const kpis = computed(() => data.value?.kpis ?? {
@@ -76,6 +78,9 @@ function onResetFilters() {
 const search = ref('')
 const sort = ref(templateSortOptions[0].value)
 const order = ref<1 | -1>(1)
+
+// View Transition API
+const active = useActiveTemplateCard()
 </script>
 
 <template>
@@ -115,11 +120,12 @@ const order = ref<1 | -1>(1)
         <template
           v-if="hasTemplates"
         >
-          <TemplatesGrid>
+          <TemplatesGrid id="templates">
             <TemplatesCard
               v-for="template in templates"
               :key="template.title"
               class="w-full"
+              :class="{ active: active === template.hash }"
               :hash="template.hash"
               :slug="template.slug"
               :featured-image="template.featuredImage"
@@ -128,6 +134,7 @@ const order = ref<1 | -1>(1)
               :paid-status="template.paidStatus"
               :creator="template.creator"
               :category="template.category"
+              @click.native="active = template.hash"
             />
           </TemplatesGrid>
 
@@ -151,8 +158,8 @@ const order = ref<1 | -1>(1)
   </div>
 </template>
 
-<style>
-#templates {
-  scroll-margin-top: 6rem;
+<style scoped>
+.active :deep(.banner) {
+  view-transition-name: selected-template;
 }
 </style>

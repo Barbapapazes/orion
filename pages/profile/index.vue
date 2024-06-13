@@ -15,8 +15,10 @@ const openTemplateExplanations = ref(false)
 
 useSeoMeta({
   title: 'Profile',
-
 })
+
+// View Transition API
+const active = useActiveTemplateCard()
 </script>
 
 <template>
@@ -67,6 +69,7 @@ useSeoMeta({
               <TemplatesCard
                 v-for="template in templates"
                 :key="template.title"
+                :class="{ active: active === template.hash }"
                 editable
                 :slug="template.slug"
                 :hash="template.hash"
@@ -77,6 +80,7 @@ useSeoMeta({
                 :paid-status="template.paidStatus"
                 :creator="template.creator"
                 :category="template.category"
+                @click.native="active = template.hash"
               />
             </TemplatesGrid>
             <ProfileNoTemplates
@@ -91,3 +95,9 @@ useSeoMeta({
     <TemplatesExplanations v-model:open="openTemplateExplanations" />
   </UContainer>
 </template>
+
+<style scoped>
+.active :deep(.banner) {
+  view-transition-name: selected-template;
+}
+</style>

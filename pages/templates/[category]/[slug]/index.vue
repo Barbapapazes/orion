@@ -1,102 +1,36 @@
 <script lang="ts" setup>
-import type { User } from '#auth-utils'
-import type { UCarousel } from '#components'
-
 const route = useRoute()
 const hash = computed(() => {
   return (route.params.slug as string).slice(-12)
 })
-const { data: template, error } = await useFetch(`/api/templates/${hash.value}`, {
-  deep: false,
-  default: () => {},
-})
 
-if (error.value) {
-  throw createError({
-    statusCode: error.value.statusCode,
-    message: error.value.message,
-    fatal: true,
-  })
-}
+const template = await useFetchTemplate(hash)
 
 if (!template.value) {
-  throw createError({
-    statusCode: 404,
-    message: 'Template not found',
-    fatal: true,
-  })
+  throw templateNotFoundError
 }
 
-const breadcrumbLinks = [{
-  label: 'Templates',
-  icon: TEMPLATE_ICON,
-  to: '/templates#templates',
-},
-{
-  label: template.value.category.name,
-  icon: CATEGORY_ICON,
-  to: `/templates/${template.value.category.slug}#templates`,
-},
-{
-  label: template.value.title,
-}]
-
+const templateTitle = template.value.title
+const templateSlug = template.value.slug
+const templateHash = template.value.hash
+const templateShortDescription = template.value.shortDescription
+const templateDescription = template.value.description
 const isPremium = template.value.paidStatus === 'premium'
-const hasAdditionalImages = (template.value.additionalImages?.length ?? 0) > 0
 
 const categoryName = template.value.category.name
+const categorySlug = template.value.category.slug
+
 const creatorName = template.value.creator.name || template.value.creator.login
 const creatorLogin = template.value.creator.login
 const creatorAvatarUrl = template.value.creator.avatarUrl
+
 const images = [
   getImageURL(template.value.featuredImage),
   ...(template.value.additionalImages ?? []).map(image => getImageURL(image)),
 ]
 
-const items = [[{
-  label: 'Edit Content',
-  icon: 'i-heroicons-pencil',
-  to: generateEditTextTemplateURL({
-    slug: template.value.slug,
-    hash: template.value.hash,
-    categorySlug: template.value.category.slug,
-  }),
-}, {
-  label: 'Edit Images',
-  icon: 'i-heroicons-photo',
-  to: generateEditImagesTemplateURL({
-    slug: template.value.slug,
-    hash: template.value.hash,
-    categorySlug: template.value.category.slug,
-  }),
-}]]
-
-const editTemplate = defineAbility((user: User, template: Pick<Template, 'creatorId'>) => {
-  if (user.roleType === 'admin') {
-    return true
-  }
-
-  if (template && user.id === template.creatorId) {
-    return true
-  }
-
-  return false
-})
-
-const viewNonPublicTemplate = defineAbility((user: User, template: Pick<Template, 'creatorId' | 'status'>) => {
-  if (template.status === 'validated') {
-    return false // If the template is validated, it's public.
-  }
-
-  if (user.roleType === 'admin' || user.id === template.creatorId) {
-    return true
-  }
-
-  return false
-})
-
 useSeoMeta({
-  title: `${template.value.title} by ${creatorName}`,
+  title: `${templateTitle} by ${creatorName}`,
   description: template.value.shortDescription,
 })
 </script>
@@ -117,35 +51,22 @@ useSeoMeta({
       />
     </Can>
 
-    <UBreadcrumb :links="breadcrumbLinks" />
+    <TemplatesBreadcrumb
+      :template-title="templateTitle"
+      :category-name="categoryName"
+      :category-slug="categorySlug"
+    />
 
-    <UCarousel
-      v-slot="{ item }"
-      class="mt-8"
-      :items="images"
-      :ui="{ wrapper: 'group', item: 'aspect-[16/9] w-full rounded-2xl overflow-hidden', indicators: { wrapper: 'opacity-0 group-hover:opacity-100 transition', inactive: 'mix-blend-normal' }, default: { prevButton: { class: 'rtl:[&_span:first-child]:rotate-180 absolute left-0 opacity-0 disabled:opacity-0 top-1/2 transform -translate-y-1/2 rounded-full group-hover:opacity-100 group-hover:disabled:opacity-75 group-hover:left-4 transition-all' }, nextButton: { class: 'rtl:[&_span:last-child]:rotate-180 absolute right-0 opacity-0 disabled:opacity-0 top-1/2 transform -translate-y-1/2 rounded-full group-hover:opacity-100 group-hover:disabled:opacity-75 group-hover:right-4 transition-all' } } }"
-      :arrows="hasAdditionalImages"
-      :indicators="hasAdditionalImages"
-      :prev-button="{
-        color: 'gray',
-      }"
-      :next-button="{
-        color: 'gray',
-      }"
-    >
-      <img
-        :src="item"
-        :alt="`${template.title} image`"
-        width="1920"
-        height="1080"
-        class="w-full aspect-[16/9] object-cover object-center"
-        draggable="false"
-      >
-    </UCarousel>
+    <TemplatesCarousel
+      class="banner"
+      :template-title="templateTitle"
+      :images="images"
+    />
+
     <UPage>
       <UPageHeader
-        :title="template.title"
-        :description="template.shortDescription"
+        :title="templateTitle"
+        :description="templateShortDescription"
         :ui="{ links: 'gap-4' }"
       >
         <template #links>
@@ -172,17 +93,11 @@ useSeoMeta({
             :bouncer-ability="editTemplate"
             :args="[template]"
           >
-            <UDropdown
-              :items="items"
-            >
-              <UButton
-                color="gray"
-                square
-                icon="i-heroicons-ellipsis-horizontal"
-                aria-label="Edit"
-                size="md"
-              />
-            </UDropdown>
+            <TemplatesEditDropdown
+              :template-slug="templateSlug"
+              :template-hash="templateHash"
+              :category-slug="categorySlug"
+            />
           </Can>
         </template>
       </UPageHeader>
@@ -191,8 +106,15 @@ useSeoMeta({
         <UPageBody class="w-9/12">
           <div
             class="prose dark:prose-invert"
-            v-html="template.description"
-          />
+          >
+            <div
+              v-if="templateDescription"
+              v-html="templateDescription"
+            />
+            <p v-else>
+              <em>No description provided.</em>
+            </p>
+          </div>
         </UPageBody>
 
         <div class="w-3/12">
@@ -293,3 +215,9 @@ useSeoMeta({
     </UPage>
   </UContainer>
 </template>
+
+<style scoped>
+.banner :deep(:first-of-type > img) {
+  view-transition-name: selected-template;
+}
+</style>

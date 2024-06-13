@@ -1,7 +1,11 @@
 export const MODULE_ICON_PREFIX = 'https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons'
 
+export const MORE_VERTICAL_ICON = 'i-heroicons-ellipsis-vertical'
+export const MORE_HORIZONTAL_ICON = 'i-heroicons-ellipsis-horizontal'
 export const CATEGORY_ICON = 'i-heroicons-tag'
 export const TEMPLATE_ICON = 'i-heroicons-rectangle-group'
+export const EDIT_ICON = 'i-heroicons-pencil-square'
+export const PHOTO_ICON = 'i-heroicons-photo'
 
 /**
  * Admin: can manage all templates

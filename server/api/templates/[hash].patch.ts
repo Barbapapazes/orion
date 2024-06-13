@@ -38,6 +38,8 @@ export default defineEventHandler(async (event) => {
     .where(and(eq(tables.templates.hash, params.hash)))
     .returning({
       id: tables.templates.id,
+      hash: tables.templates.hash,
+      slug: tables.templates.slug,
     })
 
   if (body.moduleIds) {
@@ -50,5 +52,5 @@ export default defineEventHandler(async (event) => {
       ).execute()
   }
 
-  return sendNoContent(event, 204)
+  return updatedTemplate
 })
