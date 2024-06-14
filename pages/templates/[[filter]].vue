@@ -20,7 +20,7 @@ const { data: templatesPaginated } = await useFetch('/api/templates',
       limit,
     },
     deep: false,
-    default: () => ({ data: [], meta: { total: 0, limit: 0 } }),
+    default: () => (emptyPagination),
   })
 
 const templates = computed(() => templatesPaginated.value.data)
