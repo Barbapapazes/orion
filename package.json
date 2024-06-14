@@ -39,7 +39,6 @@
     "@vueuse/nuxt": "^10.11.0",
     "drizzle-kit": "^0.22.1",
     "eslint": "9.2.0",
-    "miniflare": "^3.20240610.0",
     "quill": "2.0.2",
     "wrangler": "^3.58.0"
   },
