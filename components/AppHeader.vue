@@ -23,7 +23,7 @@ const accessAdmin = defineAbility((user: User) => {
   return user.roleType === 'admin'
 })
 
-if (allows(accessAdmin)) {
+if (await allows(accessAdmin)) {
   // @ts-expect-error No types for this yet
   items[0].push({
     label: 'Admin',
