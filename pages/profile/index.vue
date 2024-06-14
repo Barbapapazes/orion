@@ -1,17 +1,30 @@
 <script lang="ts" setup>
-const { user } = useUserSession()
+import type { TemplatePaidStatus, TemplateStatus } from '~/types'
 
 definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: templates } = useFetch(`/api/me/templates`, {
-  deep: false,
-  default: () => [],
-})
-const hasTemplates = computed(() => templates.value.length > 0)
-
 const openTemplateExplanations = ref(false)
+
+const { user } = useUserSession()
+
+const page = ref(1)
+const status = ref<TemplateStatus | undefined>()
+const paidStatus = ref<TemplatePaidStatus | undefined>()
+
+const { data } = useFetch(`/api/me/templates`, {
+  query: { page, status, paidStatus },
+  deep: false,
+  default: () => {
+    return { data: [], meta: { total: 0, limit: 0, page: 0 } }
+  },
+})
+
+const meta = computed(() => data.value.meta)
+const templates = computed(() => data.value.data)
+const hasTemplates = computed(() => templates.value.length > 0)
+const hasMorePages = computed(() => meta.value.total > meta.value.limit)
 
 useSeoMeta({
   title: 'Profile',
@@ -29,16 +42,22 @@ const active = useActiveTemplateCard()
       <UPageHeader
         :title="`Welcome ${user.name ?? user.login}`"
       />
-      <!-- TODO: split into many components -->
       <UPageBody>
         <div class="flex flex-col md:flex-row gap-8">
-          <div class="lg:w-3/12 flex flex-col gap-6">
+          <div class="lg:w-3/12 flex flex-col">
+            <div class="h-8">
+              <h2 class="text-lg font-semibold">
+                Profile
+              </h2>
+            </div>
+
             <ProfileInformations
+              class="mt-4"
               :avatar-url="user.avatarUrl"
               :name="user.name ?? user.login"
               :email="user.email"
             />
-            <div class="flex flex-row items-center gap-2">
+            <div class="mt-6 flex flex-row items-center gap-2">
               <UButton
                 :ui="{ base: 'grow justify-center' }"
                 to="/templates/new"
@@ -60,8 +79,12 @@ const active = useActiveTemplateCard()
             </div>
           </div>
 
-          <div class="lg:w-9/12">
-            <!-- TODO: add a toolbar to filter by status -->
+          <div class="lg:w-9/12 grow flex flex-col gap-4">
+            <ProfileToolbar
+              v-model:status="status"
+              v-model:paid-status="paidStatus"
+              :badge="meta.total"
+            />
 
             <TemplatesGrid
               v-if="hasTemplates"
@@ -87,6 +110,17 @@ const active = useActiveTemplateCard()
               v-else
               @info="openTemplateExplanations = true"
             />
+
+            <div
+              v-if="hasMorePages"
+              class="mt-8 flex justify-center"
+            >
+              <UPagination
+                v-model="page"
+                :page-count="meta.limit"
+                :total="meta.total"
+              />
+            </div>
           </div>
         </div>
       </UPageBody>
