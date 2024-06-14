@@ -52,7 +52,7 @@ const links = [{
         <UDashboardSidebarLinks :links="links" />
 
         <template #footer>
-          <UserDropdown />
+          <AdminUserDropdown />
         </template>
       </UDashboardSidebar>
     </UDashboardPanel>

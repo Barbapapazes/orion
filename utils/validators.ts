@@ -5,10 +5,12 @@ import { CATEGORY_MAX_NAME_LENGTH, TEMPLATE_MAX_DESCRIPTION_LENGTH, TEMPLATE_MAX
 export const createCategoryValidator = object({
   name: string({ message: 'Required' }).max(CATEGORY_MAX_NAME_LENGTH, { message: `Max ${CATEGORY_MAX_NAME_LENGTH} characters` }),
 })
+export type CreateCategoryValidatorSchema = output<typeof createCategoryValidator>
 
-export const updateCategoryValidator = object({
+export const editCategoryValidator = object({
   name: string({ message: 'Required' }).max(CATEGORY_MAX_NAME_LENGTH, { message: `Max ${CATEGORY_MAX_NAME_LENGTH} characters` }),
 })
+export type EditCategoryValidatorSchema = output<typeof editCategoryValidator>
 
 const imageValidator = any().refine(file => file instanceof File, { message: 'Required' }).refine(file => file?.size < TEMPLATE_MAX_IMAGE_SIZE, { message: `Max ${TEMPLATE_MAX_IMAGE_SIZE_KB}kb` }).refine(file => TEMPLATE_IMAGE_FORMAT.includes(file?.type), { message: `Invalid format, must be one of ${TEMPLATE_IMAGE_FORMAT.join(', ')}` })
 /**

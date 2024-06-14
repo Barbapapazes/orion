@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { type Module } from '~/server/utils/drizzle'
+import { handleFetchError } from '~/utils/errors';
 
 definePageMeta({
   middleware: ['admin'],
@@ -53,16 +54,8 @@ async function syncModules() {
     })
     refresh()
   }
-  catch (e) {
-    if (e instanceof Error) {
-      console.error(e)
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Something went wrong',
-        description: e.message,
-        color: 'red',
-      })
-    }
+  catch (error) {
+    handleFetchError(error)
   }
   finally {
     syncModuleLoading.value = false
@@ -84,7 +77,7 @@ async function syncModules() {
             color="gray"
             @click="syncModules"
           />
-          <RefreshButton
+          <AdminRefreshButton
             :loading="pending"
             @click="refresh"
           />

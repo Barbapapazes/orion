@@ -1,11 +1,9 @@
+import { listCategories } from '~/utils'
+
 export default defineEventHandler(async (event) => {
   await authorize(event, listCategories)
 
-  const categories = await useDrizzle().select({
-    id: tables.categories.id,
-    slug: tables.categories.slug,
-    name: tables.categories.name,
-  }).from(tables.categories)
+  const categories = await cachedCategories(event)
 
   return categories
 })
