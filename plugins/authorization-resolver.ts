@@ -1,5 +1,5 @@
 export default defineNuxtPlugin({
-  name: 'bouncer',
+  name: 'authorization-resolver',
   parallel: true,
   setup() {
     return {
