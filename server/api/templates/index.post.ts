@@ -1,7 +1,7 @@
 import sanitizeHtml from 'sanitize-html'
 import { randomUUID } from 'uncrypto'
+import { createTemplateTextValidator } from '~/utils'
 import { TEMPLATE_IMAGE_FORMAT, TEMPLATE_MAX_IMAGE_SIZE } from '~/utils/constants'
-import { createTemplateTextValidator } from '~/utils/validators'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, createTemplate)

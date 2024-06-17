@@ -22,5 +22,8 @@ export default defineEventHandler(async (event) => {
       .onConflictDoNothing({ target: tables.modules.repo }).execute()
   }
 
+  // Remove cache to force a refresh
+  await deleteCachedModules()
+
   return sendNoContent(event, 204)
 })

@@ -1,4 +1,5 @@
 import type { H3Event } from 'h3'
+import { getKPIs } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, getKPIs)

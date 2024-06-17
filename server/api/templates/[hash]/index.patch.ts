@@ -1,5 +1,5 @@
 import { object, string } from 'zod'
-import { editTemplateContentValidator } from '~/utils/validators'
+import { editTemplateContentValidator } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const params = await getValidatedRouterParams(event, object({

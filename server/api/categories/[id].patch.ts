@@ -1,6 +1,5 @@
 import { number, object } from 'zod'
-import { updateCategory } from '~/utils'
-import { editCategoryValidator } from '~/utils/validators'
+import { editCategoryValidator, updateCategory } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, updateCategory)
@@ -38,7 +37,7 @@ export default defineEventHandler(async (event) => {
     })
 
   // Remove cache to force a refresh
-  await useStorage('cache').removeItem(`nitro:functions:${cachedCategoriesName}:${cachedCategoriesKey}.json`)
+  await deleteCachedCategories()
 
   return sendNoContent(event, 204)
 })

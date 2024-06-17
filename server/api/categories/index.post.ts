@@ -1,5 +1,4 @@
-import { createCategory } from '~/utils'
-import { createCategoryValidator } from '~/utils/validators'
+import { createCategory, createCategoryValidator } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, createCategory)
@@ -30,7 +29,7 @@ export default defineEventHandler(async (event) => {
   })
 
   // Remove cache to force a refresh
-  await useStorage('cache').removeItem(`nitro:functions:${cachedCategoriesName}:${cachedCategoriesKey}.json`)
+  await deleteCachedCategories()
 
   return sendNoContent(event, 201)
 })

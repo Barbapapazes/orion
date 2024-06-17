@@ -4,7 +4,7 @@
     :links="[{ label: 'Browse Templates', color: 'black', to: '#templates' }]"
   >
     <template #top>
-      <div class="absolute -z-10 left-4 lg:left-auto right-4 lg:-right-12 top-[70%] lg:top-1/2 lg:mx-0 lg:h-4/5 -translate-y-1/2">
+      <div class="absolute -z-10 left-4 lg:left-auto right-4 lg:-right-12 top-[50%] lg:top-1/2 lg:mx-0 lg:h-4/5 -translate-y-1/2">
         <img
           src="/images/hero-template-dark.svg"
           aria-hidden="true"
