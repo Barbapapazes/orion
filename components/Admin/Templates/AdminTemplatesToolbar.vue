@@ -73,7 +73,7 @@ const searchCreator = async (query: string) => {
 </script>
 
 <template>
-  <UDashboardToolbar>
+  <UDashboardToolbar :ui="{ container: 'flex-col md:flex-row gap-1.5 items-start md:items-center', left: 'w-full grid grid-cols-2 md:flex', right: 'w-full md:w-auto justify-end' }">
     <template #left>
       <UInput
         v-model="search"
