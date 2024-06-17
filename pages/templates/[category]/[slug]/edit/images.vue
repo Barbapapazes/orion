@@ -1,3 +1,5 @@
 <template>
-  images
+  <div>
+    images
+  </div>
 </template>
