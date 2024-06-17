@@ -86,7 +86,8 @@ useSeoMeta({
       <AdminUsersToolbar
         v-model:search="search"
         v-model:roleType="roleType"
-        :columns="columns"
+        v-model:selectedColumns="selectedColumns"
+        :columns="defaultColumns"
       />
 
       <AdminUsersTable

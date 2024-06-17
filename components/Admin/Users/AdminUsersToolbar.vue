@@ -3,13 +3,19 @@ import type { UserRoleType } from '~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
 
+interface Column {
+  key: string
+  label: string
+  sortable?: boolean
+}
+
 defineProps<{
-  columns: { key: string, label: string, sortable?: boolean }[]
+  columns: Column[]
 }>()
 
 const search = defineModel<string>('search')
 const roleType = defineModel<UserRoleType>('roleType')
-const selectedColumns = defineModel<string[]>('selectedColumns')
+const selectedColumns = defineModel<Column[]>('selectedColumns')
 
 const roleTypeOptions = [
   {
