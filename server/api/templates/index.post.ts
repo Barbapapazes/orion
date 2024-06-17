@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
   ensureBlob(formData.get('featuredImage') as File, {
     // @ts-expect-error NuxtHub should export BlobValidateOptions and related types
     maxSize: `${TEMPLATE_MAX_IMAGE_SIZE}B`,
+    // @ts-expect-error NuxtHub should export BlobValidateOptions and related types
     types: TEMPLATE_IMAGE_FORMAT,
   })
 
@@ -52,6 +53,7 @@ export default defineEventHandler(async (event) => {
     ensureBlob(image, {
     // @ts-expect-error NuxtHub should export BlobValidateOptions and related types
       maxSize: `${TEMPLATE_MAX_IMAGE_SIZE}B`,
+      // @ts-expect-error NuxtHub should export BlobValidateOptions and related types
       types: TEMPLATE_IMAGE_FORMAT,
     })
   }

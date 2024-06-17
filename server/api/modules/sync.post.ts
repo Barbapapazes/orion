@@ -5,7 +5,7 @@ interface Modules {
 export default defineEventHandler(async (event) => {
   await authorize(event, syncModules)
 
-  const data = await $fetch<Modules>('https://api.nuxt.com/modules')
+  const data = await $fetch('https://api.nuxt.com/modules') as Modules
   const modules = data.modules
     .filter(({ type }) => type === 'official' || type === 'community')
     .map(({ name, type, icon, repo }) => ({ name, type, icon, repo, slug: useSlugify(name) }))
