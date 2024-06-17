@@ -18,6 +18,7 @@ const { data: templatesPaginated } = await useFetch('/api/templates',
     query: {
       page,
       limit,
+      status: 'validated',
     },
     deep: false,
     default: () => (emptyPagination),

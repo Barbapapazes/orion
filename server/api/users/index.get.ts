@@ -1,6 +1,6 @@
 import { number, object, string, enum as zEnum } from 'zod'
 import { getPaginationMeta } from '~/server/utils/pagination'
-import { USER_ROLE_TYPE } from '~/utils/constants'
+import { ORDER, USER_ROLE_TYPE } from '~/utils/constants'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, listUsers)
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, object({
     limit: number({ coerce: true }).default(10),
     page: number({ coerce: true }).default(1),
-    order: zEnum(['asc', 'desc'], { message: 'Invalid order' }).optional(),
+    order: zEnum(ORDER, { message: 'Invalid order' }).optional(),
     orderBy: string().optional(),
     roleType: zEnum(USER_ROLE_TYPE, { message: 'Invalid role type' }).optional(),
     search: string().optional(),

@@ -7,6 +7,8 @@ export const TEMPLATE_ICON = 'i-heroicons-rectangle-group'
 export const EDIT_ICON = 'i-heroicons-pencil-square'
 export const PHOTO_ICON = 'i-heroicons-photo'
 
+export const ORDER = ['asc', 'desc'] as const
+
 /**
  * Admin: can manage all templates
  * Creator: can manage only his templates

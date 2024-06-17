@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { TemplatePaidStatus, TemplateStatus } from '~/types'
+
 definePageMeta({
   middleware: ['admin'],
   layout: 'admin',
@@ -48,14 +50,37 @@ const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
 const page = ref(1)
-const { data, refresh, pending } = await useFetch('/api/templates', {
+const sort = ref({ column: 'updatedAt', direction: 'desc' as const })
+
+const search = ref<string | undefined>(undefined)
+const searchDebounced = useDebounce(search, 300)
+const status = ref<TemplateStatus | undefined>(undefined)
+const paidStatus = ref<TemplatePaidStatus | undefined>(undefined)
+const creator = ref<Pick<User, 'id' | 'login' | 'name' | 'avatarUrl'> | undefined>(undefined)
+
+const { data, refresh, pending } = await useAsyncData(() => useRequestFetch()('/api/templates', {
   query: {
-    page,
+    page: page.value,
+    order: sort.value.direction,
+    orderBy: sort.value.column,
+    search: search.value,
+    status: status.value,
+    paidStatus: paidStatus.value,
+    creator: creator.value?.id,
   },
+}), {
   deep: false,
   lazy: true,
-  default: () => ({ data: [], meta: { total: 0, limit: 0 } }),
+  default: () => emptyPagination,
+  watch: [page, sort, searchDebounced, status, paidStatus, creator],
 })
+
+const meta = computed(() => data.value.meta)
+const limit = computed(() => meta.value.limit)
+const total = computed(() => meta.value.total)
+const hasMoreTemplates = computed(() => total.value > limit.value)
+
+const templates = computed(() => data.value.data)
 </script>
 
 <template>
@@ -66,92 +91,36 @@ const { data, refresh, pending } = await useFetch('/api/templates', {
         :badge="data.meta.total"
       >
         <template #right>
-          <RefreshButton
+          <AdminRefreshButton
             :loading="pending"
             @click="refresh"
           />
         </template>
       </UDashboardNavbar>
 
-      <UDashboardToolbar>
-        <template #right>
-          <USelectMenu
-            v-model="selectedColumns"
-            icon="i-heroicons-adjustments-horizontal-solid"
-            :options="defaultColumns"
-            multiple
-          >
-            <template #label>
-              Display
-            </template>
-          </USelectMenu>
-        </template>
-      </UDashboardToolbar>
+      <AdminTemplatesToolbar
+        v-model:search="search"
+        v-model:status="status"
+        v-model:paidStatus="paidStatus"
+        v-model:selectedColumns="selectedColumns"
+        v-model:creator="creator"
+        :columns="defaultColumns"
+      />
 
-      <UTable
+      <AdminTemplatesTable
+        v-model:sort="sort"
         :columns="columns"
-        :rows="data.data"
-        :loading="pending"
-      >
-        <template #liveUrl-data="{ row }">
-          <UButton
-            v-if="row.liveUrl"
-            variant="link"
-            target="_blank"
-            :to="row.liveUrl"
-            class="flex flex-row items-center gap-1"
-          >
-            <span>{{ row.liveUrl }}</span>
-
-            <span class="i-heroicons-arrow-top-right-on-square-16-solid inline-block w-4 h-4" />
-          </UButton>
-          <span v-else> - </span>
-        </template>
-        <template #accessUrl-data="{ row }">
-          <UButton
-            variant="link"
-            target="_blank"
-            :to="row.accessUrl"
-            class="flex flex-row items-center gap-1"
-          >
-            <span>{{ row.accessUrl }}</span>
-
-            <span class="i-heroicons-arrow-top-right-on-square-16-solid inline-block w-4 h-4" />
-          </UButton>
-        </template>
-        <template #paidStatus-data="{ row }">
-          <TemplatesPaidStatusBadge :status="row.paidStatus" />
-        </template>
-        <template #createdBy-data="{ row }">
-          <UButton
-            color="gray"
-            variant="ghost"
-            :to="`https://github.com/${row.creator.login}`"
-          >
-            <img
-              :src="row.creator.avatarUrl"
-              alt="avatar"
-              class="w-6 h-6 rounded-full"
-            >
-            <span>{{ row.creator.name ?? row.creator.login }}</span>
-          </UButton>
-        </template>
-        <template #category-data="{ row }">
-          {{ row.category.name }}
-        </template>
-        <template #description-data="{ row }">
-          <div
-            v-html="row.description"
-          />
-        </template>
-      </UTable>
+        :templates="templates"
+        :pending="pending"
+        @refresh="refresh"
+      />
 
       <div class="mt-8 flex justify-center">
         <UPagination
-          v-if="data.meta.total > data.meta.limit"
+          v-if="hasMoreTemplates"
           v-model="page"
-          :page-count="data.meta.limit"
-          :total="data.meta.total"
+          :page-count="limit"
+          :total="total"
         />
       </div>
     </UDashboardPanel>

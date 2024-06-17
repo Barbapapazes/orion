@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 import type { User } from '~/server/utils/drizzle'
 import type { DropdownItem } from '#ui/types'
+// see https://github.com/nuxt/ui/issues/1878
+// import type { Column } from '#ui/types'
+
+interface Column {
+  key: string
+  label: string
+  sortable?: boolean
+}
 
 defineProps<{
-  columns: { key: string, label: string, sortable?: boolean }[]
+  columns: Column[]
   users: Pick<User, 'id' | 'login' | 'name' | 'email' | 'avatarUrl' | 'roleType'>[]
   pending: boolean
 }>()
