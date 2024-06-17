@@ -102,8 +102,8 @@ useSeoMeta({
         </template>
       </UPageHeader>
 
-      <div class="flex">
-        <UPageBody class="w-9/12">
+      <div class="flex flex-col md:flex-row gap-x-16">
+        <UPageBody class="order-2 md:order-1 md:w-7/12 lg:w-9/12">
           <div
             class="prose dark:prose-invert"
           >
@@ -117,7 +117,7 @@ useSeoMeta({
           </div>
         </UPageBody>
 
-        <div class="w-3/12">
+        <div class="order-1 lg:order-2 md:w-5/12 lg:w-3/12">
           <dl class="mt-8 flex flex-col gap-6">
             <div class="flex items-center gap-4">
               <dt class="text-sm dark:text-gray-400">
@@ -177,13 +177,13 @@ useSeoMeta({
             <template
               v-if="template.modules.length > 0"
             >
-              <UDivider />
+              <UDivider class="my-2" />
               <div class="flex flex-col gap-4">
-                <dt class="text-sm dark:text-gray-500">
+                <dt class="text-sm dark:text-gray-400">
                   Modules
                 </dt>
                 <dd>
-                  <ul class="flex flex-col gap-2">
+                  <ul class="grid grid-cols-2 md:grid-cols-1 items-center gap-4 lg:gap-y-2">
                     <li
                       v-for="item in template.modules"
                       :key="item.module.name"
