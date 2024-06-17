@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import type { DropdownItem } from '#ui/types'
+import type { Template as _Template } from '~/server/utils/drizzle'
+import type { TemplatePaidStatus, TemplateStatus } from '~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
 
@@ -8,9 +11,31 @@ interface Column {
   sortable?: boolean
 }
 
+interface Template {
+  id: number
+  title: string
+  slug: string
+  hash: string
+  liveUrl: string | null
+  accessUrl: string
+  status: TemplateStatus
+  paidStatus: TemplatePaidStatus
+  updatedAt: string
+  creator: {
+    login: string
+    name: string | null
+    email: string
+    avatarUrl: string
+  }
+  category: {
+    slug: string
+    name: string
+  }
+}
+
 defineProps<{
   columns: Column[]
-  templates: object[]
+  templates: Template[]
   pending: boolean
 }>()
 
@@ -20,7 +45,85 @@ const emits = defineEmits<{
 
 const sort = defineModel<{ column: string, direction: 'asc' | 'desc' }>('sort', { required: true })
 
-const toast = useToast()
+const actionsItems = (row: Template) => {
+  const actions: DropdownItem[][] = [[
+    {
+      label: 'View',
+      icon: 'i-heroicons-eye',
+      to: generateShowTemplateURL({
+        categorySlug: row.category.slug,
+        slug: row.slug,
+        hash: row.hash,
+      }),
+      target: '_blank',
+    },
+  ], [{
+    label: 'Copy Title',
+    icon: 'i-heroicons-clipboard',
+    click: () => useCopy(row.title),
+  },
+  {
+    label: 'Copy Creator Name',
+    icon: 'i-heroicons-clipboard',
+    click: () => useCopy(row.creator.name ?? row.creator.login),
+  },
+  {
+    label: 'Copy Creator Email',
+    icon: 'i-heroicons-clipboard',
+    click: () => useCopy(row.creator.email),
+  },
+  ]]
+
+  function updateStatus(status: TemplateStatus) {
+    return async () => {
+      try {
+        await $fetch(`/api/templates/${row.hash}/status`, {
+          method: 'PATCH',
+          body: { status },
+        })
+
+        useSuccessToast(`Template "${row.title}" has been ${status}`)
+        emits('refresh')
+      }
+      catch (error) {
+        handleFetchError(error)
+      }
+    }
+  }
+
+  const validatedAction = {
+    label: 'Validated',
+    icon: 'i-heroicons-check-circle',
+    click: updateStatus('validated'),
+  }
+
+  const reviewAction = {
+    label: 'Reviewed',
+    icon: 'i-heroicons-eye',
+    click: updateStatus('reviewed'),
+  }
+
+  const refusedAction = {
+    label: 'Refused',
+    icon: 'i-heroicons-x-circle',
+    click: updateStatus('refused'),
+  }
+
+  if (row.status === 'submitted') {
+    actions.push([validatedAction, reviewAction, refusedAction])
+  }
+  else if (row.status === 'validated') {
+    actions.push([reviewAction, refusedAction])
+  }
+  else if (row.status === 'reviewed') {
+    actions.push([validatedAction, refusedAction])
+  }
+  else if (row.status === 'refused') {
+    actions.push([validatedAction, reviewAction])
+  }
+
+  return actions
+}
 </script>
 
 <template>
@@ -31,6 +134,19 @@ const toast = useToast()
     :loading="pending"
     sort-mode="manual"
   >
+    <template #title-data="{ row }">
+      <UButton
+        target="_blank"
+        variant="ghost"
+        color="gray"
+        :to="generateShowTemplateURL({
+          categorySlug: row.category.slug,
+          slug: row.slug,
+          hash: row.hash,
+        })"
+        :label="row.title"
+      />
+    </template>
     <template #liveUrl-data="{ row }">
       <UButton
         v-if="row.liveUrl"
@@ -70,12 +186,14 @@ const toast = useToast()
         :label="row.creator.name ?? row.creator.login"
         color="gray"
         target="_blank"
+        variant="ghost"
+        size="xs"
       >
         <template #leading>
           <UAvatar
             :src="row.creator.avatarUrl"
             :alt="`${row.creator.name ?? row.creator.login} avatar`"
-            size="xs"
+            size="2xs"
           />
         </template>
       </UButton>
@@ -83,10 +201,14 @@ const toast = useToast()
     <template #category-data="{ row }">
       {{ row.category.name }}
     </template>
-    <template #description-data="{ row }">
-      <div
-        v-html="row.description"
-      />
+    <template #actions-data="{ row }">
+      <UDropdown :items="actionsItems(row)">
+        <UButton
+          color="gray"
+          variant="ghost"
+          icon="i-heroicons-ellipsis-horizontal-20-solid"
+        />
+      </UDropdown>
     </template>
   </UTable>
 </template>

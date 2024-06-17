@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Category } from '~/server/utils/drizzle'
 import type { TemplatePaidStatus, TemplateStatus } from '~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
@@ -11,11 +12,13 @@ interface Column {
 
 defineProps<{
   columns: Column[]
+  categories: Pick<Category, 'id' | 'name'>[]
 }>()
 
 const search = defineModel<string>('search')
 const status = defineModel<TemplateStatus | undefined>('status')
 const paidStatus = defineModel<TemplatePaidStatus | undefined>('paidStatus')
+const categoryId = defineModel<number | undefined>('categoryId')
 const creator = defineModel<Pick<User, 'id' | 'login' | 'name' | 'avatarUrl'> | undefined>('creator')
 const selectedColumns = defineModel<Column[]>('selectedColumns')
 
@@ -81,19 +84,29 @@ const searchCreator = async (query: string) => {
       />
       <USelectMenu
         v-model="status"
+        class="min-w-28"
         placeholder="Status"
         :options="statusOptions"
         value-attribute="value"
       />
       <USelectMenu
         v-model="paidStatus"
+        class="min-w-28"
         placeholder="Paid Status"
         :options="paidStatusOptions"
         value-attribute="value"
       />
       <USelectMenu
+        v-model="categoryId"
+        class="min-w-28"
+        placeholder="Category"
+        :options="categories"
+        value-attribute="id"
+        option-attribute="name"
+      />
+      <USelectMenu
         v-model="creator"
-        class="min-w-32"
+        class="min-w-28"
         :searchable="searchCreator"
         :loading="loading"
         placeholder="Creator..."

@@ -1,4 +1,4 @@
-import { number, object, string, enum as zEnum } from 'zod'
+import { array, number, object, string, enum as zEnum } from 'zod'
 import { ORDER, TEMPLATE_PAID_STATUS, TEMPLATE_STATUS } from '~/utils/constants'
 
 export default defineEventHandler(async (event) => {
@@ -11,8 +11,10 @@ export default defineEventHandler(async (event) => {
     orderBy: string().optional(),
     status: zEnum(TEMPLATE_STATUS, { message: 'Invalid status' }).optional(),
     paidStatus: zEnum(TEMPLATE_PAID_STATUS, { message: 'Invalid paid status' }).optional(),
+    categoryId: number({ coerce: true }).optional(),
     search: string().optional(),
     creator: number({ coerce: true }).optional(),
+    fields: array(string()).optional(),
   }).parse)
 
   const { user } = await getUserSession(event)
@@ -29,6 +31,10 @@ export default defineEventHandler(async (event) => {
 
   if (query.paidStatus) {
     filters.push(eq(tables.templates.paidStatus, query.paidStatus))
+  }
+
+  if (query.categoryId) {
+    filters.push(eq(tables.templates.categoryId, query.categoryId))
   }
 
   if (query.creator) {
@@ -50,6 +56,18 @@ export default defineEventHandler(async (event) => {
         : desc(tables.templates[query.orderBy as keyof Template]))
     : undefined
 
+  function allowField(field: string) {
+    if (!user) return false
+    if (user.roleType !== 'admin') return false
+
+    // User is an admin
+    if (query.fields?.includes(field)) {
+      return true
+    }
+
+    return false
+  }
+
   const templates = await useDrizzle().query.templates.findMany({
     limit: query.limit,
     offset: getOffset(query),
@@ -66,7 +84,8 @@ export default defineEventHandler(async (event) => {
       accessUrl: true,
       liveUrl: true,
       shortDescription: true,
-      description: true,
+      description: false,
+      updatedAt: allowField('updatedAt'),
     },
     with: {
       category: {
@@ -80,6 +99,7 @@ export default defineEventHandler(async (event) => {
           login: true,
           name: true,
           avatarUrl: true,
+          email: allowField('creator.email'),
         },
       },
       modules: {

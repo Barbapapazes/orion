@@ -57,3 +57,18 @@ export const updateTemplate = defineAbility((user: User, template: Pick<Template
 
   return false
 })
+
+export const updateTemplateStatus = defineAbility((user: User, template: Pick<Template, 'status' | 'creatorId'> | undefined) => {
+  if (template === undefined) {
+    return false
+  }
+
+  /**
+   * Only an admin can update the status of a template.
+   */
+  if (user.roleType === 'admin') {
+    return true
+  }
+
+  return false
+})

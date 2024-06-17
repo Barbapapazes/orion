@@ -3,8 +3,8 @@ import type { InternalApi } from 'nitropack'
 /**
  * Fetches the categories from the API
  */
-export const useFetchCategories = () => {
-  const { data: categories, error } = useFetch('/api/categories', {
+export const useFetchCategories = async () => {
+  const { data: categories, error } = await useFetch('/api/categories', {
     key: 'categories',
     deep: false,
     default: () => [] as InternalApi['/api/categories']['get'],
