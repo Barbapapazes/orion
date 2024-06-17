@@ -1,5 +1,6 @@
 import { array, number, object, string, enum as zEnum } from 'zod'
 import { ORDER, TEMPLATE_PAID_STATUS, TEMPLATE_STATUS } from '~/utils/constants'
+import { listTemplates } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, listTemplates)
