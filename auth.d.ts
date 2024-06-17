@@ -1,11 +1,13 @@
-// auth.d.ts
+import type { ROLE_TYPE } from './utils/constants'
+
 declare module '#auth-utils' {
   interface User {
+    id: number
     login: string
     email: string
     name: string
     avatarUrl: string
-    roleType: 'admin' | 'creator'
+    roleType: typeof ROLE_TYPE[number]
   }
 
   interface UserSession {

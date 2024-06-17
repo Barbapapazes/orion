@@ -1,167 +1,137 @@
 <script lang="ts" setup>
-const { user } = useUserSession()
+import type { TemplatePaidStatus, TemplateStatus } from '~/types'
 
 definePageMeta({
   middleware: ['auth'],
 })
 
+const openTemplateExplanations = ref(false)
+
+const { user } = useUserSession()
+
+const page = ref(1)
+const status = ref<TemplateStatus | undefined>()
+const paidStatus = ref<TemplatePaidStatus | undefined>()
+
+const { data } = useFetch(`/api/me/templates`, {
+  query: { page, status, paidStatus },
+  deep: false,
+  default: () => {
+    return { data: [], meta: { total: 0, limit: 0, page: 0 } }
+  },
+})
+
+const meta = computed(() => data.value.meta)
+const templates = computed(() => data.value.data)
+const hasTemplates = computed(() => templates.value.length > 0)
+const hasMorePages = computed(() => meta.value.total > meta.value.limit)
+
 useSeoMeta({
   title: 'Profile',
 })
 
-const whatIsTemplateModal = ref(false)
-
-const templates = []
-// fetch les templates
-// afficher les templates
-// si pas de templates, afficher un message
+// View Transition API
+const active = useActiveTemplateCard()
 </script>
 
 <template>
   <UContainer
     v-if="user"
-    class="mt-8 flex flex-col gap-8"
   >
-    <h1 class="text-3xl font-bold">
-      Welcome {{ user.name ?? user.login }}
-    </h1>
-    <div class="flex flex-col md:flex-row gap-8">
-      <div class="order-2 md:order-none flex flex-col md:max-w-xs gap-6">
-        <UCard
-          class="dark:bg-opacity-20 dark:bg-gray-800"
-          :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
-        >
-          <UAvatar
-            :src="user.avatarUrl"
-            :alt="user.name ?? user.login"
-            size="lg"
-          />
-          <div class="flex flex-col">
-            <p class="font-semibold">
-              {{ user.name ?? user.login }}
-            </p>
-            <p class="dark:text-gray-400 text-sm">
-              {{ user.email }}
-            </p>
-          </div>
-        </UCard>
-        <div class="flex flex-row items-center gap-2">
-          <UButton
-            :ui="{ base: 'grow justify-center' }"
-            to="/templates/new"
-            color="black"
-            size="lg"
-          >
-            Submit a template
-          </UButton>
-          <UTooltip text="Explanation">
-            <UButton
-              square
-              icon="i-heroicons-information-circle"
-              color="gray"
-              variant="ghost"
-              size="lg"
-              @click="whatIsTemplateModal = true"
+    <UPage>
+      <UPageHeader
+        :title="`Welcome ${user.name ?? user.login}`"
+      />
+      <UPageBody>
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="lg:w-3/12 flex flex-col">
+            <div class="h-8">
+              <h2 class="text-lg font-semibold">
+                Profile
+              </h2>
+            </div>
+
+            <ProfileInformations
+              class="mt-4"
+              :avatar-url="user.avatarUrl"
+              :name="user.name ?? user.login"
+              :email="user.email"
             />
-          </UTooltip>
-        </div>
-      </div>
-      <div class="grow flex">
-        <UCard
-          class="grow dark:bg-opacity-20 dark:bg-gray-800 py-40"
-          :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
-        >
-          <p class="text-sm text-center dark:text-gray-400">
-            No templates found.
-          </p>
-          <div class="flex flex-row justify-center items-center gap-2">
-            <UButton
-              to="/templates/new"
-              color="black"
-            >
-              Submit a template
-            </UButton>
-            <UTooltip text="Explanation">
+            <div class="mt-6 flex flex-row items-center gap-2">
               <UButton
-                square
-                icon="i-heroicons-information-circle"
-                color="gray"
-                variant="ghost"
-                @click="whatIsTemplateModal = true"
-              />
-            </UTooltip>
+                :ui="{ base: 'grow justify-center' }"
+                to="/templates/new"
+                color="black"
+                size="lg"
+              >
+                Submit a template
+              </UButton>
+              <UTooltip text="Explanation">
+                <UButton
+                  square
+                  icon="i-heroicons-information-circle"
+                  color="gray"
+                  variant="ghost"
+                  size="lg"
+                  @click="openTemplateExplanations = true"
+                />
+              </UTooltip>
+            </div>
           </div>
-        </UCard>
-      </div>
-    </div>
 
-    <UModal v-model="whatIsTemplateModal">
-      <UCard
-        :ui="{ divide: 'divide-none', body: { base: 'prose dark:prose-invert' }, header: { base: 'flex flex-row items-center justify-between' }, footer: { base: 'flex flex-row items-center justify-between' } }"
-      >
-        <template #header>
-          <h2 class="font-semibold text-lg flex items-center justify-center">
-            <UIcon
-              name="i-heroicons-information-circle"
-              class="mr-2"
+          <div class="lg:w-9/12 grow flex flex-col gap-4">
+            <ProfileToolbar
+              v-model:status="status"
+              v-model:paid-status="paidStatus"
+              :badge="meta.total"
             />
-            What is a template?
-          </h2>
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
-            @click="whatIsTemplateModal = false"
-          />
-        </template>
 
-        <p>
-          A template is a sample of an website or webapp with some details already in place. In the case of Orion, template are built around <a
-            href="https://nuxt.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Nuxt</a> technology and can be both a theme or a starter.
-        </p>
-        <p>
-          The idea is to help the Nuxt community to kickstart their project with a solid base. So Orion is that place where Nuxt developers can discover, search, find and learn from a collection of templates built by the community for the Nuxt ecosystem.
-        </p>
-        <p>
-          If you have built a template, free or paid, you can submit it to Orion and share it with the community. Orion is a great place to showcase your work and get feedback from the community.
-        </p>
-        <p>
-          With Orion, you can easily access to source code to deep dive into the template and learn from it. You can also fork the template to start your project from it if the project permits it.
-        </p>
-        <p>
-          Happy coding! 🚀
-        </p>
-        <template #footer>
-          <UButton
-            color="black"
-            variant="ghost"
-            to="/templates#templates"
-          >
-            Browse templates
-          </UButton>
-          <UButton
-            color="black"
-            to="/templates/new"
-          >
-            Submit a template
-          </UButton>
-        </template>
-      </UCard>
-    </UModal>
+            <TemplatesGrid
+              v-if="hasTemplates"
+            >
+              <TemplatesCard
+                v-for="template in templates"
+                :key="template.title"
+                :class="{ active: active === template.hash }"
+                editable
+                :slug="template.slug"
+                :hash="template.hash"
+                :status="template.status"
+                :featured-image="template.featuredImage"
+                :title="template.title"
+                :short-description="template.shortDescription"
+                :paid-status="template.paidStatus"
+                :creator="template.creator"
+                :category="template.category"
+                @click.native="active = template.hash"
+              />
+            </TemplatesGrid>
+            <ProfileNoTemplates
+              v-else
+              @info="openTemplateExplanations = true"
+            />
+
+            <div
+              v-if="hasMorePages"
+              class="mt-8 flex justify-center"
+            >
+              <UPagination
+                v-model="page"
+                :page-count="meta.limit"
+                :total="meta.total"
+              />
+            </div>
+          </div>
+        </div>
+      </UPageBody>
+    </UPage>
+
+    <TemplatesExplanations v-model:open="openTemplateExplanations" />
   </UContainer>
 </template>
 
 <style scoped>
-/* Remove margin top to first prose paragraph and margin bottom from last paragraph. */
-.prose p:first-of-type {
-  margin-top: 0;
-}
-
-.prose p:last-of-type {
-  margin-bottom: 0;
+.active :deep(.banner) {
+  view-transition-name: selected-template;
 }
 </style>

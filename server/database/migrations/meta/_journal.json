@@ -64,6 +64,20 @@
       "when": 1716481456206,
       "tag": "0008_classy_professor_monster",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1717528284693,
+      "tag": "0009_amazing_harrier",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1717677925625,
+      "tag": "0010_mighty_reaper",
+      "breakpoints": true
     }
   ]
 }

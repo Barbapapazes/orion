@@ -43,17 +43,12 @@ const isNewCategoryModalOpen = ref<boolean>(false)
 const editCategory = ref<Category | null>(null)
 const isEditCategoryModalOpen = ref<boolean>(false)
 
+// Do not use the composable to avoid hitting the client cache
 const { data: categories, refresh, pending } = await useFetch<Category[]>('/api/categories', {
   deep: false,
   lazy: true,
   default: () => [],
 })
-
-function onFormClose() {
-  isNewCategoryModalOpen.value = false
-  isEditCategoryModalOpen.value = false
-  refresh()
-}
 
 defineShortcuts({
   meta_c: {
@@ -78,34 +73,25 @@ defineShortcuts({
             color="gray"
             @click="isNewCategoryModalOpen = true"
           />
-          <RefreshButton
+          <AdminRefreshButton
             :loading="pending"
             @click="refresh"
           />
         </template>
       </UDashboardNavbar>
 
-      <UDashboardModal
-        v-model="isNewCategoryModalOpen"
-        title="New category"
-        description="Insert a new category into the system"
-        :ui="{ width: 'sm:max-w-md' }"
-      >
-        <CategoriesCreateForm @close="onFormClose()" />
-      </UDashboardModal>
+      <AdminCategoriesCreateModal
+        v-model:open="isNewCategoryModalOpen"
+        @created="refresh"
+      />
 
-      <UDashboardModal
-        v-model="isEditCategoryModalOpen"
-        title="Edit category"
-        description="Be careful with this action, if could affect the system."
-        :ui="{ width: 'sm:max-w-md' }"
-      >
-        <CategoriesEditForm
-          v-if="editCategory"
-          :category="editCategory"
-          @close="onFormClose()"
-        />
-      </UDashboardModal>
+      <AdminCategoriesEditModal
+        v-if="editCategory?.id"
+        :id="editCategory.id"
+        v-model:open="isEditCategoryModalOpen"
+        :state="editCategory"
+        @edited="refresh"
+      />
 
       <UDashboardToolbar>
         <template #right>

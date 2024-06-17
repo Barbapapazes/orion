@@ -1,3 +1,5 @@
+// TODO: keep only for the upcoming article about authorization but should be removed after
+
 import { type H3Event } from 'h3'
 import { type UserSessionRequired } from '#auth-utils'
 

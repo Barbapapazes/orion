@@ -9,14 +9,23 @@ export default oauth.githubEventHandler({
 
     const githubId = ghUser.id
 
-    const user = await useDrizzle().select().from(tables.users).where(eq(tables.users.githubId, githubId)).get()
+    let user: User | undefined
+
+    user = await useDrizzle().select().from(tables.users).where(eq(tables.users.githubId, githubId)).get()
+
+    if (user?.roleType === 'banned') {
+      throw createError({
+        status: 403,
+        message: 'Your cannot access to the application.',
+      })
+    }
 
     /**
      * If the user is not in the database or their data has changed, update the user data.
      * A write is more expensive than a read, so we only write if necessary.
      */
     if (!user || userDataChanged(user, ghUser)) {
-      await useDrizzle().insert(tables.users).values({
+      user = await useDrizzle().insert(tables.users).values({
         githubId,
         login: ghUser.login,
         email: ghUser.email,
@@ -32,16 +41,17 @@ export default oauth.githubEventHandler({
             avatarUrl: ghUser.avatar_url,
           },
         })
-        .execute()
+        .returning().get()
     }
 
     await setUserSession(event, {
       user: {
+        id: user.id!,
         login: ghUser.login,
         email: ghUser.email,
         name: ghUser.name,
         avatarUrl: ghUser.avatar_url,
-        roleType: user?.roleType || 'creator',
+        roleType: user.roleType || 'creator',
       },
     })
 

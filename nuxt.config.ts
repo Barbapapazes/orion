@@ -8,10 +8,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  devtools: { enabled: false },
-  extends: ['@nuxt/ui-pro'],
-  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint'],
   runtimeConfig: {
     oauth: {
       github: {
@@ -20,15 +16,40 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    '/': {
+      redirect: '/templates',
+    },
+    '/admin': {
+      redirect: '/admin/templates',
+    },
+  },
+
+  experimental: {
+    viewTransition: true,
+  },
+
+  css: ['~/assets/css/main.css'],
+
+  extends: ['@nuxt/ui-pro'],
+  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint', 'nuxt-authorization', '@vueuse/nuxt',
+  ],
   ui: {
     icons: ['heroicons', 'simple-icons'],
+    safelistColors: ['yellow', 'green', 'blue', 'orange', 'red'], // Used in badge as dynamic color.
   },
   hub: {
     database: true,
+    blob: true,
+    cache: true,
+  },
+  authorization: {
+    preset: 'nuxt-auth-utils',
   },
   eslint: {
     config: {
       stylistic: true,
     },
   },
+  devtools: { enabled: true },
 })

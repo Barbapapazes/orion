@@ -1,11 +1,17 @@
-# Orion - A Full-Stack Application Built with Nuxt and Cloudflare
-
 > [!NOTE]
 > This application is built during live stream sessions on [Twitch](https://tv.soubiran.dev) (in French). Replays are available on [YouTube](https://yt.soubiran.dev) (in French) and [a blog article](https://soubiran.dev/posts/building-a-full-stack-nuxt-application-on-twitch) (in English) retraces the entire journey. Read it to deeply understand the choices made and the reasons behind them.
 
-Orion is a web application to **centralize themes and templates** created by and for the Nuxt community. Anyone can submit a theme or a template he created to share it with the community. **Feel free to submit your own creation**!
+# Orion - Quickly Start your Nuxt Project
 
-This full-stack application is built with Nuxt and Nuxt UI Pro and deployed using NuxtHub and Cloudflare.
+Orion is a **community-driven collection of templates** for your next project, from landing pages to complete web applications.
+
+It serves to centralize templates created by and for the [Nuxt](https://nuxt.com) community. Templates authors can submit, manage, and share their work with the community.
+
+**Feel free to submit your own creation!**
+
+## Stack
+
+_Orion is a full-stack application is built with Nuxt, Nuxt UI Pro, NuxtHub and deployed using Cloudflare._
 
 ## Contributions
 
@@ -25,39 +31,28 @@ Start the development server
 pnpm dev
 ```
 
+## Inspiration
+
+This project is heavily inspired by the [Astro Developer Portal](https://astro.build/blog/dev-portal/).
+
+## License
+
+Orion © 2024 by Estéban Soubiran is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/
+
 ---
 
 # Création d'une Application Full-Stack avec Nuxt et Cloudflare
 
-## Restructuration de la gestion des utilisateurs
+Gestion des modules dans les templates
 
-- [x] On sauvegarde une fois (get if not exists save) et on check les diff pour les mises à jour
-- [x] On sauvegarde les mails (email)
-- [x] Rename username en login
-- [x] On sauvegarde le nom d'utilisateur (name) (en plus du login)
-- [x] Gestion des admins et ban des utilisateurs dans l'interface d'administration
-- [x] Voir pour ajouter un created at et un updated at
-- [x] Revoir les données envoyées lors du login (pas besoin du githubId)
+- [x] Mise à jour du schéma
+- [x] Gestion du many-to-many dans le schéma
+- [x] Mise à jour du formulaire
+- [ ] Mise à jour de l'administration (plus tard)
+?? voir avec drizzle pour improve la doc sur le many to many parce que là, c'est pas clair
 
-## Création du formulaire pour les templates
+Gestion des images
 
-## On continue le formulaire des templates
-
-Template
-
-- [ ] Création du formulaire pour ajouter un template
-- [ ] Endpoint pour ajouter un template
-- [ ] Gestion du md pour la description
-- [ ] Visualisation des thèmes dans la partie administration
-- [ ] Gestion des id de l'url via https://github.com/ai/nanoid
-
-Première page (hors stream pour le contenu et les texts)
-
-- [ ] Ajout d'une page d'accueil
-
-PR à ajouter dans les contributions:
-
-https://github.com/nuxt-hub/core/pull/113
-https://github.com/nuxt/ui-pro/issues/372
-
-(il faut voir si le problème de couleurs vient de ui, ui pro ou nuxt hub ?
+- [ ] Mise à jour du schema (featuredImage, text, et additionalImages, json)
+- [ ] Mise à jour du formulaire
+- [ ] Mise à jour de l'administration

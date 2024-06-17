@@ -1,13 +1,9 @@
 <script lang="ts" setup>
-import type { User } from '~/server/utils/drizzle'
+import type { UserRoleType } from '~/types'
 
 definePageMeta({
   middleware: ['admin'],
   layout: 'admin',
-})
-
-useSeoMeta({
-  title: 'Users',
 })
 
 const defaultColumns = [{
@@ -31,14 +27,44 @@ const defaultColumns = [{
 }, {
   key: 'roleType',
   label: 'Role Type',
+}, {
+  key: 'actions',
+  label: 'Actions',
 }]
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
-const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
+const page = ref(1)
+const sort = ref({ column: 'login', direction: 'asc' as const })
+
+const search = ref<string | undefined>(undefined)
+const searchDebounced = useDebounce(search, 300)
+const roleType = ref<UserRoleType | undefined>(undefined)
+
+const { data, pending, refresh } = await useAsyncData(() => useRequestFetch()('/api/users', {
+  query: {
+    page: page.value,
+    roleType: roleType.value,
+    order: sort.value.direction,
+    orderBy: sort.value.column,
+    search: search.value,
+  },
+}), {
   deep: false,
   lazy: true,
-  default: () => [],
+  default: () => emptyPagination,
+  watch: [page, sort, searchDebounced, roleType],
+})
+
+const meta = computed(() => data.value.meta)
+const limit = computed(() => meta.value.limit)
+const total = computed(() => meta.value.total)
+const hasMoreUsers = computed(() => total.value > limit.value)
+
+const users = computed(() => data.value.data)
+
+useSeoMeta({
+  title: 'Users',
 })
 </script>
 
@@ -47,65 +73,41 @@ const { data: users, pending, refresh } = await useFetch<User[]>('/api/users', {
     <UDashboardPanel grow>
       <UDashboardNavbar
         title="Users"
-        :badge="users.length"
+        :badge="total"
       >
         <template #right>
-          <RefreshButton
+          <AdminRefreshButton
             :loading="pending"
             @click="refresh"
           />
         </template>
       </UDashboardNavbar>
 
-      <UDashboardToolbar>
-        <template #right>
-          <USelectMenu
-            v-model="selectedColumns"
-            icon="i-heroicons-adjustments-horizontal-solid"
-            :options="defaultColumns"
-            multiple
-          >
-            <template #label>
-              Display
-            </template>
-          </USelectMenu>
-        </template>
-      </UDashboardToolbar>
+      <AdminUsersToolbar
+        v-model:search="search"
+        v-model:roleType="roleType"
+        v-model:selectedColumns="selectedColumns"
+        :columns="defaultColumns"
+      />
 
-      <UTable
+      <AdminUsersTable
+        v-model:sort="sort"
+        :users="users"
         :columns="columns"
-        :rows="users"
-        :loading="pending"
+        :pending="pending"
+        @refresh="refresh"
+      />
+
+      <div
+        v-if="hasMoreUsers"
+        class="mt-8 flex justify-center"
       >
-        <template #login-data="{ row }">
-          <div class="flex flex-row items-center gap-2">
-            <img
-              :src="row.avatarUrl"
-              alt="avatar"
-              class="w-6 h-6 rounded-full"
-            >
-            <span>{{ row.login }}</span>
-          </div>
-        </template>
-        <template #roleType-data="{ row }">
-          <template v-if="row.roleType === 'admin'">
-            <UBadge
-              color="red"
-              variant="subtle"
-            >
-              Admin
-            </UBadge>
-          </template>
-          <template v-else-if="row.roleType === 'creator'">
-            <UBadge
-              color="green"
-              variant="subtle"
-            >
-              User
-            </UBadge>
-          </template>
-        </template>
-      </UTable>
+        <UPagination
+          v-model="page"
+          :page-count="limit"
+          :total="total"
+        />
+      </div>
     </UDashboardPanel>
   </UDashboardPage>
 </template>
