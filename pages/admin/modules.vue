@@ -34,6 +34,7 @@ const defaultColumns = [{
 const selectedColumns = ref(defaultColumns)
 const columns = computed(() => defaultColumns.filter(column => selectedColumns.value.includes(column)))
 
+// Do not use the composable to avoid hitting the client cache
 const { data: modules, refresh, pending } = await useFetch<Module[]>('/api/modules', {
   deep: false,
   lazy: true,

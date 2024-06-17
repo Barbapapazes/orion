@@ -43,6 +43,7 @@ const isNewCategoryModalOpen = ref<boolean>(false)
 const editCategory = ref<Category | null>(null)
 const isEditCategoryModalOpen = ref<boolean>(false)
 
+// Do not use the composable to avoid hitting the client cache
 const { data: categories, refresh, pending } = await useFetch<Category[]>('/api/categories', {
   deep: false,
   lazy: true,

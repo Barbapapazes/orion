@@ -57,6 +57,8 @@ const categories = await useFetchCategories()
 
 const page = ref(1)
 const sort = ref({ column: 'updatedAt', direction: 'desc' as const })
+const order = computed(() => sort.value.direction)
+const orderBy = computed(() => sort.value.column)
 
 const search = ref<string | undefined>(undefined)
 const searchDebounced = useDebounce(search, 300)
@@ -64,24 +66,23 @@ const status = ref<TemplateStatus | undefined>(undefined)
 const paidStatus = ref<TemplatePaidStatus | undefined>(undefined)
 const categoryId = ref<number | undefined>(undefined)
 const creator = ref<Pick<User, 'id' | 'login' | 'name' | 'avatarUrl'> | undefined>(undefined)
+const creatorId = computed(() => creator.value?.id)
 
-const { data, refresh, pending } = await useAsyncData(() => useRequestFetch()('/api/templates', {
+const { data, refresh, pending } = await useFetch('/api/templates', {
   query: {
-    page: page.value,
-    order: sort.value.direction,
-    orderBy: sort.value.column,
-    search: search.value,
-    status: status.value,
-    paidStatus: paidStatus.value,
-    categoryId: categoryId.value,
-    creator: creator.value?.id,
+    page,
+    order,
+    orderBy,
+    search: searchDebounced,
+    status,
+    paidStatus,
+    categoryId,
+    creatorId: creatorId,
     fields: ['creator.email', 'updatedAt'],
   },
-}), {
   deep: false,
   lazy: true,
   default: () => emptyPagination,
-  watch: [page, sort, searchDebounced, status, paidStatus, categoryId, creator],
 })
 
 const meta = computed(() => data.value.meta)
