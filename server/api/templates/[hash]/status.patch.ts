@@ -1,5 +1,6 @@
 import { object, string, enum as zEnum } from 'zod'
 import { TEMPLATE_STATUS } from '~/utils/constants'
+import { updateTemplateStatus } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const params = await getValidatedRouterParams(event, object({

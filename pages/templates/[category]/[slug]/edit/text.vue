@@ -14,7 +14,7 @@ if (!template.value) {
   throw templateNotFoundError
 }
 
-const categories = useFetchCategories()
+const categories = await useFetchCategories()
 
 if (!categories.value) {
   throw categoriesNotFoundError

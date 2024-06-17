@@ -1,5 +1,5 @@
 import { object, string } from 'zod'
-import { editTemplateContentValidator } from '~/utils'
+import { editTemplateContentValidator, updateTemplate } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const params = await getValidatedRouterParams(event, object({
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       slug: tables.templates.slug,
     })
 
-  if (body.moduleIds) {
+  if (body.moduleIds?.length) {
     await useDrizzle().delete(tables.modulesToTemplates)
       .where(eq(tables.modulesToTemplates.templateId, updatedTemplate.id))
       .execute()

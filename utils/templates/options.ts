@@ -1,7 +1,7 @@
-import type { SelectMenuOption, TemplatePaidStatus, TemplateSort, TemplateStatus } from '~/types'
+import type { SelectMenuOption, TemplateOrderBy, TemplatePaidStatus, TemplateStatus } from '~/types'
 
 interface templateSortOption extends SelectMenuOption {
-  value: TemplateSort
+  value: TemplateOrderBy
   label: string
 }
 /**
@@ -11,8 +11,8 @@ export const templateSortOptions: templateSortOption[] = [{
   value: 'random',
   label: 'Random',
 }, {
-  value: 'created',
-  label: 'Created',
+  value: 'createdAt',
+  label: 'Created At',
 }, {
   value: 'title',
   label: 'Title',
@@ -39,7 +39,7 @@ export const templateStatusOptions: TemplateStatusOption[] = [{
   label: 'Validated',
 }]
 
-interface TemplatePaidStatusOption extends SelectMenuOption {
+export interface TemplatePaidStatusOption extends SelectMenuOption {
   value: TemplatePaidStatus
   label: string
 }

@@ -39,7 +39,7 @@ const links = [{
     >
       <UDashboardNavbar
         class="!border-transparent"
-        :ui="{ left: 'flex-1' }"
+        :ui="{ left: 'flex-1 items-center' }"
       >
         <template #left>
           <NuxtLink to="/templates">

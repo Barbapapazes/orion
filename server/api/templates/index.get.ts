@@ -1,4 +1,5 @@
 import { array, number, object, string, enum as zEnum } from 'zod'
+import { inArray } from 'drizzle-orm'
 import { ORDER, TEMPLATE_PAID_STATUS, TEMPLATE_STATUS } from '~/utils/constants'
 import { listTemplates } from '~/utils'
 
@@ -8,11 +9,13 @@ export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, object({
     limit: number({ coerce: true }).default(10),
     page: number({ coerce: true }).default(1),
-    order: zEnum(ORDER, { message: 'Invalid order' }).optional(),
-    orderBy: string().optional(),
+    order: zEnum(ORDER, { message: 'Invalid order' }).default('asc').optional(),
+    orderBy: string().default('random').optional(),
     status: zEnum(TEMPLATE_STATUS, { message: 'Invalid status' }).optional(),
     paidStatus: zEnum(TEMPLATE_PAID_STATUS, { message: 'Invalid paid status' }).optional(),
     categoryId: number({ coerce: true }).optional(),
+    categorySlug: string().optional(),
+    moduleSlug: string().optional(),
     search: string().optional(),
     creator: number({ coerce: true }).optional(),
     fields: array(string()).optional(),
@@ -38,6 +41,34 @@ export default defineEventHandler(async (event) => {
     filters.push(eq(tables.templates.categoryId, query.categoryId))
   }
 
+  if (query.categorySlug) {
+    filters.push(eq(
+      tables.templates.categoryId,
+      useDrizzle()
+        .select({ id: tables.categories.id })
+        .from(tables.categories)
+        .where(eq(tables.categories.slug, query.categorySlug))),
+    )
+  }
+
+  if (query.moduleSlug) {
+    filters.push(
+      inArray(
+        tables.templates.id,
+        useDrizzle()
+          .select({ id: tables.templates.id })
+          .from(tables.templates)
+          .leftJoin(tables.modulesToTemplates, eq(tables.templates.id, tables.modulesToTemplates.templateId))
+          .leftJoin(tables.modules, eq(tables.modules.id, tables.modulesToTemplates.moduleId))
+          .where(
+            and(
+              eq(tables.modules.slug, query.moduleSlug),
+            ),
+          ),
+      ),
+    )
+  }
+
   if (query.creator) {
     filters.push(eq(tables.templates.creatorId, query.creator))
   }
@@ -51,11 +82,13 @@ export default defineEventHandler(async (event) => {
 
   const where = and(...filters)
 
-  const orderBy = query.orderBy
-    ? (query.order === 'asc'
-        ? asc(tables.templates[query.orderBy as keyof Template])
-        : desc(tables.templates[query.orderBy as keyof Template]))
-    : undefined
+  const orderByColumn = tables.templates[query.orderBy as keyof Template]
+  const orderBy
+  = query.orderBy === 'random'
+    ? sql`RANDOM()`
+    : query.order === 'asc'
+      ? asc(orderByColumn)
+      : desc(orderByColumn)
 
   function allowField(field: string) {
     if (!user) return false
@@ -86,6 +119,7 @@ export default defineEventHandler(async (event) => {
       liveUrl: true,
       shortDescription: true,
       description: false,
+      createdAt: true,
       updatedAt: allowField('updatedAt'),
     },
     with: {

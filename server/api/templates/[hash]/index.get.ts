@@ -1,4 +1,5 @@
 import { object, string } from 'zod'
+import { viewTemplate } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const params = await getValidatedRouterParams(event, object({

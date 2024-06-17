@@ -40,7 +40,6 @@ export default defineEventHandler(async (event) => {
       accessUrl: true,
       liveUrl: true,
       shortDescription: true,
-      description: true,
     },
     with: {
       category: {

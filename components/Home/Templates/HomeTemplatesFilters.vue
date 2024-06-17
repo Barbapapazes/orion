@@ -1,16 +1,44 @@
 <script lang="ts" setup>
 import type { Category } from '~/server/utils/drizzle'
 import type { TemplatePaidStatus } from '~/types'
+import type { TemplatePaidStatusOption } from '~/utils'
 
-defineProps<{
-  templatePaidStatus: typeof TEMPLATE_PAID_STATUS
+const props = defineProps<{
+  templatePaidStatus: TemplatePaidStatusOption[]
   categories: Pick<Category, 'slug' | 'name'>[]
   modules: Pick<Module, 'slug' | 'name' | 'icon'>[]
 }>()
 
+const emits = defineEmits<{
+  reset: []
+}>()
+
+function onClickReset() {
+  emits('reset')
+}
+
 const categorySlug = defineModel<string>('categorySlug', { required: false })
 const moduleSlug = defineModel<string>('moduleSlug', { required: false })
 const paidStatus = defineModel<TemplatePaidStatus>('paidStatus', { required: false })
+
+const showResetFilters = computed(() => {
+  return categorySlug.value || moduleSlug.value || paidStatus.value
+})
+
+const categoriesOptions = [
+  { slug: undefined, name: 'All' },
+  ...props.categories,
+]
+
+const modulesOptions = [
+  { slug: undefined, name: 'All', icon: 'i-heroicons-photo' },
+  ...props.modules,
+]
+
+const paidStatusOptions = [
+  { value: undefined, label: 'All' },
+  ...props.templatePaidStatus,
+]
 </script>
 
 <template>
@@ -21,19 +49,20 @@ const paidStatus = defineModel<TemplatePaidStatus>('paidStatus', { required: fal
       </p>
 
       <UButton
+        v-if="showResetFilters"
         variant="ghost"
         color="gray"
         size="xs"
+        @click="onClickReset()"
       >
         Reset
       </UButton>
     </div>
 
-    <!-- Filters -->
     <div class="flex flex-col gap-6 md:gap-4">
       <USelectMenu
         v-model="categorySlug"
-        :options="categories"
+        :options="categoriesOptions"
         placeholder="Categories"
         value-attribute="slug"
         option-attribute="name"
@@ -42,35 +71,37 @@ const paidStatus = defineModel<TemplatePaidStatus>('paidStatus', { required: fal
 
       <USelectMenu
         v-model="moduleSlug"
-        :options="modules"
+        :options="modulesOptions"
         placeholder="Modules"
         value-attribute="slug"
         option-attribute="name"
         size="md"
       >
         <template #option="{ option }">
-          <img
-            v-if="option.icon"
+          <UAvatar
             :src="`${MODULE_ICON_PREFIX}/${option.icon}`"
-            class="h-4 w-auto"
-          >
-          <span
-            v-else
-            class="i-heroicons-photo inline-block h-4 w-4"
+            icon="i-heroicons-photo"
+            :ui="{ rounded: '', icon: { size: { '3xs': 'h-4 w-4' } }, background: '' }"
+            size="3xs"
           />
           <span>{{ option.name }}</span>
         </template>
       </USelectMenu>
 
-      <!-- @vue-expect-error Because Paid Status is readonly, a type error to cast to string[] is thrown -->
       <USelectMenu
         v-model="paidStatus"
-        :options="templatePaidStatus"
+        :options="paidStatusOptions"
         placeholder="Pricing"
         size="md"
+        value-attribute="value"
+        option-attribute="label"
       >
         <template #option="{ option }">
-          <TemplatesPaidStatusBadge :status="option" />
+          <TemplatesPaidStatusBadge
+            v-if="option.value"
+            :status="option.value"
+          />
+          <span v-else>{{ option.label }}</span>
         </template>
       </USelectMenu>
     </div>

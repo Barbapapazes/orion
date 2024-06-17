@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TemplatePaidStatus } from '~/types'
+
 const description = 'Discover, search, find and learn from a collection of templates built by the Nuxt community for the Nuxt ecosystem.'
 useSeoMeta({
   description,
@@ -8,67 +10,19 @@ useSeoMeta({
 const route = useRoute()
 const filter = route.params.filter as string | undefined || ''
 
-// Pagination
-const page = ref(1)
-const limit = 12
-
-// Fetch
-const { data: templatesPaginated } = await useFetch('/api/templates',
-  {
-    query: {
-      page,
-      limit,
-      status: 'validated',
-    },
-    deep: false,
-    default: () => (emptyPagination),
-  })
-
-const templates = computed(() => templatesPaginated.value.data)
-const total = computed(() => templatesPaginated.value.meta.total)
-const hasTemplates = computed(() => templatesPaginated.value.data.length > 0)
-const showPagination = computed(() => total.value > limit)
-
-// Fetch Categories, Modules and KPIs in parallel because they won't change
-// TODO: refactor to extract the promise to use the client cache
-const { data } = await useAsyncData(async () => {
-  const [categories, modules, kpis] = await Promise.all([
-    $fetch('/api/categories'),
-    $fetch('/api/modules'),
-    $fetch('/api/kpis'),
-  ])
-
-  return { categories, modules, kpis }
-}, { deep: false, getCachedData(key, nuxtApp) {
-  return nuxtApp.payload.data[key]
-} })
-const categories = computed(() => data.value?.categories ?? [])
-const modules = computed(() => data.value?.modules ?? [])
-const kpis = computed(() => data.value?.kpis ?? {
-  templates: { count: 0 },
-  categories: { count: 0 },
-  creators: { count: 0 },
-})
-const templatesCount = kpis.value.templates.count
-const categoriesCount = kpis.value.categories.count
-const creatorsCount = kpis.value.creators.count
+const [categories, modules, kpis] = await Promise.all([
+  useFetchCategories(),
+  useFetchModules(),
+  useFetchKpis(),
+])
+const templatesCount = kpis.value!.templates.count
+const categoriesCount = kpis.value!.categories.count
+const creatorsCount = kpis.value!.creators.count
 
 // Filters
-function someFilter(filter: string, items: { slug: string }[]) {
-  return items.some(item => item.slug === filter)
-}
-
-const categorySlug = ref<string>('')
-const moduleSlug = ref<string>('')
-const paidStatus = ref<typeof TEMPLATE_PAID_STATUS[number]>()
-
-if (filter && someFilter(filter, categories.value)) {
-  categorySlug.value = filter
-}
-
-if (filter && someFilter(filter, modules.value)) {
-  moduleSlug.value = filter
-}
+const categorySlug = ref<string | undefined>(undefined)
+const moduleSlug = ref<string | undefined>(undefined)
+const paidStatus = ref<TemplatePaidStatus | undefined>(undefined)
 
 function onResetFilters() {
   categorySlug.value = ''
@@ -76,10 +30,52 @@ function onResetFilters() {
   paidStatus.value = undefined
 }
 
+// Apply initial filters
+function someFilter(filter: string, items: { slug: string }[]) {
+  return items.some(item => item.slug === filter)
+}
+
+if (filter && someFilter(filter, categories.value!)) {
+  categorySlug.value = filter
+}
+
+if (filter && someFilter(filter, modules.value!)) {
+  moduleSlug.value = filter
+}
+
+// Pagination
+const page = ref(1)
+
 // Toolbar
 const search = ref('')
-const sort = ref(templateSortOptions[0].value)
-const order = ref<1 | -1>(1)
+const searchDebounce = useDebounce(search, 300)
+const orderBy = ref(templateSortOptions[0].value)
+const order = ref<'desc' | 'asc'>('asc')
+
+// Fetch
+const { data } = await useFetch('/api/templates',
+  {
+    query: {
+      page,
+      search: searchDebounce,
+      orderBy,
+      order,
+      categorySlug,
+      moduleSlug,
+      paidStatus,
+      status: 'validated',
+    },
+    deep: false,
+    default: () => (emptyPagination),
+  })
+
+const meta = computed(() => data.value.meta)
+const total = computed(() => meta.value.total)
+const limit = computed(() => meta.value.limit)
+
+const templates = computed(() => data.value.data)
+const hasTemplates = computed(() => templates.value.length > 0)
+const hasMoreTemplates = computed(() => total.value > limit.value)
 
 // View Transition API
 const active = useActiveTemplateCard()
@@ -105,9 +101,10 @@ const active = useActiveTemplateCard()
           v-model:module-slug="moduleSlug"
           v-model:paid-status="paidStatus"
           class="sticky top-20"
-          :categories="categories"
-          :modules="modules"
-          :template-paid-status="TEMPLATE_PAID_STATUS"
+          :categories="categories!"
+          :modules="modules!"
+          :template-paid-status="templatePaidStatusOptions"
+          @reset="onResetFilters"
         />
       </div>
 
@@ -117,7 +114,7 @@ const active = useActiveTemplateCard()
         <HomeTemplatesToolbar
           v-model:search="search"
           v-model:order="order"
-          v-model:sort="sort"
+          v-model:order-by="orderBy"
         />
         <template
           v-if="hasTemplates"
@@ -125,7 +122,7 @@ const active = useActiveTemplateCard()
           <TemplatesGrid id="templates">
             <TemplatesCard
               v-for="template in templates"
-              :key="template.title"
+              :key="template.hash"
               class="w-full"
               :class="{ active: active === template.hash }"
               :hash="template.hash"
@@ -142,7 +139,7 @@ const active = useActiveTemplateCard()
 
           <div class="mt-8 flex justify-center">
             <UPagination
-              v-if="showPagination"
+              v-if="hasMoreTemplates"
               v-model="page"
               :page-count="limit"
               :total="total"

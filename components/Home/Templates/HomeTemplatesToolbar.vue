@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import type { TemplateSort } from '~/types'
+import type { TemplateOrderBy } from '~/types'
 
-const search = defineModel<string>('search', { required: true })
-
-const order = defineModel<-1 | 1>('order', { required: true })
-const sort = defineModel<TemplateSort>('sort', { required: true })
+const search = defineModel<string>('search')
+const order = defineModel<'desc' | 'asc'>('order')
+const orderBy = defineModel<TemplateOrderBy>('orderBy')
 </script>
 
 <template>
@@ -20,15 +19,17 @@ const sort = defineModel<TemplateSort>('sort', { required: true })
 
     <UButtonGroup size="md">
       <UButton
-        :icon="order === 1 ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down'"
+        :icon="order === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down'"
         color="gray"
-        @click="order *= -1"
+        @click="order = order === 'asc' ? 'desc' : 'asc'"
       />
       <USelectMenu
-        v-model="sort"
+        v-model="orderBy"
         :options="templateSortOptions"
         color="white"
         class="w-32"
+        value-attribute="value"
+        option-attribute="label"
       />
     </UButtonGroup>
   </div>
