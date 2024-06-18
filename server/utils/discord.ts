@@ -20,6 +20,7 @@ export function sendDiscordNotification(event: H3Event, title: string, options: 
   event.context.waitUntil($fetch(webhookUrl, {
     method: 'POST',
     body: {
+      username: 'Orion',
       embeds: [{
         title: `${title}`,
         color,
