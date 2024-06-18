@@ -3,8 +3,8 @@ import type { InternalApi } from 'nitropack'
 /**
  * Fetches the modules from the API
  */
-export const useFetchModules = () => {
-  const { data: modules, error } = useFetch('/api/modules', {
+export const useFetchModules = async () => {
+  const { data: modules, error } = await useFetch('/api/modules', {
     key: 'modules',
     deep: false,
     default: () => [] as InternalApi['/api/modules']['get'],

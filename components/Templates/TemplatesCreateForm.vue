@@ -47,11 +47,11 @@ function onImagesChange(imagesState: TemplateFormImagesState) {
 }
 
 const featuredImageValue = computed(() => {
-  return state.featuredImage ? urlFromFile(state.featuredImage) : undefined
+  return state.featuredImage ? getURLfromFile(state.featuredImage) : undefined
 })
 
 const additionalImagesValue = computed(() => {
-  return state.additionalImages?.map(file => urlFromFile(file))
+  return state.additionalImages?.map(file => getURLfromFile(file))
 })
 
 async function onReset() {

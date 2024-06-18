@@ -10,6 +10,16 @@ const emits = defineEmits<{
 function onClick() {
   emits('click', props.src)
 }
+
+const src = computed(() => {
+  if (props.src?.startsWith('blob')) {
+    return props.src
+  }
+  if (props.src)
+    return getImageURL(props.src)
+
+  return undefined
+})
 </script>
 
 <template>

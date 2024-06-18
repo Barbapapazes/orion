@@ -3,13 +3,13 @@ import type { FormSubmitEvent } from '#ui/types'
 
 const toast = useToast()
 
-const categories = useFetchCategories()
+const categories = await useFetchCategories()
 
 if (!categories.value) {
   throw categoriesNotFoundError
 }
 
-const modules = useFetchModules()
+const modules = await useFetchModules()
 
 if (!modules.value) {
   throw modulesNotFoundError

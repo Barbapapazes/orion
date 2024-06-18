@@ -51,3 +51,12 @@ export const editTemplateContentValidator = object({
     message: `Max ${TEMPLATE_MAX_DESCRIPTION_LENGTH} characters`,
   }).optional(),
 })
+
+export const editTemplateImagesValidator = object({
+  featuredImage: string().or(imageValidator).optional(),
+  additionalImages: array(string().or(imageValidator))
+    .max(TEMPLATE_MAX_ADDITIONAL_IMAGES, {
+      message: `Max ${TEMPLATE_MAX_ADDITIONAL_IMAGES} images`,
+    }),
+})
+export type EditTemplateImagesValidatorSchema = output<typeof editTemplateImagesValidator>

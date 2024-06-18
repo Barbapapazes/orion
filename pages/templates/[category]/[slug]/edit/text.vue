@@ -20,7 +20,7 @@ if (!categories.value) {
   throw categoriesNotFoundError
 }
 
-const modules = useFetchModules()
+const modules = await useFetchModules()
 
 if (!modules.value) {
   throw modulesNotFoundError
@@ -94,7 +94,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UContainer v-if="template">
+  <UContainer>
     <UPage>
       <UPageHeader
         title="Edit Template Content"

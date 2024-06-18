@@ -58,7 +58,7 @@ export const editTemplate = defineAbility((user: User, template: Pick<Template, 
 
 export const createTemplate = defineAbility(() => true)
 
-export const updateTemplate = defineAbility((user: User, template: Pick<Template, 'status' | 'creatorId'> | undefined) => {
+export const updateTemplate = defineAbility((user: User, template: Pick<Template, | 'creatorId'> | undefined) => {
   if (template === undefined) {
     return false
   }

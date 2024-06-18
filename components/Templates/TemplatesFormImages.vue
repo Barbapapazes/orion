@@ -6,8 +6,8 @@ const props = defineProps<{
 }>()
 
 export interface TemplateFormImagesState {
-  featuredImage: File | undefined
-  additionalImages: File[]
+  featuredImage: File | string | undefined
+  additionalImages: File[] | string[]
 }
 
 const emits = defineEmits<{
@@ -15,8 +15,8 @@ const emits = defineEmits<{
 }>()
 
 const state = reactive<TemplateFormImagesState>({
-  featuredImage: undefined,
-  additionalImages: [],
+  featuredImage: props.featuredImage,
+  additionalImages: props.additionalImages || [],
 })
 
 watch(state, () => {

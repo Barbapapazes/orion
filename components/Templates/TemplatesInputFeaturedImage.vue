@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   value: string | undefined
 }>()
 
@@ -10,7 +10,7 @@ const emits = defineEmits<{
 const toast = useToast()
 
 const file = ref<File | null>(null)
-const hasImage = computed(() => file.value !== null)
+const hasImage = computed(() => file.value !== null || props.value !== undefined)
 
 function handleFileChange(files: FileList) {
   if (files.length === 0) {
@@ -26,11 +26,21 @@ function handleFileChange(files: FileList) {
     title: 'Featured image has been added.',
   })
 }
+
+const src = computed(() => {
+  if (props.value?.startsWith('blob')) {
+    return props.value
+  }
+  if (props.value)
+    return getImageURL(props.value)
+
+  return undefined
+})
 </script>
 
 <template>
   <img
-    :src="value"
+    :src="src"
     class="absolute inset-0 aspect-[16/9] object-cover object-center rounded-lg"
   >
   <TemplatesInputCard
