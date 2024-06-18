@@ -1,4 +1,5 @@
 import { number, object } from 'zod'
+import { unbanUser } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   await authorize(event, unbanUser)
@@ -9,7 +10,15 @@ export default defineEventHandler(async (event) => {
 
   await useDrizzle().update(tables.users)
     .set({ roleType: 'creator' })
-    .where(eq(tables.users.id, params.id))
+    .where(eq(tables.users.id, params.id)).catch(async () => {
+      sendDiscordNotification(event, 'Failed to unban user', { level: 'error' })
+      throw createError({
+        status: 500,
+        message: 'Failed to unban user',
+      })
+    })
+
+  sendDiscordNotification(event, `User ${params.id} banned`, { level: 'success' })
 
   return sendNoContent(event, 204)
 })

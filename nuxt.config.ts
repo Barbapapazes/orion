@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    discordWebhookUrl: '',
     oauth: {
       github: {
         clientId: '',

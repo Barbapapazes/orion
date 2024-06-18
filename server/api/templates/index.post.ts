@@ -63,7 +63,13 @@ export default defineEventHandler(async (event) => {
       prefix: TEMPLATE_PREFIX,
     })
   })
-  const savedAdditionalImages = await Promise.all(additionalImagePromises)
+  const savedAdditionalImages = await Promise.all(additionalImagePromises).catch(async () => {
+    sendDiscordNotification(event, 'Failed to save additional images', { level: 'error' })
+    throw createError({
+      status: 500,
+      message: 'Failed to save additional images',
+    })
+  })
 
   const { user } = await requireUserSession(event)
   const [template] = await useDrizzle().insert(tables.templates).values({
@@ -83,11 +89,25 @@ export default defineEventHandler(async (event) => {
     id: tables.templates.id,
     slug: tables.templates.slug,
     hash: tables.templates.hash,
+  }).catch(async () => {
+    await sendDiscordNotification(event, 'Failed to create template', { level: 'error' })
+    throw createError({
+      status: 500,
+      message: 'Failed to create template',
+    })
   })
 
   if (body.moduleIds?.length) {
-    await useDrizzle().insert(tables.modulesToTemplates).values(body.moduleIds.map(id => ({ moduleId: id, templateId: template.id }))).execute()
+    await useDrizzle().insert(tables.modulesToTemplates).values(body.moduleIds.map(id => ({ moduleId: id, templateId: template.id }))).execute().catch(async () => {
+      await sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error' })
+      throw createError({
+        status: 500,
+        message: 'Failed to associate modules with template',
+      })
+    })
   }
+
+  await sendDiscordNotification(event, `Template ${body.title} created`, { level: 'success' })
 
   setResponseStatus(event, 201)
   return template

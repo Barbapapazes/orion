@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (!template) {
+    sendDiscordNotification(event, 'Template not found', { level: 'error' })
     throw createError({
       statusCode: 404,
       message: 'Template not found',
@@ -45,11 +46,23 @@ export default defineEventHandler(async (event) => {
   if (body.moduleIds?.length) {
     await useDrizzle().delete(tables.modulesToTemplates)
       .where(eq(tables.modulesToTemplates.templateId, updatedTemplate.id))
-      .execute()
+      .execute().catch(async () => {
+        sendDiscordNotification(event, 'Failed to dissociate modules from template', { level: 'error' })
+        throw createError({
+          status: 500,
+          message: 'Failed to dissociate modules from template',
+        })
+      })
 
     await useDrizzle().insert(tables.modulesToTemplates)
       .values(body.moduleIds.map(id => ({ moduleId: id, templateId: updatedTemplate.id })),
-      ).execute()
+      ).execute().catch(async () => {
+        sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error' })
+        throw createError({
+          status: 500,
+          message: 'Failed to associate modules with template',
+        })
+      })
   }
 
   return updatedTemplate

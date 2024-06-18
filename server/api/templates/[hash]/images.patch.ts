@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (!template) {
+    sendDiscordNotification(event, 'Template not found', { level: 'error' })
     throw createError({
       statusCode: 404,
       message: 'Template not found',
@@ -91,7 +92,15 @@ export default defineEventHandler(async (event) => {
     additionalImages: newAdditionalImages,
   })
     .where(and(eq(tables.templates.hash, params.hash)))
-    .execute()
+    .execute().catch(async () => {
+      await sendDiscordNotification(event, 'Failed to update template images', { level: 'error' })
+      throw createError({
+        status: 500,
+        message: 'Failed to update template images',
+      })
+    })
+
+  await sendDiscordNotification(event, `Template ${params.hash} images updated`, { level: 'success' })
 
   return sendNoContent(event, 204)
 })

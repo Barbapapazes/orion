@@ -17,8 +17,8 @@ export const cachedCategories = defineCachedFunction(async (_event: H3Event) => 
   getKey: () => cachedCategoriesKey,
 })
 
-export const deleteCachedCategories = async () => {
-  await useStorage('cache').removeItem(`nitro:functions:${cachedCategoriesName}:${cachedCategoriesKey}.json`)
+export const deleteCachedCategories = (event: H3Event) => {
+  event.context.waitUntil(useStorage('cache').removeItem(`nitro:functions:${cachedCategoriesName}:${cachedCategoriesKey}.json`))
 }
 
 export const cachedModulesName = 'modules'
@@ -41,6 +41,6 @@ export const cachedModules = defineCachedFunction(async (_event: H3Event) => {
   getKey: () => cachedModulesKey,
 })
 
-export const deleteCachedModules = async () => {
-  await useStorage('cache').removeItem(`nitro:functions:${cachedModulesName}:${cachedModulesKey}.json`)
+export const deleteCachedModules = (event: H3Event) => {
+  event.context.waitUntil(useStorage('cache').removeItem(`nitro:functions:${cachedModulesName}:${cachedModulesKey}.json`))
 }

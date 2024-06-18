@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     })
 
   // Remove cache to force a refresh
-  await deleteCachedCategories()
+  deleteCachedCategories(event)
 
   return sendNoContent(event, 204)
 })

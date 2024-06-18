@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Category } from '~/server/utils/drizzle'
+import type { Category } from '~~/server/utils/drizzle'
 
 definePageMeta({
   middleware: ['admin'],

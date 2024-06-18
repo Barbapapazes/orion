@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Module } from '~/server/utils/drizzle'
+import { type Module } from '~~/server/utils/drizzle'
 import { handleFetchError } from '~/utils/errors'
 
 definePageMeta({
