@@ -14,22 +14,22 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "@iconify-json/simple-icons": "^1.1.104",
+    "@iconify-json/simple-icons": "^1.1.106",
     "@nuxt/eslint": "^0.3.13",
-    "@nuxt/ui": "^2.16.0",
-    "@nuxt/ui-pro": "^1.2.0",
-    "@nuxthub/core": "^0.6.9",
-    "drizzle-orm": "^0.31.0",
+    "@nuxt/ui": "^2.17.0",
+    "@nuxt/ui-pro": "^1.3.0",
+    "@nuxthub/core": "^0.6.17",
+    "drizzle-orm": "^0.31.2",
     "easymde": "^2.18.0",
     "nanoid": "^5.0.7",
-    "nuxt": "^3.11.2",
+    "nuxt": "^3.12.2",
     "nuxt-auth-utils": "^0.0.25",
     "nuxt-authorization": "^0.0.3",
     "sanitize-html": "^2.13.0",
     "slugify": "^1.6.6",
     "uncrypto": "^0.1.3",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -37,10 +37,10 @@
     "@types/sanitize-html": "^2.11.0",
     "@vueuse/core": "^10.11.0",
     "@vueuse/nuxt": "^10.11.0",
-    "drizzle-kit": "^0.22.1",
+    "drizzle-kit": "^0.22.7",
     "eslint": "9.2.0",
     "quill": "2.0.2",
-    "wrangler": "^3.58.0"
+    "wrangler": "^3.60.3"
   },
-  "packageManager": "pnpm@9.1.4"
+  "packageManager": "pnpm@9.4.0"
 }

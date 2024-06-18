@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { sql, relations } from 'drizzle-orm'
-import { TEMPLATE_PAID_STATUS, TEMPLATE_STATUS, USER_ROLE_TYPE } from '../../utils/constants'
+import { TEMPLATE_PAID_STATUS, TEMPLATE_STATUS, USER_ROLE_TYPE } from '../../app/utils/constants'
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),

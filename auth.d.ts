@@ -1,4 +1,4 @@
-import type { ROLE_TYPE } from './utils/constants'
+import type { UserRoleType } from '~/types'
 
 declare module '#auth-utils' {
   interface User {
@@ -7,7 +7,7 @@ declare module '#auth-utils' {
     email: string
     name: string
     avatarUrl: string
-    roleType: typeof ROLE_TYPE[number]
+    roleType: UserRoleType
   }
 
   interface UserSession {
