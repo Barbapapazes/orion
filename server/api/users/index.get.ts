@@ -1,5 +1,4 @@
 import { number, object, string, enum as zEnum } from 'zod'
-import { getPaginationMeta } from '~/server/utils/pagination'
 import { ORDER, USER_ROLE_TYPE } from '~/utils/constants'
 import { listUsers } from '~/utils'
 
