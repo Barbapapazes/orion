@@ -36,25 +36,26 @@ const columns = computed(() => defaultColumns.filter(column => selectedColumns.v
 
 const page = ref(1)
 const sort = ref({ column: 'login', direction: 'asc' as const })
+const order = computed(() => sort.value.direction)
+const orderBy = computed(() => sort.value.column)
 
 const search = ref<string | undefined>(undefined)
 const searchDebounced = useDebounce(search, 300)
 const roleType = ref<UserRoleType | undefined>(undefined)
 
-const { data, pending, refresh } = await useAsyncData(() => useRequestFetch()('/api/users', {
-  query: {
-    page: page.value,
-    roleType: roleType.value,
-    order: sort.value.direction,
-    orderBy: sort.value.column,
-    search: search.value,
-  },
-}), {
-  deep: false,
-  lazy: true,
-  default: () => emptyPagination,
-  watch: [page, sort, searchDebounced, roleType],
-})
+const { data, refresh, pending } = await useFetch('/api/users',
+  {
+    query: {
+      page,
+      order,
+      orderBy,
+      search: searchDebounced,
+      roleType,
+    },
+    deep: false,
+    lazy: true,
+    default: () => emptyPagination,
+  })
 
 const meta = computed(() => data.value.meta)
 const limit = computed(() => meta.value.limit)
