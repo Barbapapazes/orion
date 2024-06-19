@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 const items = [{
   label: 'What is Orion?',
-  content: 'Orion is a community-driven collection of templates for your next project, from landing pages to complete web applications. It means that it is a website where you can find starter or themes built by Nuxt users for other Nuxt users.',
+  content: 'Orion is a community-driven collection of templates for your next project, ranging from landing pages to complete web applications. It is a platform where you can find starter templates or themes created by Nuxt users for other Nuxt users.',
 }, {
   label: 'How does it work?',
-  content: 'As a user, you can browse the templates, filter them by categories, modules, and pricing, and then you can see the details of the template. Once you find a template that you like, you can easily access to it using the access link.',
+  content: 'As a user, you can browse the templates, filter them by categories, modules, and pricing, and view the template details. Once you find a template you like, you can easily access it using the provided access link.',
 }, {
   label: 'How can I submit a template?',
-  content: 'To submit a template, you need to have a GitHub account. Once you have it, you can click on the "Submit a template" button to create an account. You\'ll be able to create a new template using a form and then submit it to review. Your template will be examined by the Orion team and then published if it meets the requirements.',
+  content: 'To submit a template, you need a GitHub account. Once you have an account, click on the \'Submit a template\' button to create an account on Orion. You will be able to create a new template using a form and then submit it for review. Your template will be examined by the Orion team and published if it meets the requirements.',
 }, {
   label: 'Is Orion free?',
-  content: 'Yes, Orion is free to use, for both the users and the creators. It\'s a project by the community for the community. You can support the project by sharing it with your friends, by submitting a template or by <a href="https://github.com/sponsors/Barbapapazes" target="_blank">sponsoring the project on GitHub.</a>',
+  content: 'Yes, Orion is free to use for both users and creators. It is a project by the community for the community. You can support the project by sharing it with your friends, submitting a template, or <a href="https://github.com/sponsors/Barbapapazes" target="_blank">sponsoring the project on GitHub</a>.',
 }, {
   label: 'How can I contact the team?',
-  content: 'You can contact the team by sending an email to orion@barbapapazes.dev or using the social media links in the footer.',
+  content: 'You can contact the team by sending an email to orion@barbapapazes.dev or by using the social media links in the footer.',
 }]
 </script>
 
