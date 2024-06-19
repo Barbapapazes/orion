@@ -62,7 +62,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
         width="1920"
         height="1080"
         :alt="`${title} featured image`"
-        class="banner w-full aspect-[16/9] group-hover:scale-[102%] transition-transform ease-in"
+        class="banner w-full aspect-[16/9] transition-transform ease-in rounded-t-lg"
       >
       <dl class="category absolute right-2 bottom-2 opacity-0 group-hover:opacity-100 transition">
         <div>
