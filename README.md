@@ -14,7 +14,7 @@ It serves to centralize templates created by and for the [Nuxt](https://nuxt.com
 
 ## Stack
 
-Orion is a full-stack application is built with Nuxt, Nuxt UI Pro, NuxtHub and deployed using Cloudflare.
+Orion is a full-stack application built with Nuxt, Nuxt UI Pro, NuxtHub, and deployed using Cloudflare.
 
 ## Contributions
 
