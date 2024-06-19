@@ -95,12 +95,12 @@ const active = useActiveTemplateCard()
     </HomeKPI>
 
     <UContainer class="py-24 sm:py-32 md:py-40 flex flex-col md:flex-row gap-6 md:gap-8">
-      <div class="w-full md:max-w-56">
+      <div class="grow w-full">
         <HomeTemplatesFilters
           v-model:category-slug="categorySlug"
           v-model:module-slug="moduleSlug"
           v-model:paid-status="paidStatus"
-          class="md:sticky md:top-20"
+          class="md:sticky md:top-20 md:w-48 lg:w-56"
           :categories="categories!"
           :modules="modules!"
           :template-paid-status="templatePaidStatusOptions"
@@ -110,7 +110,7 @@ const active = useActiveTemplateCard()
 
       <div
         id="templates"
-        class="grow flex flex-col gap-6"
+        class="flex flex-col gap-6"
       >
         <HomeTemplatesToolbar
           v-model:search="search"
@@ -138,9 +138,12 @@ const active = useActiveTemplateCard()
             />
           </TemplatesGrid>
 
-          <div class="mt-8 flex justify-center">
+          <div
+            v-if="hasMoreTemplates"
+            class="mt-8 flex justify-center"
+          >
             <UPagination
-              v-if="hasMoreTemplates"
+
               v-model="page"
               :page-count="limit"
               :total="total"
