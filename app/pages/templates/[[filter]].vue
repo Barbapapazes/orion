@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TemplatePaidStatus } from '~/types'
+import type { TemplatePaidStatus } from '~~/types'
 
 const description = 'Discover, search, find and learn from a collection of templates built by the Nuxt community for the Nuxt ecosystem.'
 useSeoMeta({

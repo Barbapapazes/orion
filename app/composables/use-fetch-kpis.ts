@@ -1,5 +1,3 @@
-import type { InternalApi } from 'nitropack'
-
 /**
  * Fetches the KPIs from the API
  */
@@ -17,9 +15,9 @@ export const useFetchKpis = async () => {
       templates: {
         count: 0,
       },
-    }) as InternalApi['/api/kpis']['get'],
+    }),
     getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] as InternalApi['/api/kpis']['get'] | undefined
+      return nuxtApp.payload.data[key]
     },
   })
 
