@@ -109,6 +109,7 @@ const active = useActiveTemplateCard()
       </div>
 
       <div
+        id="templates"
         class="grow flex flex-col gap-6"
       >
         <HomeTemplatesToolbar
@@ -119,7 +120,7 @@ const active = useActiveTemplateCard()
         <template
           v-if="hasTemplates"
         >
-          <TemplatesGrid id="templates">
+          <TemplatesGrid>
             <TemplatesCard
               v-for="template in templates"
               :key="template.hash"
