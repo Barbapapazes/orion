@@ -16,6 +16,10 @@ export default defineEventHandler(async (event) => {
     templates: {
       count: templatesCount,
     },
+  } as {
+    creators: { count: number }
+    categories: { count: number }
+    templates: { count: number }
   }
 })
 
