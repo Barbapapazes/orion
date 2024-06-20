@@ -49,7 +49,7 @@ const page = ref(1)
 // Toolbar
 const search = ref('')
 const searchDebounce = useDebounce(search, 300)
-const orderBy = ref(templateSortOptions[0].value)
+const orderBy = ref(templateSortOptions[0]!.value)
 const order = ref<'desc' | 'asc'>('asc')
 
 // Fetch
@@ -95,7 +95,7 @@ const active = useActiveTemplateCard()
     </HomeKPI>
 
     <UContainer class="py-24 sm:py-32 md:py-40 flex flex-col md:flex-row gap-6 md:gap-8">
-      <div class="grow w-full">
+      <div>
         <HomeTemplatesFilters
           v-model:category-slug="categorySlug"
           v-model:module-slug="moduleSlug"
@@ -110,7 +110,7 @@ const active = useActiveTemplateCard()
 
       <div
         id="templates"
-        class="flex flex-col gap-6"
+        class="grow flex flex-col gap-6"
       >
         <HomeTemplatesToolbar
           v-model:search="search"
