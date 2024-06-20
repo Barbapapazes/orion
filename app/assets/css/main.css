@@ -7,3 +7,13 @@
     scroll-margin-top: 6rem;
   }
 }
+
+/* Remove the margin top of the first prose paragraph */
+.prose p:first-of-type {
+  margin-top: 0;
+}
+
+/* Remove the margin bottom of the last prose paragraph */
+.prose p:last-child {
+  margin-bottom: 0;
+}
