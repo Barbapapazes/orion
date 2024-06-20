@@ -45,7 +45,7 @@ const src = computed(() => {
   >
   <TemplatesInputCard
     class="aspect-[16/9] transition"
-    :class="{ 'opacity-0 hover:opacity-100 hover:dark:bg-opacity-60 backdrop-blur': hasImage }"
+    :class="{ 'opacity-0 hover:opacity-80 hover:dark:bg-opacity-80 backdrop-blur-xl': hasImage }"
   >
     <UIcon
       name="i-heroicons-photo"
@@ -59,7 +59,7 @@ const src = computed(() => {
         Featured image added
       </template>
     </p>
-    <p class="mt-2 text-center text-sm dark:text-gray-400">
+    <p class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
       <template v-if="!hasImage">
         Drag and drop an image
         <br>

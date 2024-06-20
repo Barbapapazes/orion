@@ -68,7 +68,7 @@ const inputAccept = computed(() => TEMPLATE_IMAGE_FORMAT.join(', '))
         Add images ({{ filesLength }}/{{ TEMPLATE_MAX_ADDITIONAL_IMAGES }})
       </p>
       <p
-        class="mt-2 text-center text-sm dark:text-gray-400"
+        class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400"
       >
         <template v-if="!hasMaximalAdditionalImages">
           Drag and drop images

@@ -32,7 +32,7 @@ const src = computed(() => {
       alt="Image preview"
       class="absolute inset-0 aspect-[16/9] object-cover object-center"
     >
-    <div class="aspect-[16/9] h-full w-full relative opacity-0 dark:bg-gray-800 transition group-hover:opacity-100 group-hover:dark:bg-opacity-60 backdrop-blur flex justify-center items-center">
+    <div class="aspect-[16/9] h-full w-full relative opacity-0 bg-gray-200 dark:bg-gray-800 transition group-hover:opacity-80 group-hover:dark:bg-opacity-80 backdrop-blur-xl flex justify-center items-center">
       <UButton
         variant="outline"
         size="sm"

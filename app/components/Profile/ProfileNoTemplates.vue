@@ -10,10 +10,10 @@ function onClick() {
 
 <template>
   <UCard
-    class="dark:bg-opacity-20 dark:bg-gray-800 py-40"
+    class="bg-opacity-20 bg-gray-200 dark:bg-opacity-20 dark:bg-gray-800 py-40"
     :ui="{ body: { base: 'h-full flex flex-col justify-center items-center gap-6' } }"
   >
-    <p class="text-sm text-center dark:text-gray-400">
+    <p class="text-sm text-center text-gray-500 dark:text-gray-400">
       No templates found.
     </p>
     <div class="flex flex-row justify-center items-center gap-2">

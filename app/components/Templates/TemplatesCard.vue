@@ -36,7 +36,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
 
 <template>
   <UCard
-    class="relative group h-full dark:bg-opacity-20 dark:bg-gray-800 dark:hover:ring-primary-500 hover:ring-2 transition overflow-hidden"
+    class="relative group h-full bg-opacity-20 bg-gray-200 hover:ring-primary-500 dark:bg-opacity-20 dark:bg-gray-800 dark:hover:ring-primary-400 hover:ring-2 transition overflow-hidden"
     :ui="{ body: { base: 'h-full flex flex-col', padding: 'px-0 py-0 pb-4 sm:p-0 sm:pb-4' } }"
   >
     <template v-if="editable">
@@ -84,7 +84,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
           <span class="absolute inset-0" />
         </NuxtLink>
       </h3>
-      <p class="grow mt-1 dark:text-gray-500">
+      <p class="grow mt-1 text-gray-500 dark:text-gray-400">
         {{ shortDescription }}
       </p>
       <dl class="mt-4 flex flex-row justify-between items-center">

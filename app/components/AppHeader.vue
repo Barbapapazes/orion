@@ -63,7 +63,7 @@ if (await allows(accessAdmin)) {
           <UButton
             variant="ghost"
             color="gray"
-            :class="[open && 'bg-gray-50 dark:bg-gray-800']"
+            :class="[open && 'bg-gray-50 bg-gray-200 dark:bg-gray-800']"
           >
             <template #leading>
               <UAvatar

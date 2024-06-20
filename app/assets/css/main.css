@@ -1,3 +1,9 @@
 #templates {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: 5.5rem;
+}
+
+@media (min-width: theme('screens.lg')) {
+  #templates {
+    scroll-margin-top: 6rem;
+  }
 }

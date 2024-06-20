@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <UCard
-    class="dark:bg-opacity-20 dark:bg-gray-800"
+    class="bg-opacity-20 bg-gray-200 dark:bg-opacity-20 dark:bg-gray-800"
     :ui="{ body: { base: 'flex flex-row items-center gap-4' } }"
   >
     <UAvatar
@@ -21,7 +21,7 @@ defineProps<{
         {{ name }}
       </p>
       <p
-        class="dark:text-gray-400 text-sm truncate"
+        class="text-gray-500 dark:text-gray-400 text-sm truncate"
         :title="email"
       >
         {{ email }}

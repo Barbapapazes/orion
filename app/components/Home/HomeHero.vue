@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+const imgClass = 'w-full max-w-screen-sm lg:max-w-screen-md mx-auto lg:mx-0 lg:opacity-40'
+</script>
+
 <template>
   <ULandingHero
     :ui="{ wrapper: 'overflow-hidden', base: 'lg:text-left', links: 'lg:justify-start' }"
@@ -8,12 +12,19 @@
         <img
           src="/images/hero-template-dark.svg"
           aria-hidden="true"
-          class="w-full max-w-screen-sm lg:max-w-screen-md mx-auto lg:mx-0 opacity-20 lg:opacity-40"
+          class="hidden dark:block opacity-20 "
+          :class="imgClass"
+        >
+        <img
+          src="/images/hero-template-light.svg"
+          aria-hidden="true"
+          class="dark:hidden opacity-30"
+          :class="imgClass"
         >
       </div>
     </template>
     <template #title>
-      Quickly start <br> your <span class="dark:text-[#00dc82]">Nuxt</span> project
+      Quickly start <br> your <span class="text-[#00dc82]">Nuxt</span> project
     </template>
     <template #description>
       A community-driven collection of templates for your next project, <br class="hidden sm:inline"> from landing pages to complete web applications.

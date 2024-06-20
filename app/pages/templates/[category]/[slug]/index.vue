@@ -120,7 +120,7 @@ useSeoMeta({
         <div class="order-1 lg:order-2 md:w-5/12 lg:w-3/12">
           <dl class="mt-8 flex flex-col gap-6">
             <div class="flex items-center gap-4">
-              <dt class="text-sm dark:text-gray-400">
+              <dt class="text-sm text-gray-500 dark:text-gray-400">
                 Cost
               </dt>
               <div
@@ -134,7 +134,7 @@ useSeoMeta({
               </dd>
             </div>
             <div class="flex items-center gap-4">
-              <dt class="text-sm dark:text-gray-400">
+              <dt class="text-sm text-gray-500 dark:text-gray-400">
                 Category
               </dt>
               <div
@@ -150,7 +150,7 @@ useSeoMeta({
               </dd>
             </div>
             <div class="flex items-center gap-4">
-              <dt class="text-sm dark:text-gray-400">
+              <dt class="text-sm text-gray-500 dark:text-gray-400">
                 Creator
               </dt>
               <div
@@ -179,7 +179,7 @@ useSeoMeta({
             >
               <UDivider class="my-2" />
               <div class="flex flex-col gap-4">
-                <dt class="text-sm dark:text-gray-400">
+                <dt class="text-sm text-gray-500 dark:text-gray-400">
                   Modules
                 </dt>
                 <dd>
