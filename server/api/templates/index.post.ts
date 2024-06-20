@@ -89,13 +89,11 @@ export default defineEventHandler(async (event) => {
     id: tables.templates.id,
     slug: tables.templates.slug,
     hash: tables.templates.hash,
-  }).catch((error) => {
-    console.log(error)
+  }).catch(() => {
     sendDiscordNotification(event, 'Failed to create template', { level: 'error' })
     throw createError({
       status: 500,
       message: 'Failed to create template',
-      data: error,
     })
   })
 
