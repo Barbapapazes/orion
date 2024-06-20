@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: apply these class to every card using the app config. -->
   <UCard
     class="bg-gray-200 bg-opacity-20 dark:bg-opacity-20 dark:bg-gray-800"
     :ui="{ divide: 'divide-y-0', body: { base: 'prose prose-sm dark:prose-invert max-w-none' } }"
@@ -30,7 +29,7 @@
     <p>
       <UButton
         class="w-full justify-center"
-        to=""
+        to="https://www.figma.com/community/file/1385718462370739769/orion-cover-image-template"
         variant="outline"
         target="_blank"
       >
