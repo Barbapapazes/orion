@@ -105,7 +105,7 @@ useSeoMeta({
       <div class="flex flex-col md:flex-row gap-x-16">
         <UPageBody class="order-2 md:order-1 md:w-7/12 lg:w-9/12">
           <div
-            class="prose dark:prose-invert"
+            class="prose dark:prose-invert max-w-none"
           >
             <div
               v-if="templateDescription"
