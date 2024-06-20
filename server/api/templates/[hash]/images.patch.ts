@@ -92,15 +92,16 @@ export default defineEventHandler(async (event) => {
     additionalImages: newAdditionalImages,
   })
     .where(and(eq(tables.templates.hash, params.hash)))
-    .execute().catch(async () => {
-      await sendDiscordNotification(event, 'Failed to update template images', { level: 'error' })
+    .execute().catch((error) => {
+      console.error(error)
+      sendDiscordNotification(event, 'Failed to update template images', { level: 'error', message: error.message })
       throw createError({
         status: 500,
         message: 'Failed to update template images',
       })
     })
 
-  await sendDiscordNotification(event, `Template ${params.hash} images updated`, { level: 'success' })
+  sendDiscordNotification(event, `Template ${params.hash} images updated`, { level: 'success' })
 
   return sendNoContent(event, 204)
 })

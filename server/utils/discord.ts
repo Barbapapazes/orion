@@ -2,7 +2,7 @@ import type { H3Event } from 'h3'
 
 type Level = 'success' | 'error' | 'info' | 'warning'
 
-export function sendDiscordNotification(event: H3Event, title: string, options: { level: Level } = { level: 'info' }) {
+export function sendDiscordNotification(event: H3Event, title: string, options: { level: Level, message?: string } = { level: 'info' }) {
   const runtimeConfig = useRuntimeConfig(event)
   const webhookUrl = runtimeConfig.discordWebhookUrl
 
@@ -23,6 +23,7 @@ export function sendDiscordNotification(event: H3Event, title: string, options: 
       username: 'Orion',
       embeds: [{
         title: `${title}`,
+        description: options.message,
         color,
         fields: [
           {

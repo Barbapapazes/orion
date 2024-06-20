@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
   }
   // Use `parseAsync` to throw a custom error on validation failure. We do it this way to stay consistent with the `ensureBlob` function. Using a `safeParse` would require a manual error handling (but it's also possible).
   const body = await createTemplateTextValidator.parseAsync(data).catch((error) => {
+    console.error(error)
     throw createError({
       statusCode: 400,
       message: error.errors[0].message,
@@ -63,8 +64,9 @@ export default defineEventHandler(async (event) => {
       prefix: TEMPLATE_PREFIX,
     })
   })
-  const savedAdditionalImages = await Promise.all(additionalImagePromises).catch(() => {
-    sendDiscordNotification(event, 'Failed to save additional images', { level: 'error' })
+  const savedAdditionalImages = await Promise.all(additionalImagePromises).catch((error) => {
+    console.error(error)
+    sendDiscordNotification(event, 'Failed to save additional images', { level: 'error', message: error.message })
     throw createError({
       status: 500,
       message: 'Failed to save additional images',
@@ -89,8 +91,9 @@ export default defineEventHandler(async (event) => {
     id: tables.templates.id,
     slug: tables.templates.slug,
     hash: tables.templates.hash,
-  }).catch(() => {
-    sendDiscordNotification(event, 'Failed to create template', { level: 'error' })
+  }).catch((error) => {
+    console.error(error)
+    sendDiscordNotification(event, 'Failed to create template', { level: 'error', message: error.message })
     throw createError({
       status: 500,
       message: 'Failed to create template',
@@ -98,8 +101,9 @@ export default defineEventHandler(async (event) => {
   })
 
   if (body.moduleIds?.length) {
-    await useDrizzle().insert(tables.modulesToTemplates).values(body.moduleIds.map(id => ({ moduleId: id, templateId: template.id }))).execute().catch(() => {
-      sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error' })
+    await useDrizzle().insert(tables.modulesToTemplates).values(body.moduleIds.map(id => ({ moduleId: id, templateId: template.id }))).execute().catch((error) => {
+      console.error(error)
+      sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error', message: error.message })
       throw createError({
         status: 500,
         message: 'Failed to associate modules with template',

@@ -10,8 +10,9 @@ export default defineEventHandler(async (event) => {
 
   await useDrizzle().update(tables.users)
     .set({ roleType: 'creator' })
-    .where(eq(tables.users.id, params.id)).catch(async () => {
-      sendDiscordNotification(event, 'Failed to unban user', { level: 'error' })
+    .where(eq(tables.users.id, params.id)).catch((error) => {
+      console.error(error)
+      sendDiscordNotification(event, 'Failed to unban user', { level: 'error', message: error.message})
       throw createError({
         status: 500,
         message: 'Failed to unban user',

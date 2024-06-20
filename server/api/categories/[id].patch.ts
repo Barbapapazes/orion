@@ -28,16 +28,18 @@ export default defineEventHandler(async (event) => {
   })
     .where(eq(tables.categories.id, params.id))
     .execute().catch((error) => {
-      if (error instanceof Error) {
-        throw createError({
-          status: 500,
-          message: error.message,
-        })
-      }
+      console.error(error)
+      sendDiscordNotification(event, 'Failed to update category', { level: 'error', message: error.message })
+      throw createError({
+        status: 500,
+        message: 'Failed to update category',
+      })
     })
 
   // Remove cache to force a refresh
   deleteCachedCategories(event)
+
+  sendDiscordNotification(event, `Category ${body.name} updated`, { level: 'success' })
 
   return sendNoContent(event, 204)
 })

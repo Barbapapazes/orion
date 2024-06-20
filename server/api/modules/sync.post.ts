@@ -7,8 +7,6 @@ interface Modules {
 export default defineEventHandler(async (event) => {
   await authorize(event, syncModules)
 
-  sendDiscordNotification(event, 'Syncing modules...')
-
   const data = await $fetch('https://api.nuxt.com/modules') as Modules
   const modules = data.modules
     .filter(({ type }) => type === 'official' || type === 'community')
@@ -23,8 +21,9 @@ export default defineEventHandler(async (event) => {
   for (let loop = 0; loop < loops; loop++) {
     const values = modules.slice(loop * insertPerLoop, (loop + 1) * insertPerLoop)
     await useDrizzle().insert(tables.modules).values(values)
-      .onConflictDoNothing({ target: tables.modules.slug }).execute().catch(async () => {
-        sendDiscordNotification(event, 'Failed to sync modules', { level: 'error' })
+      .onConflictDoNothing({ target: tables.modules.slug }).execute().catch((error) => {
+        console.error(error)
+        sendDiscordNotification(event, 'Failed to sync modules', { level: 'error', message: error.message })
         throw createError({
           status: 500,
           message: 'Failed to sync modules',
@@ -34,6 +33,8 @@ export default defineEventHandler(async (event) => {
 
   // Remove cache to force a refresh
   deleteCachedModules(event)
+
+  sendDiscordNotification(event, 'Modules synced', { level: 'success' })
 
   return sendNoContent(event, 204)
 })

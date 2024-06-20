@@ -20,14 +20,13 @@ export default defineEventHandler(async (event) => {
   await useDrizzle().insert(tables.categories).values({
     slug: useSlugify(body.name),
     name: body.name,
-  }).execute().catch(async (error) => {
-    if (error instanceof Error) {
-      sendDiscordNotification(event, 'Failed to create category', { level: 'error' })
-      throw createError({
-        status: 500,
-        message: error.message,
-      })
-    }
+  }).execute().catch((error) => {
+    console.error(error)
+    sendDiscordNotification(event, 'Failed to create category', { level: 'error', message: error.message })
+    throw createError({
+      status: 500,
+      message: 'Failed to create category',
+    })
   })
 
   sendDiscordNotification(event, `Category ${body.name} created`, { level: 'success' })
