@@ -11,8 +11,6 @@ useSeoMeta({
   title: 'Modules',
 })
 
-const toast = useToast()
-
 const defaultColumns = [{
   key: 'id',
   label: '#',
@@ -48,11 +46,7 @@ async function syncModules() {
     await $fetch('/api/modules/sync', {
       method: 'POST',
     })
-    toast.add({
-      icon: 'i-heroicons-check-circle',
-      title: 'Modules synced',
-      color: 'green',
-    })
+    useSuccessToast('Modules synced')
     refresh()
   }
   catch (error) {
@@ -89,7 +83,7 @@ async function syncModules() {
         <template #right>
           <USelectMenu
             v-model="selectedColumns"
-            icon="i-heroicons-adjustments-horizontal-solid"
+            :icon="FADER_ICON"
             :options="defaultColumns"
             multiple
           >
@@ -109,7 +103,7 @@ async function syncModules() {
           <UAvatar
             :ui="{ background: 'bg-transparent', rounded: '', icon: { size: { sm: 'w-8 h-8' } } }"
             :src="row.icon ? `${MODULE_ICON_PREFIX}/${row.icon}` : ''"
-            icon="i-heroicons-photo"
+            :icon="PHOTO_ICON"
           />
         </template>
         <template #type-data="{ row }">

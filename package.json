@@ -33,6 +33,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@iconify-json/ph": "^1.1.13",
     "@types/markdown-it": "^14.1.1",
     "@types/sanitize-html": "^2.11.0",
     "@vueuse/core": "^10.11.0",

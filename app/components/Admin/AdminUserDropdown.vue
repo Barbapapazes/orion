@@ -9,12 +9,12 @@ const items = computed(() => [
   }],
   [{
     label: 'Profile',
-    icon: 'i-heroicons-user',
+    icon: USER_ICON,
     to: '/profile',
   }],
   [{
     label: 'Sign out',
-    icon: 'i-heroicons-arrow-right-on-rectangle',
+    icon: SIGN_OUT_ICON,
     click: async () => {
       await clear()
       navigateTo('/')
@@ -47,7 +47,7 @@ const items = computed(() => [
 
         <template #trailing>
           <UIcon
-            name="i-heroicons-ellipsis-vertical"
+            :name="MORE_VERTICAL_ICON"
             class="w-5 h-5 ml-auto"
           />
         </template>

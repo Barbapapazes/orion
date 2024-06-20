@@ -7,7 +7,7 @@ const props = defineProps<{
 
 const items = [[{
   label: 'Edit Content',
-  icon: EDIT_ICON,
+  icon: PEN_ICON,
   to: generateEditTextTemplateURL({
     slug: props.templateSlug,
     hash: props.templateHash,

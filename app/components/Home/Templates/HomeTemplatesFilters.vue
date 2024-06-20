@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Category } from '~/server/utils/drizzle'
-import type { TemplatePaidStatus } from '~/types'
+import type { Category } from '~~/server/utils/drizzle'
+import type { TemplatePaidStatus } from '~~/types'
 import type { TemplatePaidStatusOption } from '~/utils'
 
 const props = defineProps<{
@@ -31,7 +31,7 @@ const categoriesOptions = [
 ]
 
 const modulesOptions = [
-  { slug: undefined, name: 'All', icon: 'i-heroicons-photo' },
+  { slug: undefined, name: 'All', icon: PHOTO_ICON },
   ...props.modules,
 ]
 
@@ -80,7 +80,7 @@ const paidStatusOptions = [
         <template #option="{ option }">
           <UAvatar
             :src="`${MODULE_ICON_PREFIX}/${option.icon}`"
-            icon="i-heroicons-photo"
+            :icon="PHOTO_ICON"
             :ui="{ rounded: '', icon: { size: { '3xs': 'h-4 w-4' } }, background: '' }"
             size="3xs"
           />

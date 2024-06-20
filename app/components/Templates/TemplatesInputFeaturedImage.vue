@@ -18,11 +18,13 @@ function handleFileChange(files: FileList) {
     return
   }
   const _file = files[0]
+  if (!_file) return
+
   file.value = _file
   emits('fileChange', _file)
 
   toast.add({
-    icon: 'i-heroicons-photo',
+    icon: PHOTO_ICON,
     title: 'Featured image has been added.',
   })
 }
@@ -48,7 +50,7 @@ const src = computed(() => {
     :class="{ 'opacity-0 hover:opacity-80 hover:dark:bg-opacity-80 backdrop-blur-xl': hasImage }"
   >
     <UIcon
-      name="i-heroicons-photo"
+      :name="PHOTO_ICON"
       class="inline-block flex-shrink-0 h-8 w-8"
     />
     <p class="mt-4 text-lg font-semibold group-hover:text-primary transition-colors">

@@ -30,7 +30,7 @@ const columns = computed(() => defaultColumns.filter(column => selectedColumns.v
 const actionsItems = (row: Category) => [
   [{
     label: 'Edit',
-    icon: 'i-heroicons-pencil-square-20-solid',
+    icon: EDIT_ICON,
     click: () => {
       editCategory.value = row
       isEditCategoryModalOpen.value = true
@@ -69,7 +69,7 @@ defineShortcuts({
         <template #right>
           <UButton
             label="New category"
-            trailing-icon="i-heroicons-plus"
+            :trailing-icon="PLUS_ICON"
             color="gray"
             @click="isNewCategoryModalOpen = true"
           />
@@ -97,7 +97,7 @@ defineShortcuts({
         <template #right>
           <USelectMenu
             v-model="selectedColumns"
-            icon="i-heroicons-adjustments-horizontal-solid"
+            :icon="PHOTO_ICON"
             :options="defaultColumns"
             multiple
           >
@@ -118,7 +118,7 @@ defineShortcuts({
             <UButton
               color="gray"
               variant="ghost"
-              icon="i-heroicons-ellipsis-horizontal-20-solid"
+              :icon="MORE_VERTICAL_ICON"
             />
           </UDropdown>
         </template>

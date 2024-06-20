@@ -2,7 +2,7 @@
 const links = [{
   id: 'admin',
   label: 'Admin',
-  icon: 'i-heroicons-home',
+  icon: HOME_ICON,
   to: '/admin',
   tooltip: {
     text: 'Admin',
@@ -10,22 +10,22 @@ const links = [{
 }, {
   id: 'categories',
   label: 'Categories',
-  icon: 'i-heroicons-tag',
+  icon: CATEGORY_ICON,
   to: '/admin/categories',
 }, {
   id: 'modules',
   label: 'Modules',
-  icon: 'i-heroicons-archive-box',
+  icon: MODULE_ICON,
   to: '/admin/modules',
 }, {
   id: 'templates',
   label: 'Templates',
-  icon: 'i-heroicons-rectangle-group',
+  icon: TEMPLATE_ICON,
   to: '/admin/templates',
 }, {
   id: 'users',
   label: 'Users',
-  icon: 'i-heroicons-user-group',
+  icon: USERS_ICON,
   to: '/admin/users',
 }]
 </script>

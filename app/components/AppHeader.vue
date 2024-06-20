@@ -8,11 +8,11 @@ const socials = appConfig.socials
 
 const items = [[{
   label: 'Profile',
-  icon: 'i-heroicons-user',
+  icon: USER_ICON,
   to: '/profile',
 }], [{
   label: 'Sign out',
-  icon: 'i-heroicons-arrow-right-on-rectangle',
+  icon: SIGN_OUT_ICON,
   click: async () => {
     await clear()
     navigateTo('/templates')
@@ -27,7 +27,7 @@ if (await allows(accessAdmin)) {
   // @ts-expect-error No types for this yet
   items[0].push({
     label: 'Admin',
-    icon: 'i-heroicons-shield-check',
+    icon: ADMIN_ICON,
     to: '/admin',
   })
 }

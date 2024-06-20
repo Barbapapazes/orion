@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TemplateStatus } from '~/types'
+import type { TemplateStatus } from '~~/types'
 
 const props = defineProps<{
   id: number
@@ -26,7 +26,7 @@ const title = props.status === 'refused'
   <UAlert
     :color="color"
     variant="solid"
-    icon="i-heroicons-information-circle"
+    :icon="INFORMATION_CIRCLE_ICON"
     :title="title"
   />
 </template>

@@ -76,7 +76,7 @@ useSeoMeta({
             rel="noopener noreferrer external"
             :to="template.accessUrl"
             target="_blank"
-            trailing-icon="i-heroicons-arrow-top-right-on-square"
+            :trailing-icon="EXTERNAL_LINK_ICON"
             size="md"
           />
           <UButton
@@ -86,7 +86,7 @@ useSeoMeta({
             :to="template.liveUrl"
             target="_blank"
             rel="noopener noreferrer external"
-            trailing-icon="i-heroicons-arrow-top-right-on-square"
+            :trailing-icon="EXTERNAL_LINK_ICON"
             size="lg"
           />
           <Can

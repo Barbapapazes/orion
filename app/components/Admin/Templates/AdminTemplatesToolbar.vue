@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Category } from '~/server/utils/drizzle'
-import type { TemplatePaidStatus, TemplateStatus } from '~/types'
+import type { Category } from '~~/server/utils/drizzle'
+import type { TemplatePaidStatus, TemplateStatus } from '~~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
 
@@ -142,7 +142,7 @@ const searchCreator = async (query: string) => {
     <template #right>
       <USelectMenu
         v-model="selectedColumns"
-        icon="i-heroicons-adjustments-horizontal-solid"
+        :icon="FADER_ICON"
         :options="columns"
         multiple
       >

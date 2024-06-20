@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { User } from '~/server/utils/drizzle'
+import type { User } from '~~/server/utils/drizzle'
 import type { DropdownItem } from '#ui/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
@@ -22,12 +22,11 @@ const emits = defineEmits<{
 
 const sort = defineModel<{ column: string, direction: 'asc' | 'desc' }>('sort', { required: true })
 
-const toast = useToast()
 const actionsItems = (row: User) => {
   const actions: DropdownItem[] = [
     {
       label: 'Copy Email',
-      icon: 'i-heroicons-clipboard',
+      icon: CLIPBOARD_ICON,
       click: () => useCopy(row.email),
     },
   ]
@@ -41,17 +40,13 @@ const actionsItems = (row: User) => {
       actions,
       [{
         label: 'Unban',
-        icon: 'i-heroicons-lock-open',
+        icon: UNLOCK_ICON,
         click: async () => {
           try {
             await $fetch(`/api/users/${row.id}/unban`, {
               method: 'PATCH',
             })
-            toast.add({
-              icon: 'i-heroicons-check-circle',
-              title: `User "${row.login}" has been unbanned`,
-              color: 'green',
-            })
+            useSuccessToast(`User "${row.login}" has been unbanned`)
             emits('refresh')
           }
           catch (error) {
@@ -65,17 +60,13 @@ const actionsItems = (row: User) => {
     actions,
     [{
       label: 'Ban',
-      icon: 'i-heroicons-lock-closed',
+      icon: LOCK_ICON,
       click: async () => {
         try {
           await $fetch(`/api/users/${row.id}/ban`, {
             method: 'PATCH',
           })
-          toast.add({
-            icon: 'i-heroicons-check-circle',
-            title: `User "${row.login}" has been banned`,
-            color: 'green',
-          })
+          useSuccessToast(`User "${row.login}" has been banned`)
           emits('refresh')
         }
         catch (error) {
@@ -130,7 +121,7 @@ const actionsItems = (row: User) => {
         <UButton
           color="gray"
           variant="ghost"
-          icon="i-heroicons-ellipsis-horizontal-20-solid"
+          :icon="MORE_VERTICAL_ICON"
         />
       </UDropdown>
     </template>

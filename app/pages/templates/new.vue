@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types'
 
-const toast = useToast()
-
 const categories = await useFetchCategories()
 
 if (!categories.value) {
@@ -39,23 +37,22 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
       method: 'POST',
       body: formData,
     })
-    toast.add({
-      icon: 'i-heroicons-check-circle',
-      title: `Template "${event.data.title}" has been created`,
-      color: 'green',
-    })
+    useSuccessToast(`Template "${event.data.title}" has been created`)
     const category = categories.value!.find(category => category.id === event.data.categoryId)
 
     /**
      * This case should never happen.
      */
     if (!category) {
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Category not found',
-        description: 'The category for the template was not found but your template have been created. Please contact the administrator.',
-        color: 'red',
-      })
+      useErrorToast('Category not found', 'The category for the template was not found but your template have been created. Please contact the administrator.')
+      return navigateTo('/profile')
+    }
+
+    /**
+     * This case should never happen.
+     */
+    if (!template) {
+      useErrorToast('Template not found', 'The template was not found but your template have been created. Please contact the administrator.')
       return navigateTo('/profile')
     }
 
@@ -63,13 +60,7 @@ async function onSubmit(event: FormSubmitEvent<CreateTemplateValidatorSchema>) {
   }
   catch (error) {
     if (error instanceof Error) {
-      console.error(error)
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Something went wrong',
-        description: error.message,
-        color: 'red',
-      })
+      useErrorToast('An error occurred', 'An error occurred while creating the template. Please try again later.')
     }
   }
   finally {

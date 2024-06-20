@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Template, Category, User } from '~/server/utils/drizzle'
+import type { Template, Category, User } from '~~/server/utils/drizzle'
 
 const props = withDefaults(defineProps<{
   editable?: boolean
@@ -16,12 +16,12 @@ const props = withDefaults(defineProps<{
 
 const items = [
   [{
-    icon: 'i-heroicons-document-text',
+    icon: DOCUMENT_ICON,
     label: 'Edit Content',
     to: `/templates/${props.hash}/edit/content`,
   },
   {
-    icon: 'i-heroicons-photo',
+    icon: PHOTO_ICON,
     label: 'Edit Images',
     to: `/templates/${props.hash}/edit/images`,
   }],
@@ -52,7 +52,7 @@ const creatorAvatarUrl = props.creator.avatarUrl
         <UButton
           square
           size="xs"
-          icon="i-heroicons-pencil-square"
+          :icon="EDIT_ICON"
         />
       </UDropdown>
     </template>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DropdownItem } from '#ui/types'
-import type { Template as _Template } from '~/server/utils/drizzle'
-import type { TemplatePaidStatus, TemplateStatus } from '~/types'
+import type { Template as _Template } from '~~/server/utils/drizzle'
+import type { TemplatePaidStatus, TemplateStatus } from '~~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
 
@@ -49,7 +49,7 @@ const actionsItems = (row: Template) => {
   const actions: DropdownItem[][] = [[
     {
       label: 'View',
-      icon: 'i-heroicons-eye',
+      icon: EYE_ICON,
       to: generateShowTemplateURL({
         categorySlug: row.category.slug,
         slug: row.slug,
@@ -59,17 +59,17 @@ const actionsItems = (row: Template) => {
     },
   ], [{
     label: 'Copy Title',
-    icon: 'i-heroicons-clipboard',
+    icon: CLIPBOARD_ICON,
     click: () => useCopy(row.title),
   },
   {
     label: 'Copy Creator Name',
-    icon: 'i-heroicons-clipboard',
+    icon: CLIPBOARD_ICON,
     click: () => useCopy(row.creator.name ?? row.creator.login),
   },
   {
     label: 'Copy Creator Email',
-    icon: 'i-heroicons-clipboard',
+    icon: CLIPBOARD_ICON,
     click: () => useCopy(row.creator.email),
   },
   ]]
@@ -93,19 +93,19 @@ const actionsItems = (row: Template) => {
 
   const validatedAction = {
     label: 'Validated',
-    icon: 'i-heroicons-check-circle',
+    icon: CHECK_CIRCLE_ICON,
     click: updateStatus('validated'),
   }
 
   const reviewAction = {
     label: 'Reviewed',
-    icon: 'i-heroicons-eye',
+    icon: EYE_ICON,
     click: updateStatus('reviewed'),
   }
 
   const refusedAction = {
     label: 'Refused',
-    icon: 'i-heroicons-x-circle',
+    icon: X_CIRCLE_ICON,
     click: updateStatus('refused'),
   }
 
@@ -157,7 +157,7 @@ const actionsItems = (row: Template) => {
       >
         <span>{{ row.liveUrl }}</span>
 
-        <span class="i-heroicons-arrow-top-right-on-square-16-solid inline-block w-4 h-4" />
+        <span class="inline-block w-4 h-4" :class="EXTERNAL_LINK_ICON" />
       </UButton>
       <span v-else> - </span>
     </template>
@@ -170,7 +170,7 @@ const actionsItems = (row: Template) => {
       >
         <span>{{ row.accessUrl }}</span>
 
-        <span class="i-heroicons-arrow-top-right-on-square-16-solid inline-block w-4 h-4" />
+        <span class="inline-block w-4 h-4" :class="EXTERNAL_LINK_ICON" />
       </UButton>
     </template>
     <template #status-data="{ row }">
@@ -206,7 +206,7 @@ const actionsItems = (row: Template) => {
         <UButton
           color="gray"
           variant="ghost"
-          icon="i-heroicons-ellipsis-horizontal-20-solid"
+          :icon="MORE_VERTICAL_ICON"
         />
       </UDropdown>
     </template>

@@ -40,7 +40,6 @@ const defaultState: State = {
   paidStatus: template.value.paidStatus,
 }
 
-const toast = useToast()
 const loading = ref(false)
 async function onSubmit(event: FormSubmitEvent<State>) {
   loading.value = true
@@ -51,23 +50,22 @@ async function onSubmit(event: FormSubmitEvent<State>) {
       body: event.data,
     })
 
-    toast.add({
-      icon: 'i-heroicons-check-circle',
-      title: `Template "${event.data.title}" has been updated`,
-      color: 'green',
-    })
+    useSuccessToast(`Template "${event.data.title}" has been updated`)
     const category = categories.value!.find(category => category.id === event.data.categoryId)
 
     /**
      * This case should never happen.
      */
     if (!category) {
-      toast.add({
-        icon: 'i-heroicons-exclamation-circle',
-        title: 'Category not found',
-        description: 'The category for the template was not found but your template have been created. Please contact the administrator.',
-        color: 'red',
-      })
+      useErrorToast('Category not found', 'The category for the template was not found but your template have been created. Please contact the administrator.')
+      return navigateTo('/profile')
+    }
+
+    /**
+     * This case should never happen.
+     */
+    if (!template) {
+      useErrorToast('Template not found', 'The template was not found but your template have been created. Please contact the administrator.')
       return navigateTo('/profile')
     }
 
@@ -75,12 +73,7 @@ async function onSubmit(event: FormSubmitEvent<State>) {
     navigateTo(generateShowTemplateURL({ slug: template.slug, hash: template.hash, categorySlug: category.slug }))
   }
   catch (error) {
-    toast.add({
-      icon: 'i-heroicons-exclamation-circle',
-      title: 'An error occurred',
-      description: 'An error occurred while updating the template. Please try again later.',
-      color: 'red',
-    })
+    useErrorToast('An error occurred', 'An error occurred while updating the template. Please try again later.')
   }
   finally {
     loading.value = false

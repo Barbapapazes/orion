@@ -37,7 +37,7 @@ const src = computed(() => {
         variant="outline"
         size="sm"
         color="red"
-        icon="i-heroicons-trash"
+        :icon="TRASH_ICON"
         @click="onClick()"
       >
         Remove

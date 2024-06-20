@@ -26,7 +26,7 @@ function onClick() {
       <UTooltip text="Explanation">
         <UButton
           square
-          icon="i-heroicons-information-circle"
+          :icon="INFORMATION_CIRCLE_ICON"
           color="gray"
           variant="ghost"
           @click="onClick"

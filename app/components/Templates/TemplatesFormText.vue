@@ -96,7 +96,8 @@ function onDescriptionChange(content: string, source: EmitterSource) {
           >
           <span
             v-else
-            class="i-heroicons-photo inline-block h-4 w-4"
+            class="inline-block h-4 w-4"
+            :class="PHOTO_ICON"
           />
           <span>{{ option.name }}</span>
         </template>

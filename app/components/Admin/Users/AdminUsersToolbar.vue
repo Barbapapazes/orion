@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { UserRoleType } from '~/types'
+import type { UserRoleType } from '~~/types'
 // see https://github.com/nuxt/ui/issues/1878
 // import type { Column } from '#ui/types'
 
@@ -43,7 +43,7 @@ const roleTypeOptions = [
     <template #right>
       <USelectMenu
         v-model="selectedColumns"
-        icon="i-heroicons-adjustments-horizontal-solid"
+        :icon="FADER_ICON"
         :options="columns"
         multiple
       >

@@ -15,7 +15,7 @@ function onClick() {
     <template #header>
       <h2 class="font-semibold text-lg flex items-center justify-center">
         <UIcon
-          name="i-heroicons-information-circle"
+          :name="INFORMATION_CIRCLE_ICON"
           class="mr-2"
         />
         What is a template?
@@ -23,7 +23,7 @@ function onClick() {
       <UButton
         color="gray"
         variant="ghost"
-        icon="i-heroicons-x-mark-20-solid"
+        :icon="X_ICON"
         class="-my-1"
         @click="onClick"
       />

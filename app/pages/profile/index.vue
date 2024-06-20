@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { TemplatePaidStatus, TemplateStatus } from '~/types'
+import type { TemplatePaidStatus, TemplateStatus } from '~~/types'
 
 definePageMeta({
   middleware: ['auth'],
@@ -69,7 +69,7 @@ const active = useActiveTemplateCard()
               <UTooltip text="Explanation">
                 <UButton
                   square
-                  icon="i-heroicons-information-circle"
+                  :icon="INFORMATION_CIRCLE_ICON"
                   color="gray"
                   variant="ghost"
                   size="lg"

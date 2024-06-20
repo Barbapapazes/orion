@@ -40,7 +40,7 @@ export default defineNuxtConfig({
   modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint', 'nuxt-authorization', '@vueuse/nuxt',
   ],
   ui: {
-    icons: ['heroicons', 'simple-icons'],
+    icons: ['ph', 'simple-icons'],
     safelistColors: ['yellow', 'green', 'blue', 'orange', 'red'], // Used in badge as dynamic color.
   },
   hub: {

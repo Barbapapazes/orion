@@ -1,11 +1,45 @@
 export const MODULE_ICON_PREFIX = 'https://ipx.nuxt.com/s_80,f_auto/gh/nuxt/modules/main/icons'
 
-export const MORE_VERTICAL_ICON = 'i-heroicons-ellipsis-vertical'
-export const MORE_HORIZONTAL_ICON = 'i-heroicons-ellipsis-horizontal'
-export const CATEGORY_ICON = 'i-heroicons-tag'
-export const TEMPLATE_ICON = 'i-heroicons-rectangle-group'
-export const EDIT_ICON = 'i-heroicons-pencil-square'
-export const PHOTO_ICON = 'i-heroicons-photo'
+// Navigation
+export const HOME_ICON = 'i-ph-house-duotone'
+export const USER_ICON = 'i-ph-user-duotone'
+export const USERS_ICON = 'i-ph-users-three-duotone'
+export const ADMIN_ICON = 'i-ph-shield-duotone'
+
+// Business
+export const CATEGORY_ICON = 'i-ph-tag-duotone'
+export const MODULE_ICON = 'i-ph-archive-duotone'
+export const TEMPLATE_ICON = 'i-ph-book-duotone'
+
+// Action
+export const SIGN_OUT_ICON = 'i-ph-sign-out'
+export const MORE_VERTICAL_ICON = 'i-ph-dots-three-vertical'
+export const EYE_ICON = 'i-ph-eye-duotone'
+export const EDIT_ICON = 'i-ph-note-pencil-duotone'
+export const CLIPBOARD_ICON = 'i-ph-clipboard-duotone'
+export const PLUS_ICON = 'i-ph-plus'
+export const TRASH_ICON = 'i-ph-trash-duotone'
+export const X_ICON = 'i-ph-x'
+export const UNLOCK_ICON = 'i-ph-lock-open-duotone'
+export const LOCK_ICON = 'i-ph-lock-duotone'
+export const EXTERNAL_LINK_ICON = 'i-ph-arrow-square-out-duotone'
+
+// Element
+export const PHOTO_ICON = 'i-ph-image-duotone'
+export const PEN_ICON = 'i-ph-pen-duotone'
+export const DOCUMENT_ICON = 'i-ph-file-text-duotone'
+
+// Table
+export const FADER_ICON = 'i-ph-faders'
+export const LOAD_ICON = 'i-ph-arrows-clockwise-duotone'
+export const SEARCH_ICON = 'i-ph-magnifying-glass-duotone'
+export const SORT_DESC_ICON = 'i-ph-sort-ascending'
+export const SORT_ASC_ICON = 'i-ph-sort-descending'
+
+// Notification
+export const INFORMATION_CIRCLE_ICON = 'i-ph-info-duotone'
+export const CHECK_CIRCLE_ICON = 'i-ph-check-circle-duotone'
+export const X_CIRCLE_ICON = 'i-ph-x-circle-duotone'
 
 export const ORDER = ['asc', 'desc'] as const
 

@@ -20,11 +20,7 @@ function handleFileChange(fileList: FileList) {
 
   for (const file of fileList) {
     if (filesLength.value >= TEMPLATE_MAX_ADDITIONAL_IMAGES) {
-      toast.add({
-        icon: 'i-heroicons-exclamation',
-        title: `You can only add up to ${TEMPLATE_MAX_ADDITIONAL_IMAGES} additional images.`,
-        color: 'orange',
-      })
+      useSuccessToast(`You can only add up to ${TEMPLATE_MAX_ADDITIONAL_IMAGES} additional images.`)
       return
     }
 
@@ -33,7 +29,7 @@ function handleFileChange(fileList: FileList) {
 
   emits('filesChange', files.value)
   toast.add({
-    icon: 'i-heroicons-photo',
+    icon: PHOTO_ICON,
     title: `${fileList.length} additional ${fileList.length > 1 ? 'images' : 'image'} have been added.`,
   })
 }
@@ -43,8 +39,8 @@ function removeFile(index: number) {
 
   emits('filesChange', files.value)
   toast.add({
-    icon: 'i-heroicons-trash',
-    title: `Additional image "${file.name}" has been removed.`,
+    icon: TRASH_ICON,
+    title: `Additional image "${file!.name}" has been removed.`,
     color: 'red',
   })
 }
