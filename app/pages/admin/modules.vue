@@ -106,14 +106,10 @@ async function syncModules() {
         :loading="pending"
       >
         <template #icon-data="{ row }">
-          <img
-            v-if="row.icon"
-            :src="`${MODULE_ICON_PREFIX}/${row.icon}`"
-            class="h-6 w-auto"
-          >
-          <span
-            v-else
-            class="i-heroicons-photo inline-block h-6 w-6"
+          <UAvatar
+            :ui="{ background: 'bg-transparent', rounded: '', icon: { size: { sm: 'w-8 h-8' } } }"
+            :src="row.icon ? `${MODULE_ICON_PREFIX}/${row.icon}` : ''"
+            icon="i-heroicons-photo"
           />
         </template>
         <template #type-data="{ row }">
