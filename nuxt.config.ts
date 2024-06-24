@@ -44,7 +44,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-authorization',
     '@vueuse/nuxt',
-    "nuxt-simple-robots"
+    'nuxt-simple-robots',
   ],
   ui: {
     icons: ['ph', 'simple-icons'],

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     .set({ roleType: 'creator' })
     .where(eq(tables.users.id, params.id)).catch((error) => {
       console.error(error)
-      sendDiscordNotification(event, 'Failed to unban user', { level: 'error', message: error.message})
+      sendDiscordNotification(event, 'Failed to unban user', { level: 'error', message: error.message })
       throw createError({
         status: 500,
         message: 'Failed to unban user',

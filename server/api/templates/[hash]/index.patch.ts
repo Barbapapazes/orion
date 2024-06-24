@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
       .where(eq(tables.modulesToTemplates.templateId, updatedTemplate.id))
       .execute().catch((error) => {
         console.error(error)
-        sendDiscordNotification(event, 'Failed to dissociate modules from template', { level: 'error', message: error.message})
+        sendDiscordNotification(event, 'Failed to dissociate modules from template', { level: 'error', message: error.message })
         throw createError({
           status: 500,
           message: 'Failed to dissociate modules from template',
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
       .values(body.moduleIds.map(id => ({ moduleId: id, templateId: updatedTemplate.id })),
       ).execute().catch((error) => {
         console.error(error)
-        sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error', message: error.message})
+        sendDiscordNotification(event, 'Failed to associate modules with template', { level: 'error', message: error.message })
         throw createError({
           status: 500,
           message: 'Failed to associate modules with template',

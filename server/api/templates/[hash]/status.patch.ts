@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     .where(and(eq(tables.templates.hash, params.hash)))
     .execute().catch((error) => {
       console.error(error)
-      sendDiscordNotification(event, 'Failed to update template status', { level: 'error', message: error.message})
+      sendDiscordNotification(event, 'Failed to update template status', { level: 'error', message: error.message })
       throw createError({
         status: 500,
         message: 'Failed to update template status',

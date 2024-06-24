@@ -157,7 +157,10 @@ const actionsItems = (row: Template) => {
       >
         <span>{{ row.liveUrl }}</span>
 
-        <span class="inline-block w-4 h-4" :class="EXTERNAL_LINK_ICON" />
+        <span
+          class="inline-block w-4 h-4"
+          :class="EXTERNAL_LINK_ICON"
+        />
       </UButton>
       <span v-else> - </span>
     </template>
@@ -170,7 +173,10 @@ const actionsItems = (row: Template) => {
       >
         <span>{{ row.accessUrl }}</span>
 
-        <span class="inline-block w-4 h-4" :class="EXTERNAL_LINK_ICON" />
+        <span
+          class="inline-block w-4 h-4"
+          :class="EXTERNAL_LINK_ICON"
+        />
       </UButton>
     </template>
     <template #status-data="{ row }">
