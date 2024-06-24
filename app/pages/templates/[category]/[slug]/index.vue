@@ -29,6 +29,7 @@ const images = [
   ...(template.value.additionalImages ?? []).map(image => getImageURL(image)),
 ]
 
+const siteConfig = useSiteConfig()
 useSeoMeta({
   title: `${templateTitle} by ${creatorName}`,
   ogTitle: `${templateTitle} by ${creatorName}`,
@@ -36,8 +37,8 @@ useSeoMeta({
   description: template.value.shortDescription,
   ogDescription: template.value.shortDescription,
   twitterDescription: template.value.shortDescription,
-  ogImage: `https://orion.barbapapazes.dev/images/${template.value.featuredImage}`,
-  twitterImage: `https://orion.barbapapazes.dev/images/${template.value.featuredImage}`,
+  ogImage: `${siteConfig.url}/images/${template.value.featuredImage}`,
+  twitterImage: `${siteConfig.url}/images/${template.value.featuredImage}`,
   twitterCard: 'summary_large_image',
   author: creatorName,
 })
