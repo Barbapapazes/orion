@@ -3,6 +3,7 @@ import type { ImageEntry } from '#sitemap'
 
 export default defineSitemapEventHandler(async () => {
   const templates = await useDrizzle().query.templates.findMany({
+    where: eq(tables.templates.status, 'validated'),
     with: {
       category: true,
     },
