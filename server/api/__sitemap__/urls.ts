@@ -8,7 +8,7 @@ export default defineSitemapEventHandler(async () => {
     },
   })
 
-  return templates.map((template) => {
+  const templatesForSitemap = templates.map((template) => {
     const images: ImageEntry[] = [template.featuredImage, template.additionalImages].flat().map(image => ({
       loc: `images/${image}`,
     }))
@@ -19,4 +19,15 @@ export default defineSitemapEventHandler(async () => {
       images,
     }
   })
+
+  const categories = await useDrizzle().query.categories.findMany()
+
+  const categoriesForSitemap = categories.map(category => ({
+    url: `/templates/${category.slug}`,
+  }))
+
+  return [
+    ...templatesForSitemap,
+    ...categoriesForSitemap,
+  ]
 })
