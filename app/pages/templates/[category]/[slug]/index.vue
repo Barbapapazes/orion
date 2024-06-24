@@ -31,7 +31,15 @@ const images = [
 
 useSeoMeta({
   title: `${templateTitle} by ${creatorName}`,
+  ogTitle: `${templateTitle} by ${creatorName}`,
+  twitterTitle: `${templateTitle} by ${creatorName}`,
   description: template.value.shortDescription,
+  ogDescription: template.value.shortDescription,
+  twitterDescription: template.value.shortDescription,
+  ogImage: `https://orion.barbapapapazes.dev/images/${template.value.featuredImage}`,
+  twitterImage: `https://orion.barbapapapazes.dev/images/${template.value.featuredImage}`,
+  twitterCard: 'summary_large_image',
+  author: creatorName,
 })
 </script>
 
