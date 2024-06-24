@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { join } from 'pathe'
+
 const route = useRoute()
 const hash = computed(() => {
   return (route.params.slug as string).slice(-12)
@@ -30,6 +32,7 @@ const images = [
 ]
 
 const siteConfig = useSiteConfig()
+const image = join(siteConfig.url, 'images', template.value.featuredImage)
 useSeoMeta({
   title: `${templateTitle} by ${creatorName}`,
   ogTitle: `${templateTitle} by ${creatorName}`,
@@ -37,8 +40,8 @@ useSeoMeta({
   description: template.value.shortDescription,
   ogDescription: template.value.shortDescription,
   twitterDescription: template.value.shortDescription,
-  ogImage: `${siteConfig.url}/images/${template.value.featuredImage}`,
-  twitterImage: `${siteConfig.url}/images/${template.value.featuredImage}`,
+  ogImage: image,
+  twitterImage: image,
   twitterCard: 'summary_large_image',
   author: creatorName,
 })

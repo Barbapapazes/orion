@@ -42,6 +42,7 @@
     "@vueuse/nuxt": "^10.11.0",
     "drizzle-kit": "^0.22.7",
     "eslint": "9.2.0",
+    "pathe": "^1.1.2",
     "quill": "2.0.2",
     "wrangler": "^3.60.3"
   },
