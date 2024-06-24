@@ -37,7 +37,14 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   extends: ['@nuxt/ui-pro'],
-  modules: ['nuxt-auth-utils', '@nuxthub/core', '@nuxt/ui', '@nuxt/eslint', 'nuxt-authorization', '@vueuse/nuxt',
+  modules: [
+    'nuxt-auth-utils',
+    '@nuxthub/core',
+    '@nuxt/ui',
+    '@nuxt/eslint',
+    'nuxt-authorization',
+    '@vueuse/nuxt',
+    "nuxt-simple-robots"
   ],
   ui: {
     icons: ['ph', 'simple-icons'],

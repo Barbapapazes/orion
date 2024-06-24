@@ -25,6 +25,7 @@
     "nuxt": "^3.12.2",
     "nuxt-auth-utils": "^0.0.25",
     "nuxt-authorization": "^0.0.3",
+    "nuxt-simple-robots": "4.0.0-rc.19",
     "sanitize-html": "^2.13.0",
     "slugify": "^1.6.6",
     "uncrypto": "^0.1.3",
