@@ -24,8 +24,8 @@ importers:
         specifier: ^0.6.17
         version: 0.6.17(ioredis@5.4.1)(magicast@0.3.4)(nuxt@3.12.2(@parcel/watcher@2.4.1)(@types/node@20.12.7)(@unocss/reset@0.61.0)(drizzle-orm@0.31.2(@cloudflare/workers-types@4.20240614.0))(encoding@0.1.13)(eslint@9.2.0)(floating-vue@5.2.2(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@4.17.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@6.6.2)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.17.0)(terser@5.30.4)(typescript@5.4.5)(unocss@0.61.0(@unocss/webpack@0.61.0(rollup@4.17.0)(webpack@5.92.1(esbuild@0.20.2)))(postcss@8.4.38)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4)))(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4)))(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
       '@nuxtjs/sitemap':
-        specifier: ^5.2.1
-        version: 5.2.1(yyfxbewuns6itcdixnizhrbpiq)
+        specifier: ^5.3.2
+        version: 5.3.2(yyfxbewuns6itcdixnizhrbpiq)
       drizzle-orm:
         specifier: ^0.31.2
         version: 0.31.2(@cloudflare/workers-types@4.20240614.0)
@@ -1250,6 +1250,7 @@ packages:
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1257,6 +1258,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/retry@0.2.4':
     resolution: {integrity: sha512-Ttl/jHpxfS3st5sxwICYfk4pOH0WrLI1SpW283GgQL7sCWU7EHIOhX4b4fkIxr3tkfzwg8+FNojtzsIEE7Ecgg==}
@@ -1280,8 +1282,8 @@ packages:
   '@iconify-json/simple-icons@1.1.106':
     resolution: {integrity: sha512-3aHpMAgc0UES/ecsCzaXhyBuJVy1AEC/IG03cso6KqvG+DJzrb3LT2ibTTB4uoGGPAmz/mq9df4LqYQhbSrHCA==}
 
-  '@iconify-json/tabler@1.1.114':
-    resolution: {integrity: sha512-AaTTGEyiPQ7VAYyXGQ9jUI8+8iL6xanucYsACz6f3U6JLph6jDyicXXUh+dYM6HxW6TGehwVqRO2NSIQpACszw==}
+  '@iconify-json/tabler@1.1.115':
+    resolution: {integrity: sha512-nyD8OmtQhBl6FLptfVJe04fjoLIUT3sxe4sEChrXhVDuYQlb1DUPEQQkbwjAIzP4w9JcNYwdUpVbIWn60AjECw==}
 
   '@iconify/collections@1.0.419':
     resolution: {integrity: sha512-DD1BQBrdXiIS9txIYdExjyT+Lvc6ZSU5lAqMK1W4lMU7QcBDT7J/Qc8QFZNZ4LG+wXyUgo0rhSIHvO8gTMOBtQ==}
@@ -1426,10 +1428,15 @@ packages:
     peerDependencies:
       vite: '*'
 
-  '@nuxt/devtools-ui-kit@1.3.6':
-    resolution: {integrity: sha512-93NQ0Cb1i4+597u8aYBsfasxEU6rGYIFGYKPJ28mc4AngY5JXP9lYADom9EwNwDg4ARoP1vujXxHB0eDUNnQoA==}
+  '@nuxt/devtools-kit@1.3.7':
+    resolution: {integrity: sha512-TpvlZuooarsaMk9av2shtT6YZzFyFwlo60Qk5BLm5MEJFoGvIIsKjAxmwb3HWMTnoYJ79dTB5FBPEdpR2Qpueg==}
     peerDependencies:
-      '@nuxt/devtools': 1.3.6
+      vite: '*'
+
+  '@nuxt/devtools-ui-kit@1.3.7':
+    resolution: {integrity: sha512-ax/cugDoMYDjtekrt8dH/LPhCsOblwOqGtvtaXrGC8VXZ/xH6dWsEUy2W90C/u/N6Vp8uR+MlBO6kGQtUJYVFg==}
+    peerDependencies:
+      '@nuxt/devtools': 1.3.7
 
   '@nuxt/devtools-wizard@1.3.3':
     resolution: {integrity: sha512-9Umo9eDgwhSBDnTzWINXwJBYy2J3ay6OviM7Qdr08B9hDu+CU6MrEpsT4hZ3npD7p1E+9t1YQw/4fZ8NMcPVnw==}
@@ -1514,8 +1521,9 @@ packages:
   '@nuxtjs/color-mode@3.4.1':
     resolution: {integrity: sha512-vZgJqDstxInGw3RGSWbLoCLXtU1mvh1LLeuEA/X3a++DYA4ifwSbNoiSiOyb9qZHFEwz1Xr99H71sXV4IhOaEg==}
 
-  '@nuxtjs/sitemap@5.2.1':
-    resolution: {integrity: sha512-GFlXFR7EVxt50V4VJSk2Oyg4UoifFHMcqYa+wyHwCU74loi0bPMsOhUo9QiI/8liuyj92L/JvWmcO77HCx7T+A==}
+  '@nuxtjs/sitemap@5.3.2':
+    resolution: {integrity: sha512-O5Vk9iSz35Paqq58SDHM2J5Ezc+6rCj3GSVyi8UZ0bpzh/wDW7ytz1vq/niTjpz9RYqzMAfVTZ7xrwY9/ohZsg==}
+    engines: {node: '>=18.0.0'}
 
   '@nuxtjs/tailwindcss@6.12.0':
     resolution: {integrity: sha512-vXvEq8z177TQcx0tc10mw3O6T9WeN0iTL8hIKGDfidmr+HKReexJU01aPgHefFrCu4LJB70egYFYnywzB9lMyQ==}
@@ -1780,14 +1788,14 @@ packages:
   '@rushstack/eslint-patch@1.10.3':
     resolution: {integrity: sha512-qC/xYId4NMebE6w/V33Fh9gWxLgURiNYgVNObbJl2LZv0GUUItCcCqC5axQSwRaAgaxl2mELq1rMzlswaQ0Zxg==}
 
+  '@shikijs/core@1.10.0':
+    resolution: {integrity: sha512-BZcr6FCmPfP6TXaekvujZcnkFmJHZ/Yglu97r/9VjzVndQA56/F4WjUKtJRQUnK59Wi7p/UTAOekMfCJv7jnYg==}
+
   '@shikijs/core@1.3.0':
     resolution: {integrity: sha512-7fedsBfuILDTBmrYZNFI8B6ATTxhQAasUHllHmjvSZPnoq4bULWoTpHwmuQvZ8Aq03/tAa2IGo6RXqWtHdWaCA==}
 
   '@shikijs/core@1.6.4':
     resolution: {integrity: sha512-WTU9rzZae1p2v6LOxMf6LhtmZOkIHYYW160IuahUyJy7YXPPjyWZLR1ag+SgD22ZMxZtz1gfU6Tccc8t0Il/XA==}
-
-  '@shikijs/core@1.9.0':
-    resolution: {integrity: sha512-cbSoY8P/jgGByG8UOl3jnP/CWg/Qk+1q+eAKWtcrU3pNoILF8wTsLB0jT44qUBV8Ce1SvA9uqcM9Xf+u3fJFBw==}
 
   '@sigstore/bundle@2.3.1':
     resolution: {integrity: sha512-eqV17lO3EIFqCWK3969Rz+J8MYrRZKw9IBHpSo6DEcEX2c+uzDFOgHE9f2MnyDpfs48LFO4hXmk9KhQ74JzU1g==}
@@ -2248,47 +2256,6 @@ packages:
       qrcode: ^1.5
       sortablejs: ^1
       universal-cookie: ^6
-    peerDependenciesMeta:
-      async-validator:
-        optional: true
-      axios:
-        optional: true
-      change-case:
-        optional: true
-      drauu:
-        optional: true
-      focus-trap:
-        optional: true
-      fuse.js:
-        optional: true
-      idb-keyval:
-        optional: true
-      jwt-decode:
-        optional: true
-      nprogress:
-        optional: true
-      qrcode:
-        optional: true
-      sortablejs:
-        optional: true
-      universal-cookie:
-        optional: true
-
-  '@vueuse/integrations@10.9.0':
-    resolution: {integrity: sha512-acK+A01AYdWSvL4BZmCoJAcyHJ6EqhmkQEXbQLwev1MY7NBnS+hcEMx/BzVoR9zKI+UqEPMD9u6PsyAuiTRT4Q==}
-    peerDependencies:
-      async-validator: '*'
-      axios: '*'
-      change-case: '*'
-      drauu: '*'
-      focus-trap: '*'
-      fuse.js: '*'
-      idb-keyval: '*'
-      jwt-decode: '*'
-      nprogress: '*'
-      qrcode: '*'
-      sortablejs: '*'
-      universal-cookie: '*'
     peerDependenciesMeta:
       async-validator:
         optional: true
@@ -5161,14 +5128,14 @@ packages:
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
+  shiki@1.10.0:
+    resolution: {integrity: sha512-YD2sXQ+TMD/F9BimV9Jn0wj35pqOvywvOG/3PB6hGHyGKlM7TJ9tyJ02jOb2kF8F0HfJwKNYrh3sW7jEcuRlXA==}
+
   shiki@1.3.0:
     resolution: {integrity: sha512-9aNdQy/etMXctnPzsje1h1XIGm9YfRcSksKOGqZWXA/qP9G18/8fpz5Bjpma8bOgz3tqIpjERAd6/lLjFyzoww==}
 
   shiki@1.6.4:
     resolution: {integrity: sha512-X88chM7w8jnadoZtjPTi5ahCJx9pc9f8GfEkZAEYUTlcUZIEw2D/RY86HI/LkkE7Nj8TQWkiBfaFTJ3VJT6ESg==}
-
-  shiki@1.9.0:
-    resolution: {integrity: sha512-i6//Lqgn7+7nZA0qVjoYH0085YdNk4MC+tJV4bo+HgjgRMJ0JmkLZzFAuvVioJqLkcGDK5GAMpghZEZkCnwxpQ==}
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -6974,7 +6941,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/tabler@1.1.114':
+  '@iconify-json/tabler@1.1.115':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -7197,14 +7164,25 @@ snapshots:
       - rollup
       - supports-color
 
-  '@nuxt/devtools-ui-kit@1.3.6(jvzknzoxg32ivh3tp4gimkdvc4)':
+  '@nuxt/devtools-kit@1.3.7(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))':
+    dependencies:
+      '@nuxt/kit': 3.12.2(magicast@0.3.4)(rollup@4.17.0)
+      '@nuxt/schema': 3.12.2(rollup@4.17.0)
+      execa: 7.2.0
+      vite: 5.3.1(@types/node@20.12.7)(terser@5.30.4)
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+
+  '@nuxt/devtools-ui-kit@1.3.7(jvzknzoxg32ivh3tp4gimkdvc4)':
     dependencies:
       '@iconify-json/carbon': 1.1.36
       '@iconify-json/logos': 1.1.43
       '@iconify-json/ri': 1.1.21
-      '@iconify-json/tabler': 1.1.114
+      '@iconify-json/tabler': 1.1.115
       '@nuxt/devtools': 1.3.3(@unocss/reset@0.61.0)(floating-vue@5.2.2(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@4.17.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@6.6.2)(nuxt@3.12.2(@parcel/watcher@2.4.1)(@types/node@20.12.7)(@unocss/reset@0.61.0)(drizzle-orm@0.31.2(@cloudflare/workers-types@4.20240614.0))(encoding@0.1.13)(eslint@9.2.0)(floating-vue@5.2.2(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@4.17.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@6.6.2)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.17.0)(terser@5.30.4)(typescript@5.4.5)(unocss@0.61.0(@unocss/webpack@0.61.0(rollup@4.17.0)(webpack@5.92.1(esbuild@0.20.2)))(postcss@8.4.38)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4)))(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4)))(rollup@4.17.0)(unocss@0.61.0(@unocss/webpack@0.61.0(rollup@4.17.0)(webpack@5.92.1(esbuild@0.20.2)))(postcss@8.4.38)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4)))(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))(vue@3.4.29(typescript@5.4.5))
-      '@nuxt/devtools-kit': 1.3.6(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
+      '@nuxt/devtools-kit': 1.3.7(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
       '@nuxt/kit': 3.12.2(magicast@0.3.4)(rollup@4.17.0)
       '@unocss/core': 0.61.0
       '@unocss/nuxt': 0.61.0(magicast@0.3.4)(postcss@8.4.38)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))(webpack@5.92.1(esbuild@0.20.2))
@@ -7726,10 +7704,10 @@ snapshots:
       - rollup
       - supports-color
 
-  '@nuxtjs/sitemap@5.2.1(yyfxbewuns6itcdixnizhrbpiq)':
+  '@nuxtjs/sitemap@5.3.2(yyfxbewuns6itcdixnizhrbpiq)':
     dependencies:
-      '@nuxt/devtools-kit': 1.3.6(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
-      '@nuxt/devtools-ui-kit': 1.3.6(jvzknzoxg32ivh3tp4gimkdvc4)
+      '@nuxt/devtools-kit': 1.3.7(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
+      '@nuxt/devtools-ui-kit': 1.3.7(jvzknzoxg32ivh3tp4gimkdvc4)
       '@nuxt/kit': 3.12.2(magicast@0.3.4)(rollup@4.17.0)
       '@vueuse/core': 10.11.0(vue@3.4.29(typescript@5.4.5))
       chalk: 5.3.0
@@ -7743,7 +7721,7 @@ snapshots:
       pkg-types: 1.1.1
       radix3: 1.1.2
       semver: 7.6.2
-      shiki: 1.9.0
+      shiki: 1.10.0
       sirv: 2.0.4
       site-config-stack: 2.2.12(vue@3.4.29(typescript@5.4.5))
       ufo: 1.5.3
@@ -7988,11 +7966,11 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.3': {}
 
+  '@shikijs/core@1.10.0': {}
+
   '@shikijs/core@1.3.0': {}
 
   '@shikijs/core@1.6.4': {}
-
-  '@shikijs/core@1.9.0': {}
 
   '@sigstore/bundle@2.3.1':
     dependencies:
@@ -8692,7 +8670,7 @@ snapshots:
       '@vue/devtools-shared': 7.1.3
       '@vueuse/components': 10.9.0(vue@3.4.29(typescript@5.4.5))
       '@vueuse/core': 10.11.0(vue@3.4.29(typescript@5.4.5))
-      '@vueuse/integrations': 10.9.0(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.29(typescript@5.4.5))
+      '@vueuse/integrations': 10.11.0(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.29(typescript@5.4.5))
       colord: 2.9.3
       floating-vue: 5.2.2(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@4.17.0))(vue@3.4.29(typescript@5.4.5))
       focus-trap: 7.5.4
@@ -8771,18 +8749,6 @@ snapshots:
     dependencies:
       '@vueuse/core': 10.11.0(vue@3.4.29(typescript@5.4.5))
       '@vueuse/shared': 10.11.0(vue@3.4.29(typescript@5.4.5))
-      vue-demi: 0.14.8(vue@3.4.29(typescript@5.4.5))
-    optionalDependencies:
-      focus-trap: 7.5.4
-      fuse.js: 6.6.2
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
-
-  '@vueuse/integrations@10.9.0(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.29(typescript@5.4.5))':
-    dependencies:
-      '@vueuse/core': 10.9.0(vue@3.4.29(typescript@5.4.5))
-      '@vueuse/shared': 10.9.0(vue@3.4.29(typescript@5.4.5))
       vue-demi: 0.14.8(vue@3.4.29(typescript@5.4.5))
     optionalDependencies:
       focus-trap: 7.5.4
@@ -11230,15 +11196,15 @@ snapshots:
 
   nuxt-site-config@2.2.12(jvzknzoxg32ivh3tp4gimkdvc4):
     dependencies:
-      '@nuxt/devtools-kit': 1.3.6(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
-      '@nuxt/devtools-ui-kit': 1.3.6(jvzknzoxg32ivh3tp4gimkdvc4)
+      '@nuxt/devtools-kit': 1.3.7(magicast@0.3.4)(rollup@4.17.0)(vite@5.3.1(@types/node@20.12.7)(terser@5.30.4))
+      '@nuxt/devtools-ui-kit': 1.3.7(jvzknzoxg32ivh3tp4gimkdvc4)
       '@nuxt/kit': 3.12.2(magicast@0.3.4)(rollup@4.17.0)
       '@nuxt/schema': 3.12.2(rollup@4.17.0)
       floating-vue: 5.2.2(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@4.17.0))(vue@3.4.29(typescript@5.4.5))
       nuxt-site-config-kit: 2.2.12(magicast@0.3.4)(rollup@4.17.0)(vue@3.4.29(typescript@5.4.5))
       pathe: 1.1.2
       pkg-types: 1.1.1
-      shiki: 1.6.4
+      shiki: 1.10.0
       sirv: 2.0.4
       site-config-stack: 2.2.12(vue@3.4.29(typescript@5.4.5))
       ufo: 1.5.3
@@ -12120,6 +12086,10 @@ snapshots:
 
   shell-quote@1.8.1: {}
 
+  shiki@1.10.0:
+    dependencies:
+      '@shikijs/core': 1.10.0
+
   shiki@1.3.0:
     dependencies:
       '@shikijs/core': 1.3.0
@@ -12127,10 +12097,6 @@ snapshots:
   shiki@1.6.4:
     dependencies:
       '@shikijs/core': 1.6.4
-
-  shiki@1.9.0:
-    dependencies:
-      '@shikijs/core': 1.9.0
 
   signal-exit@3.0.7: {}
 
